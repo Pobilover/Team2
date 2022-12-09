@@ -22,8 +22,9 @@ import javax.swing.border.LineBorder;
 
 class Previous extends JDialog {
 	public Previous() {	
+		Methods methods = new Methods();
 		// 주요패널 선언
-		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(backgroud("배경.png"));
+		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(methods.backgroud("배경.png"));
 		pnl.setBackground(Color.WHITE);
 		JPanel pnlNorth = new JPanel();
 		pnlNorth.setBackground(new Color(255, 0, 0, 0));
@@ -178,27 +179,5 @@ class Previous extends JDialog {
 		setModal(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
-	}
-	
-	public ImageIcon convertToIcon(String name, int width, int height) {
-		String imageName = name;
-		Toolkit kit = Toolkit.getDefaultToolkit();
-		ClassLoader classLoader = getClass().getClassLoader();
-		Image image = kit.getImage(classLoader.getResource(imageName));
-		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		ImageIcon icon = new ImageIcon(image);
-		return icon;
-	}
-	
-	public BufferedImage backgroud(String name) {
-		ClassLoader loader = getClass().getClassLoader();	
-		URL imageURL = loader.getResource(name);
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(imageURL);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return image;
 	}
 }
