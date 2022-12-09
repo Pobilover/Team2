@@ -4,7 +4,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -14,121 +17,146 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.tools.DiagnosticCollector;
+import javax.swing.border.LineBorder;
 
 
-class Purchase extends JDialog{
+class Purchase extends JDialog implements MouseListener {
+	private JLabel[] lottoNums;
+	private JPanel pnlNum;
+
 	public Purchase() {
 		setModal(true); // 부모 창이랑 상호작용 못하게 막음
 		
-		JPanel pnlBuy = new JPanel(new BorderLayout());
+		// 제일 큰 패널
+		JPanel pnlBuy = new JPanel();
 		
-		JPanel pnlNum = new JPanel();
-		pnlNum.setBackground(Color.WHITE);
-		pnlNum.setLayout(new BoxLayout(pnlNum, BoxLayout.Y_AXIS));
+		// 로또번호 선택가능한 패널
+		JPanel pnlWest = new JPanel();
+		pnlWest.setBounds(50, 100, 250, 400);
+		pnlWest.setBorder(new LineBorder(Color.black));
+//		pnlNum.setBackground(Color.WHITE);
+		pnlWest.setLayout(new BoxLayout(pnlWest, BoxLayout.Y_AXIS));
 		
-		JPanel pnlNum1 = new JPanel();
+		// 로또번호 선택창 이미지 패널
+		JPanel pnlImage = new JPanel();
 		JLabel lottoImage = new JLabel();
-		ImageIcon lottoIcon = convertToIcon("lotto.png", 230, 50);
+		ImageIcon lottoIcon = getIcon("lotto123.png", 230, 80);
 		lottoImage.setIcon(lottoIcon);
-		pnlNum1.add(lottoImage);
+		pnlImage.add(lottoImage);
 		
-		JPanel pnlNum2 = new JPanel();
-		JLabel[] lottoNumber = new JLabel[45];
-		pnlNum2.setLayout(new GridLayout(7, 7));
-		for (int i = 0; i < lottoNumber.length; i++) {
+		pnlNum = new JPanel();
+		lottoNums = new JLabel[45];
+		pnlNum.setLayout(new GridLayout(7, 7));
+		for (int i = 0; i < lottoNums.length; i++) {
 			String name = "num" + (i + 1) + ".png";
-			lottoNumber[i] = new JLabel(convertToIcon("numbers/" + name, 30, 30));
-			pnlNum2.add(lottoNumber[i]);
+			lottoNums[i] = new JLabel(getIcon("numbers/" + name, 30, 30));
+			pnlNum.add(lottoNums[i]);
 		}
-
-		JPanel pnlNum3 = new JPanel();
-		pnlNum3.setLayout(new FlowLayout());
+		
+		lottoNums[45].addMouseListener(this);
+		
+		
+		// 로또번호 선택기능 패널
+		JPanel pnlNumSkill1 = new JPanel();
+		pnlNumSkill1.setLayout(new FlowLayout());
 		JButton reset = new JButton("초기화");
 		JButton auto = new JButton("자동선택");
-		pnlNum3.add(reset);
-		pnlNum3.add(auto);
+		pnlNumSkill1.add(reset);
+		pnlNumSkill1.add(Box.createHorizontalStrut(20));
+		pnlNumSkill1.add(auto);
 		
-		JPanel pnlNum4 = new JPanel();
-		pnlNum4.setLayout(new FlowLayout());
+		// 로또번호 수량선택 패널
+		JPanel pnlNumSkill2 = new JPanel();
+		pnlNumSkill2.setLayout(new FlowLayout());
 		JLabel count = new JLabel("수량");
 		String list[] = {"1", "2", "3", "4", "5"};
 		JComboBox cList = new JComboBox(list);
 		JButton ok = new JButton("확인");
-		pnlNum4.add(count,"Center");
-		pnlNum4.add(cList);
-		pnlNum4.add(ok);
+		pnlNumSkill2.add(count);
+		pnlNumSkill2.add(cList);
+		pnlNumSkill2.add(Box.createHorizontalStrut(30));
+		pnlNumSkill2.add(ok);
 		
-		pnlNum.add(pnlNum1);
-		pnlNum.add(pnlNum2);
-		pnlNum.add(pnlNum3);
-		pnlNum.add(pnlNum4);
+		pnlWest.add(pnlImage);
+		pnlWest.add(pnlNum);
+		pnlWest.add(pnlNumSkill1);
+		pnlWest.add(pnlNumSkill2);
 		
-		pnlBuy.add(pnlNum, BorderLayout.WEST);
+		pnlBuy.add(pnlWest);
 		
 		
-		JPanel pnlChoiceNum = new JPanel();
-		pnlChoiceNum.setBackground(Color.WHITE);
-		pnlChoiceNum.setLayout(new BoxLayout(pnlChoiceNum, BoxLayout.Y_AXIS));
+		// 로또번호 선택 보이는 큰 패널
+		JPanel pnlEast = new JPanel();
+		pnlEast.setBounds(300, 20, 300, 400);
+		pnlEast.setBorder(new LineBorder(Color.black));
+//		pnlChoiceNum.setBackground(Color.WHITE);
+		pnlEast.setLayout(new BoxLayout(pnlEast, BoxLayout.Y_AXIS));
 		
-		JPanel pnlCho1 = new JPanel();
-		JLabel lbl = new JLabel("선택번호 확인");
+		// 전체 초기화기능 패널
+		JPanel pnlReset = new JPanel();
+		JLabel lblConfirm = new JLabel("선택번호 확인");
 		JButton allReset = new JButton("초기화");
-//		pnlCho1.add(Box.createHorizontalStrut(500));
-		pnlCho1.add(lbl);
-		pnlCho1.add(allReset);
+		pnlReset.add(lblConfirm);
+		pnlReset.add(Box.createHorizontalStrut(170));
+		pnlReset.add(allReset);
 		
+		// 선택한 번호 보이는 패널
+		JPanel pnlChoNum = new JPanel();
+		pnlChoNum.setLayout(new BoxLayout(pnlChoNum, BoxLayout.Y_AXIS));
 		
-		JPanel pnlCho2 = new JPanel();
-		pnlCho2.setLayout(new BoxLayout(pnlCho2, BoxLayout.Y_AXIS));
-		
-		JPanel pnlChoSet = new JPanel();
-		pnlChoSet.setLayout(new FlowLayout(FlowLayout.CENTER));
-		
-		JLabel lblChoC = new JLabel("1");
-		JLabel[] lblChoNum = new JLabel[6];
-		for (int i = 0; i < lblChoNum.length ; i++) {
-			ImageIcon choiceImage = convertToIcon("chnum1.png", 30, 30);
-			lblChoNum[i] = new JLabel(choiceImage);
+		int j = 0;
+		while(j < 5) {
+			j++;
+			JPanel pnlChoSet = new JPanel();
+			pnlChoSet.setLayout(new FlowLayout(FlowLayout.CENTER));
+			
+			String choCount = String.valueOf(j);
+			JLabel lblChoConut = new JLabel(choCount);
+			JLabel[] lblChoNum = new JLabel[6];
+			for (int i = 0; i < lblChoNum.length ; i++) {
+				ImageIcon choiceImage = getIcon("balls/" + "ball1.png", 30, 30);
+				lblChoNum[i] = new JLabel(choiceImage);
+			}
+			
+			JButton choReset = new JButton("수정");
+			JButton choDelete = new JButton("삭제");
+			
+			pnlChoSet.add(lblChoConut);
+			pnlChoSet.add(Box.createHorizontalStrut(5));
+			for (int i = 0; i < lblChoNum.length; i++) {
+				pnlChoSet.add(lblChoNum[i]);
+			}
+			pnlChoSet.add(Box.createHorizontalStrut(5));
+			pnlChoSet.add(choReset);
+			pnlChoSet.add(choDelete);
+			pnlChoNum.add(pnlChoSet);
 		}
 		
-		JButton choReset = new JButton("수정");
-		JButton choDelete = new JButton("삭제");
+		// 금액과 구매버튼 패널
+		JPanel pnlPurchase = new JPanel();
+		pnlPurchase.setLayout(new FlowLayout());
+		JLabel lblSheet = new JLabel("장");
+		JLabel lbltotal = new JLabel("결제 금액 :      원");
+		JButton btnPurchase = new JButton("구매");
+		pnlPurchase.add(lblSheet);
+		pnlPurchase.add(Box.createHorizontalStrut(20));
+		pnlPurchase.add(lbltotal);
+		pnlPurchase.add(Box.createHorizontalStrut(150));
+		pnlPurchase.add(btnPurchase);
 		
-		pnlChoSet.add(lblChoC);
-		for (int i = 0; i < lblChoNum.length; i++) {
-			pnlChoSet.add(lblChoNum[i]);
-		}
-		
-		pnlChoSet.add(choReset);
-		pnlChoSet.add(choDelete);
-		pnlCho2.add(pnlChoSet);
-		
-		JPanel pnlCho3 = new JPanel();
-		pnlCho3.setLayout(new FlowLayout());
-		JLabel total = new JLabel("원");
-		JButton purchase = new JButton("구매");
-		pnlCho3.add(total);
-		pnlCho3.add(purchase);
-		
-		
-		pnlChoiceNum.add(pnlCho1);
-		pnlChoiceNum.add(pnlCho2);
-		pnlChoiceNum.add(pnlCho3);
-		pnlBuy.add(pnlChoiceNum, BorderLayout.EAST);
-		
-//		pnlChoiceNum.setPreferredSize(new Dimension(700, 0));
-//		
+		pnlEast.add(pnlReset);
+		pnlEast.add(pnlChoNum);
+		pnlEast.add(pnlPurchase);
+		pnlBuy.add(pnlEast);
 		
 		add(pnlBuy);
-		
 
 		setSize(700, 500);
 		setVisible(true);
 		
 	}
 	
-	public ImageIcon convertToIcon(String name, int width, int height) {
+	public ImageIcon getIcon(String name, int width, int height) {
 		String imageName = name;
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -138,4 +166,32 @@ class Purchase extends JDialog{
 		ImageIcon icon = new ImageIcon(image);
 		return icon;
 	 }
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+//		lottoNums[45] = (JLabel) e.getSource();
+//		for (int i = 0; i < lottoNums.length; i++) {
+//			if (lottoNuns[i]) {
+//			String name = "num" + (i + 1) + ".png";
+//			lottoNums[i] = new JLabel(getIcon("afternumbers/" + name, 30, 30));
+//			pnlNum.add(lottoNums[i]);
+//		}
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+	}
 }
