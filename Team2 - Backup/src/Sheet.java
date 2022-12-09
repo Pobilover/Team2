@@ -21,6 +21,8 @@ public class Sheet {
 		types.add(type);
 	}
 	
+	public Sheet() {};
+	
 	public void checkSheet(int numOfGames) {
 		if (numOfGames != count) {
 			JOptionPane.showMessageDialog(null, "입력된 게임과 저장된 게임의 수가 틀립니다!!", "ERROR", JOptionPane.ERROR_MESSAGE);
