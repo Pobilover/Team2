@@ -1,11 +1,15 @@
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
 
 // Method 사용법!!
 // new Methods().사용할 메소드
@@ -49,4 +53,20 @@ public class Methods {
 		}
 		return image;
 	}
+	
+	// 창 전체 폰트 설정하는 메소드
+	// 이 메소드를 복사하여 적용시킬 클래스에 붙여넣기
+	// 파라미터에는 new FontUIResource(new Font("폰트이름", 스타일, 크기)) 입력
+    public static void setUIFont(FontUIResource f) {
+        Enumeration keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if (value instanceof FontUIResource) {
+                FontUIResource orig = (FontUIResource) value;
+                Font font = new Font(f.getFontName(), orig.getStyle(), f.getSize());
+                UIManager.put(key, new FontUIResource(font));
+            }
+        }
+    }	
 }
