@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -26,13 +27,9 @@ public class StartScreen extends JFrame implements ActionListener {
 
 	public void ChangeImageSize() {
 		System.out.println("결과 확인 ");
-		ImageIcon icon = new ImageIcon("128x128.png");
+		ImageIcon icon = convertToIcon("128x128.png" , 700, 500);
 
-		Image img = icon.getImage();
-		// 창의 사이즈인 700,500에 맞춰서 이미지를 변경
-		//Image changeImg = img.getScaledInstance(700,500, Image.SCALE_SMOOTH);
-		ImageIcon changeIcon = new ImageIcon(img);
-		JLabel lbl = new JLabel(changeIcon);
+		JLabel lbl = new JLabel(icon);
 
 		// SCALE_DEFAULT, SCALE_FAST, SCALE_SMOOTH, SCALE_REPLICATE,
 		// SCALE_AREA_AVERAGING\
@@ -67,6 +64,16 @@ public class StartScreen extends JFrame implements ActionListener {
 
 	public void showGUI() {
 		setVisible(true);
+	}
+	
+	public ImageIcon convertToIcon(String name, int width, int height) {
+		String imageName = name;
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		ClassLoader classLoader = getClass().getClassLoader();
+		Image image = kit.getImage(classLoader.getResource(imageName));
+		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		ImageIcon icon = new ImageIcon(image);
+		return icon;
 	}
 
 	public class RoundedButton extends JButton {
