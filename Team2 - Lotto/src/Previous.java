@@ -99,13 +99,13 @@ class Previous extends JDialog {
 		// pnlCenter에 들어갈 component
 		JLabel[] lblWinNum = new JLabel[7];
 		for (int i = 0; i < lblWinNum.length; i++) {
-			ImageIcon icon = convertToIcon("balls/ball1.png", 40, 40);
+			ImageIcon icon = methods.convertToIcon("balls/ball1.png", 40, 40);
 			lblWinNum[i] = new JLabel(icon);
 		}			
 		JLabel lblPlus = new JLabel("+");
 		lblPlus.setFont(new Font("휴먼편지체", Font.BOLD, 25));
 		JLabel lblBonusNum = new JLabel();
-		lblBonusNum = new JLabel(convertToIcon("balls/ball1.png", 40, 40));			
+		lblBonusNum = new JLabel(methods.convertToIcon("balls/ball1.png", 40, 40));			
 		JLabel lblWinNumT = new JLabel("당첨번호");
 		lblWinNumT.setFont(new Font("휴먼편지체", Font.BOLD, 15));
 		JLabel lblBonusNumT = new JLabel("보너스");

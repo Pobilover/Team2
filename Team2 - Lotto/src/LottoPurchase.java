@@ -1,10 +1,9 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,7 +17,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-
 
 class Purchase extends JDialog implements MouseListener {
 	private JLabel[] lottoNums;
@@ -50,10 +48,10 @@ class Purchase extends JDialog implements MouseListener {
 		for (int i = 0; i < lottoNums.length; i++) {
 			String name = "num" + (i + 1) + ".png";
 			lottoNums[i] = new JLabel(getIcon("numbers/" + name, 30, 30));
+			lottoNums[i].addMouseListener(this);
 			pnlNum.add(lottoNums[i]);
 		}
 		
-		lottoNums[45].addMouseListener(this);
 		
 		
 		// 로또번호 선택기능 패널
@@ -71,6 +69,7 @@ class Purchase extends JDialog implements MouseListener {
 		JLabel count = new JLabel("수량");
 		String list[] = {"1", "2", "3", "4", "5"};
 		JComboBox cList = new JComboBox(list);
+		cList.setPreferredSize(new Dimension(80, 20));
 		JButton ok = new JButton("확인");
 		pnlNumSkill2.add(count);
 		pnlNumSkill2.add(cList);

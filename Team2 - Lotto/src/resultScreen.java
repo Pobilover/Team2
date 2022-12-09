@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 
@@ -12,9 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
 
 class resultScreenSet extends JDialog{
 	public resultScreenSet() {
@@ -86,26 +84,54 @@ class resultScreenSet extends JDialog{
 		pnl3.add(pnl3_1);
 		
 		JButton before = new JButton("<<<");
-		JButton after = new JButton(">>>");		
-		JTable resultTable = new JTable(5,4);		
-		//table 값 만들기
-		DefaultTableModel model = (DefaultTableModel)resultTable.getModel();
-		String[] record = new String[4];
-		record[0] = "A";
-		record[1] = "자동";
-		record[2] = "1등";
-		record[3] = "2 3 5 6 7 9";
-		model.addRow(record);
+		JButton after = new JButton(">>>");	
+		
+		JPanel pnl4_1 = new JPanel(new GridLayout(5, 9));		
+		JLabel lblA = new JLabel("A");
+		JLabel lblB = new JLabel("B");
+		JLabel lblC = new JLabel("C");
+		JLabel lblD = new JLabel("D");
+		JLabel lblE = new JLabel("E");
+		JLabel[] lblType = new JLabel[5];
+		for (int i = 0; i < lblType.length; i++) {
+			lblType[i] = new JLabel("자동");
+		}
+		JLabel[] lblRank = new JLabel[5];
+		for (int i = 0; i < lblRank.length; i++) {
+			lblRank[i] = new JLabel("1등");
+		}
+		JLabel[][] lblUserNumbers = new JLabel[5][6];
+		for (int i = 0; i < lblUserNumbers.length; i++) {
+			for (int j = 0; j < lblUserNumbers[i].length; j++) {
+				int number = 0;
+				String imgName = "balls/" + number + ".png" ;
+				lblUserNumbers[i][j] = new JLabel(convertToIcon("balls/ball1.png", 30, 30));
+			}
+		}
+		pnl4_1.add(lblA);
+		pnl4_1.add(lblType[0]);
+		pnl4_1.add(lblRank[0]);
+		
+		
+//		JTable resultTable = new JTable(5,4);		
+//		//table 값 만들기
+//		DefaultTableModel model = (DefaultTableModel)resultTable.getModel();
+//		String[] record = new String[4];
+//		record[0] = "A";
+//		record[1] = "자동";
+//		record[2] = "1등";
+//		record[3] = "2 3 5 6 7 9";
+//		model.addRow(record);
 		
 		before.setPreferredSize(new Dimension(55,40));
 		before.setBackground(Color.LIGHT_GRAY);
 		after.setPreferredSize(new Dimension(55,40));
 		after.setBackground(Color.LIGHT_GRAY);
-		resultTable.setPreferredSize(new Dimension(300,150));
-		resultTable.setRowHeight(30);
+//		resultTable.setPreferredSize(new Dimension(300,150));
+//		resultTable.setRowHeight(30);
 		pnl4.add(before);
 		pnl4.add(Box.createHorizontalStrut(30));
-		pnl4.add(resultTable);
+//		pnl4.add(resultTable);
 		pnl4.add(Box.createHorizontalStrut(30));
 		pnl4.add(after);
 		
