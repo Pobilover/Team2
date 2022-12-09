@@ -213,3 +213,9 @@ class Purchase extends JDialog implements MouseListener {
 	public void mouseReleased(MouseEvent e) {
 	}
 }
+
+public class LottoPurchase {
+	public static void main(String[] args) {
+		new Purchase();
+	}
+}
