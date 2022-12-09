@@ -23,6 +23,9 @@ import javax.swing.border.LineBorder;
 class Purchase extends JDialog implements MouseListener {
 	private JLabel[] lottoNums;
 	private JPanel pnlNum;
+	private String name;
+	private JLabel[] lblChoNums;
+	private ImageIcon choiceImage;
 
 	public Purchase() {
 		setModal(true); // 부모 창이랑 상호작용 못하게 막음
@@ -45,15 +48,15 @@ class Purchase extends JDialog implements MouseListener {
 		pnlImage.add(lottoImage);
 		
 		pnlNum = new JPanel();
+		pnlNum.setPreferredSize(new Dimension(250, 250));
 		lottoNums = new JLabel[45];
-		pnlNum.setLayout(new GridLayout(7, 7));
+		pnlNum.setLayout(new FlowLayout(FlowLayout.LEFT));
 		for (int i = 0; i < lottoNums.length; i++) {
-			String name = "num" + (i + 1) + ".png";
+			name = "num" + (i + 1) + ".png";
 			lottoNums[i] = new JLabel(getIcon("numbers/" + name, 30, 30));
 			pnlNum.add(lottoNums[i]);
+			lottoNums[i].addMouseListener(this);
 		}
-		
-		lottoNums[45].addMouseListener(this);
 		
 		
 		// 로또번호 선택기능 패널
@@ -112,19 +115,21 @@ class Purchase extends JDialog implements MouseListener {
 			
 			String choCount = String.valueOf(j);
 			JLabel lblChoConut = new JLabel(choCount);
-			JLabel[] lblChoNum = new JLabel[6];
-			for (int i = 0; i < lblChoNum.length ; i++) {
-				ImageIcon choiceImage = getIcon("balls/" + "ball1.png", 30, 30);
-				lblChoNum[i] = new JLabel(choiceImage);
+			JLabel lblChoAuto = new JLabel("자동");
+			lblChoNums = new JLabel[6];
+			for (int i = 0; i < lblChoNums.length ; i++) {
+				choiceImage = getIcon("balls/" + "ball1.png", 30, 30);
+				lblChoNums[i] = new JLabel(choiceImage);
 			}
 			
 			JButton choReset = new JButton("수정");
 			JButton choDelete = new JButton("삭제");
 			
 			pnlChoSet.add(lblChoConut);
+			pnlChoSet.add(lblChoAuto);
 			pnlChoSet.add(Box.createHorizontalStrut(5));
-			for (int i = 0; i < lblChoNum.length; i++) {
-				pnlChoSet.add(lblChoNum[i]);
+			for (int i = 0; i < lblChoNums.length; i++) {
+				pnlChoSet.add(lblChoNums[i]);
 			}
 			pnlChoSet.add(Box.createHorizontalStrut(5));
 			pnlChoSet.add(choReset);
@@ -158,25 +163,38 @@ class Purchase extends JDialog implements MouseListener {
 	
 	public ImageIcon getIcon(String name, int width, int height) {
 		String imageName = name;
+		int w = width;
+		int h = height;
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		ClassLoader classLoader = getClass().getClassLoader();
-		Image image = kit.getImage(classLoader.getResource(imageName));
-		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		// 이미지크기조절
-		ImageIcon icon = new ImageIcon(image);
-		return icon;
+		try {
+			Image image = kit.getImage(classLoader.getResource(imageName));
+			image = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+			// 이미지크기조절
+			ImageIcon icon = new ImageIcon(image);
+			return icon;	
+		} catch(NullPointerException e) {
+			System.out.println(imageName + "이 없습니다.");
+		}
+		return null;
 	 }
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-//		lottoNums[45] = (JLabel) e.getSource();
-//		for (int i = 0; i < lottoNums.length; i++) {
-//			if (lottoNuns[i]) {
-//			String name = "num" + (i + 1) + ".png";
-//			lottoNums[i] = new JLabel(getIcon("afternumbers/" + name, 30, 30));
-//			pnlNum.add(lottoNums[i]);
-//		}
-
+		Object after = e.getSource();
+		for (int i = 0; i < lottoNums.length; i++) {
+			name = "num" + (i + 1) + ".png";
+			ImageIcon icon1 = getIcon("numbers/" + name, 30, 30);
+			ImageIcon icon2 = getIcon("afterNumbers/" + name, 30, 30);			
+			if (after == lottoNums[i]) {
+				System.out.println("클릭");
+				if (lottoNums[i].getIcon() == icon1) {
+					lottoNums[i].setIcon(icon2);
+				} else if (lottoNums[i].getIcon() == icon2) {
+					lottoNums[i].setIcon(icon1);
+				}
+			}
+		}
 	}
 
 	@Override
