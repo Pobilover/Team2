@@ -27,7 +27,7 @@ public class StartScreen extends JFrame implements ActionListener {
 
 	public void ChangeImageSize() {
 		System.out.println("결과 확인 ");
-		ImageIcon icon = convertToIcon("128x128.png" , 700, 500);
+		ImageIcon icon = convertToIcon("128x128.png" , 200, 200);
 
 		JLabel lbl = new JLabel(icon);
 

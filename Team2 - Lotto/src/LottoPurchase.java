@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
@@ -28,6 +29,11 @@ class Purchase extends JDialog implements MouseListener {
 	private JLabel[] lblChoNums;
 	private ImageIcon choiceImage;
 	private boolean[] lottoNumsIcon;
+	private JPanel[] pnlChoSets;
+	private JLabel[] lblTypes;
+	private JLabel lblNowGame;
+	private JLabel[][] lblChoNums2;
+	private int[] nowGameCounters;
 	
 	public Purchase() {
 		setModal(true); // 부모 창이랑 상호작용 못하게 막음
@@ -40,7 +46,7 @@ class Purchase extends JDialog implements MouseListener {
 		// 로또번호 선택가능한 패널
 		JPanel pnlWest = new JPanel();
 		pnlWest.setBackground(Color.WHITE);
-		pnlWest.setBounds(50, 100, 250, 400);
+		pnlWest.setPreferredSize(new Dimension(230, 420));
 		pnlWest.setBorder(new LineBorder(Color.black, 2, true));
 //		pnlNum.setBackground(Color.WHITE);
 		pnlWest.setLayout(new BoxLayout(pnlWest, BoxLayout.Y_AXIS));
@@ -53,6 +59,14 @@ class Purchase extends JDialog implements MouseListener {
 		lottoImage.setIcon(lottoIcon);
 		pnlImage.add(lottoImage);
 		
+		// 로또번호 선택창 현재 조 알려주는 패널
+		JPanel pnlNowGame = new JPanel();
+		JLabel lblNowGameT = new JLabel("현재 작성중인 조 : ");
+		lblNowGame = new JLabel("A");
+		pnlNowGame.add(lblNowGameT);
+		pnlNowGame.add(lblNowGame);
+		
+		// 로또번호 패널
 		pnlNum = new JPanel();
 		pnlNum.setBackground(Color.WHITE);
 		lottoNums = new JLabel[45];
@@ -93,6 +107,7 @@ class Purchase extends JDialog implements MouseListener {
 		pnlNumSkill2.add(ok);
 		
 		pnlWest.add(pnlImage);
+		pnlWest.add(pnlNowGame);
 		pnlWest.add(pnlNum);
 		pnlWest.add(pnlNumSkill1);
 		pnlWest.add(pnlNumSkill2);
@@ -102,7 +117,7 @@ class Purchase extends JDialog implements MouseListener {
 		
 		// 로또번호 선택 보이는 큰 패널
 		JPanel pnlEast = new JPanel();
-		pnlEast.setPreferredSize(new Dimension(400, 380));
+		pnlEast.setPreferredSize(new Dimension(450, 420));
 		pnlEast.setBorder(new LineBorder(Color.black, 2, true));
 //		pnlChoiceNum.setBackground(Color.WHITE);
 		pnlEast.setLayout(new BoxLayout(pnlEast, BoxLayout.Y_AXIS));
@@ -110,46 +125,56 @@ class Purchase extends JDialog implements MouseListener {
 		// 전체 초기화기능 패널
 		JPanel pnlReset = new JPanel();
 		JLabel lblConfirm = new JLabel("선택번호 확인");
+		lblConfirm.setFont(new Font("휴먼편지체", 1, 20));
 		RoundedButton allReset = new RoundedButton("초기화");
 		allReset.setBackground(new Color(128, 128, 128));
 		allReset.setForeground(Color.white);
 		pnlReset.add(lblConfirm);
-		pnlReset.add(Box.createHorizontalStrut(197));
+		pnlReset.add(Box.createHorizontalStrut(210));
 		pnlReset.add(allReset);
 		
 		// 선택한 번호 보이는 패널
 		JPanel pnlChoNum = new JPanel();
 		pnlChoNum.setBackground(Color.WHITE);
 		pnlChoNum.setLayout(new BoxLayout(pnlChoNum, BoxLayout.Y_AXIS));
-		JPanel[] pnlChoSet = new JPanel[5];
-		for (int j = 0; j < pnlChoSet.length; j++) {
-			pnlChoSet[j] = new JPanel();
-			pnlChoSet[j].setBackground(Color.WHITE);
-			pnlChoSet[j].setBorder(new LineBorder(Color.black, 1, true));
-			pnlChoSet[j].setLayout(new FlowLayout(FlowLayout.CENTER));
-			pnlChoSet[j].addMouseListener(this);
-			
+		pnlChoSets = new JPanel[5];
+		lblTypes = new JLabel[5];
+		for (int j = 0; j < pnlChoSets.length; j++) {
+			pnlChoSets[j] = new JPanel();
+			pnlChoSets[j].setBackground(Color.WHITE);
+			pnlChoSets[j].setBorder(new LineBorder(Color.black, 1, true));
+			pnlChoSets[j].setLayout(new FlowLayout(FlowLayout.CENTER));
+			pnlChoSets[j].addMouseListener(this);
+			lblTypes[j] = new JLabel("미지정");
+			lblTypes[j].setPreferredSize(new Dimension(42, 14));
+			lblChoNums2 = new JLabel[5][6];
 			String choCount = String.valueOf(j + 1);
-			JLabel lblChoConut = new JLabel(choCount);
-			JLabel[] lblChoNum = new JLabel[6];
-			for (int i = 0; i < lblChoNum.length ; i++) {
-				ImageIcon choiceImage = getIcon("balls/" + "ball1.png", 30, 30);
-				lblChoNum[i] = new JLabel(choiceImage);
+			char ch = (char) (j + 65);
+			JLabel lblChoConut = new JLabel(String.valueOf(ch));
+			for (int i = 0; i < lblChoNums2[j].length ; i++) {
+				ImageIcon choiceImage = getIcon("balls/" + "ball0.png", 30, 30);
+				lblChoNums2[j][i] = new JLabel(choiceImage);
 			}
 			
 			JButton choReset = new JButton("수정");
 			JButton choDelete = new JButton("삭제");
 			
-			pnlChoSet[j].add(lblChoConut);
-			pnlChoSet[j].add(Box.createHorizontalStrut(5));
-			for (int i = 0; i < lblChoNum.length; i++) {
-				pnlChoSet[j].add(lblChoNum[i]);
+			pnlChoSets[j].add(lblChoConut);
+			pnlChoSets[j].add(lblTypes[j]);
+			pnlChoSets[j].add(Box.createHorizontalStrut(5));
+			for (int i = 0; i < lblChoNums2[j].length; i++) {
+				pnlChoSets[j].add(lblChoNums2[j][i]);
 			}
-			pnlChoSet[j].add(Box.createHorizontalStrut(5));
-			pnlChoSet[j].add(choReset);
-			pnlChoSet[j].add(choDelete);
-			pnlChoNum.add(pnlChoSet[j]);
+			pnlChoSets[j].add(Box.createHorizontalStrut(5));
+			pnlChoSets[j].add(choReset);
+			pnlChoSets[j].add(choDelete);
+			pnlChoNum.add(pnlChoSets[j]);
 		}
+		nowGameCounters = new int[5];
+		for (int i = 0; i < 5; i++) {
+			nowGameCounters[i] = 0;
+		}
+		
 		
 		// 금액과 구매버튼 패널
 		JPanel pnlPurchase = new JPanel();
@@ -169,7 +194,7 @@ class Purchase extends JDialog implements MouseListener {
 		pnlPurchase.add(lbltotalT);
 		pnlPurchase.add(lbltotal);
 		pnlPurchase.add(lblTotal);
-		pnlPurchase.add(Box.createHorizontalStrut(20));
+		pnlPurchase.add(Box.createHorizontalStrut(120));
 		pnlPurchase.add(btnPurchase);
 		
 		pnlEast.add(pnlReset);
@@ -179,7 +204,7 @@ class Purchase extends JDialog implements MouseListener {
 		
 		add(pnlBuy);
 
-		setSize(700, 500);
+		setSize(720, 500);
 		setVisible(true);
 		
 	}
@@ -206,25 +231,52 @@ class Purchase extends JDialog implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		Object command = e.getSource();
 		for (int i = 0; i < lottoNums.length; i++) {
-			name = "num" + (i + 1) + ".png";		
+			name = "num" + (i + 1) + ".png";	
+			String ballName = "ball" + (i + 1) + ".png";
 			if (command == lottoNums[i]) {
+				int NowGame = (int) lblNowGame.getText().charAt(0) - 65;
+				System.out.println(NowGame);
 				if (lottoNumsIcon[i] == false) {
 					lottoNums[i].setIcon(getIcon("afterNumbers/"+name, 25, 25));
+					lblChoNums2[NowGame][nowGameCounters[NowGame]].setIcon(getIcon("balls/" + ballName, 30, 30));
+					nowGameCounters[NowGame]++;
 					lottoNumsIcon[i] = true;
+					System.out.println(NowGame);
+					System.out.println(nowGameCounters[NowGame]);
 				} else {
 					lottoNums[i].setIcon(getIcon("numbers/"+name, 30, 30));
+					nowGameCounters[NowGame]--;
+					lblChoNums2[NowGame][nowGameCounters[NowGame]].setIcon(getIcon("balls/" + "ball0.png", 30, 30));
 					lottoNumsIcon[i] = false;					
-				}
+				}	
 			}
+		}
+		for (int i = 0; i < pnlChoSets.length; i++) {
+			if (command == pnlChoSets[i]) {
+				char ch = (char) (i + 65);			
+				lblNowGame.setText(String.valueOf(ch));
+			}			
 		}
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		Object command = e.getSource();
+		for (int i = 0; i < pnlChoSets.length; i++) {
+			if (command == pnlChoSets[i]) {
+				pnlChoSets[i].setBackground(new Color(180, 180, 180));
+			}
+		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		Object command = e.getSource();
+		for (int i = 0; i < pnlChoSets.length; i++) {
+			if (command == pnlChoSets[i]) {
+				pnlChoSets[i].setBackground(Color.WHITE);
+			}
+		}		
 	}
 
 	@Override
