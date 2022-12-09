@@ -27,6 +27,7 @@ class Purchase extends JDialog implements MouseListener {
 	private String name;
 	private JLabel[] lblChoNums;
 	private ImageIcon choiceImage;
+	private boolean[] lottoNumsIcon;
 	
 	public Purchase() {
 		setModal(true); // 부모 창이랑 상호작용 못하게 막음
@@ -55,12 +56,14 @@ class Purchase extends JDialog implements MouseListener {
 		pnlNum = new JPanel();
 		pnlNum.setBackground(Color.WHITE);
 		lottoNums = new JLabel[45];
+		lottoNumsIcon = new boolean[45];
 		pnlNum.setLayout(new GridLayout(7, 7));
 		for (int i = 0; i < lottoNums.length; i++) {
 			String name = "num" + (i + 1) + ".png";
 			lottoNums[i] = new JLabel(getIcon("numbers/" + name, 30, 30));
 			lottoNums[i].addMouseListener(this);
 			pnlNum.add(lottoNums[i]);
+			lottoNumsIcon[i] = false;
 		}
 		
 		
@@ -201,17 +204,16 @@ class Purchase extends JDialog implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Object after = e.getSource();
+		Object command = e.getSource();
 		for (int i = 0; i < lottoNums.length; i++) {
-			name = "num" + (i + 1) + ".png";
-			ImageIcon icon1 = getIcon("numbers/" + name, 30, 30);
-			ImageIcon icon2 = getIcon("afterNumbers/" + name, 30, 30);			
-			if (after == lottoNums[i]) {
-				System.out.println("클릭");
-				if (lottoNums[i].getIcon() == icon1) {
-					lottoNums[i].setIcon(icon2);
-				} else if (lottoNums[i].getIcon() == icon2) {
-					lottoNums[i].setIcon(icon1);
+			name = "num" + (i + 1) + ".png";		
+			if (command == lottoNums[i]) {
+				if (lottoNumsIcon[i] == false) {
+					lottoNums[i].setIcon(getIcon("afterNumbers/"+name, 25, 25));
+					lottoNumsIcon[i] = true;
+				} else {
+					lottoNums[i].setIcon(getIcon("numbers/"+name, 30, 30));
+					lottoNumsIcon[i] = false;					
 				}
 			}
 		}
