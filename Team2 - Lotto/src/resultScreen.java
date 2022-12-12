@@ -5,6 +5,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,8 +29,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-class resultScreenSet extends JDialog{
+class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
+	private JButton before;
+	private JButton after;
+	private JLabel[][] lblUserNumbers;
 	
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
 		return sheets;
@@ -161,8 +168,8 @@ class resultScreenSet extends JDialog{
 		
 		// 버튼과 표 표시해주는 panel
 		JPanel pnl4Box = new JPanel();
-		JButton before = new JButton("<<<");
-		JButton after = new JButton(">>>");	
+		before = new JButton("<<<");
+		after = new JButton(">>>");	
 		pnl4Box.setLayout(new BoxLayout(pnl4Box, BoxLayout.Y_AXIS));
 		pnl4Box.setBackground(Color.WHITE);
 		JLabel[] lblSequence = new JLabel[5];
@@ -179,7 +186,7 @@ class resultScreenSet extends JDialog{
 		for (int i = 0; i < lblRank.length; i++) {
 			lblRank[i] = new JLabel("1등");
 		}
-		JLabel[][] lblUserNumbers = new JLabel[5][6];
+		lblUserNumbers = new JLabel[5][6];
 		for (int i = 0; i < lblUserNumbers.length; i++) {
 			for (int j = 0; j < lblUserNumbers[i].length; j++) {
 				try {
@@ -286,7 +293,75 @@ class resultScreenSet extends JDialog{
 		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		ImageIcon icon = new ImageIcon(image);
 		return icon;
+		
 	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// 다시 수정예정............
+////		Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
+////		sheets.get(0).get(0);
+//		Object command = e.getSource();
+//		List<Integer> test = new ArrayList<>(Arrays.asList(1,6,12,16,25,34));
+//		
+//		if (command == before) {
+//			for (int i = 0; i < test.size(); i++) {
+//				for (int j = 0; j < 46; j++) {
+//					if (test.contains(j)) {
+//						test.indexOf(i);
+//					ImageIcon image = convertToIcon("balls/ball" + j +".png", 30, 30);
+//					lblUserNumbers[0][i].setIcon(image);
+//					}
+//				}
+//			}				
+//		}
+		
+		Object command = e.getSource();
+		if (command == before) {
+			for (int i = 0; i < lblUserNumbers.length; i++) {
+				for (int j = 0; j < lblUserNumbers[i].length; j++) {
+					ImageIcon image = convertToIcon("balls/ball5.png", 30, 30);
+					lblUserNumbers[i][j].setIcon(image);
+				}
+			}
+		}
+		if (command == after) {
+			for (int i = 0; i < lblUserNumbers.length; i++) {
+				for (int j = 0; j < lblUserNumbers[i].length; j++) {
+					ImageIcon image = convertToIcon("balls/ball7.png", 30, 30);
+					lblUserNumbers[i][j].setIcon(image);
+				}
+			}
+		}
+	} 
+	
+	
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	
+		
+	}
+	
 }
 public class resultScreen {
 	public static void main(String[] args) {
