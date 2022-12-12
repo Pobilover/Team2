@@ -430,9 +430,11 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		if (command == btnAllReset) {
 			for (int i = 0; i < 5; i++) {
 				changeBallIcon(i, inputNumbers, "삭제", "미지정");
+				numOfGames++;
 				cbQuantity.setSelectedIndex(0);
 				searchPossible(nowGame);
 				clearSelectedNumber(nowGame);
+				lblNowGame.setText("A");
 			}
 		}
 		if (btnChoResets.contains(command)) {
@@ -457,23 +459,31 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			clearSelectedNumber(nowGame);
 		}
 		if (command == btnPurchase && numOfGame != 0) {
+			List<Integer> existence = new ArrayList<>();
+			for (int i = 0; i < 5; i++) {
+				if (inputRounds.get(i) != null) {
+					existence.add(i);
+				}
+			}
+			Collections.sort(existence);
 			for (int i = 0; i < inputRounds.size(); i++) {
-				if (inputRounds.get(i).contains(100)) {
+				int numI = existence.get(i);
+				if (inputRounds.get(numI).contains(100)) {
 					do {
-						int index = inputRounds.get(i).indexOf(100);
+						int index = inputRounds.get(numI).indexOf(100);
 						if (index != -1) {
-							inputRounds.get(i).remove(index);	
+							inputRounds.get(numI).remove(index);	
 						}			
-					} while (inputRounds.get(i).contains(100));
+					} while (inputRounds.get(numI).contains(100));
 					Set<Integer> tempSet = new TreeSet<>();	
-					tempSet.addAll(inputRounds.get(i));
+					tempSet.addAll(inputRounds.get(numI));
 					Random random = new Random();
 					while (tempSet.size() < 6) {
 						int num = random.nextInt(45);
 						tempSet.add(num);
-						inputRounds.get(i).clear();
-						inputRounds.get(i).addAll(tempSet);
-						Collections.sort(inputRounds.get(i));	
+						inputRounds.get(numI).clear();
+						inputRounds.get(numI).addAll(tempSet);
+						Collections.sort(inputRounds.get(numI));	
 					}					
 				}
 			}
