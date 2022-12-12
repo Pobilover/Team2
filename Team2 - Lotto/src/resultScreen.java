@@ -10,8 +10,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -23,6 +25,16 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 class resultScreenSet extends JDialog{
+	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
+	
+	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
+		return sheets;
+	}
+
+	public void setSheets(Map<Integer, Map<Integer, List<Integer>>> sheets) {
+		this.sheets = sheets;
+	}
+
 	public resultScreenSet() {
 		List<Integer> userNum = new ArrayList<>(Arrays.asList(5,12,16,18,25,31));
 		// 당첨결과 여섯개 랜덤 숫자 만들기
@@ -202,6 +214,9 @@ class resultScreenSet extends JDialog{
 		add(pnlBox);
 		setModal(true);
 		setSize(700,500);
+	}
+	
+	public void showGUI() {
 		setVisible(true);
 	}
 	
@@ -217,6 +232,6 @@ class resultScreenSet extends JDialog{
 }
 public class resultScreen {
 	public static void main(String[] args) {
-		new resultScreenSet();
+		new resultScreenSet().showGUI();
 	}
 }

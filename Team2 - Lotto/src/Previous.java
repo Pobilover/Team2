@@ -178,6 +178,9 @@ class Previous extends JDialog {
 		setTitle("이전회차 조회");
 		setModal(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	}
+	
+	public void showGUI() {
 		setVisible(true);
 	}
 }

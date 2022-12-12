@@ -28,6 +28,8 @@ public class StartScreen extends JFrame implements ActionListener {
 	private RoundedButton round2;
 	private RoundedButton round3;
 	Purchase purchase = new Purchase();
+	resultScreenSet resultScreenSet = new resultScreenSet();
+	Previous previous = new Previous();
 	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
 
 	public void ChangeImageSize() {
@@ -162,10 +164,11 @@ public class StartScreen extends JFrame implements ActionListener {
 		}
 		if (command == round2) {
 			sheets = purchase.getSheets();
-			new resultScreenSet();
+			resultScreenSet.setSheets(sheets);
+			resultScreenSet.showGUI();
 		}
 		if (command == round3) {
-			new Previous();
+			previous.showGUI();
 		}
 	}
 
