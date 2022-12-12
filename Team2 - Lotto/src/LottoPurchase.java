@@ -422,8 +422,8 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 				randomNumbers(nowGame, inputNumbers);
 				changeBallIcon(nowGame, inputNumbers, "등록", "반자동");
 				selectedQuantity--;
+				List<Integer> possible = searchPossible(nowGame);
 				for (int i = 0; i < selectedQuantity; i++) {
-					List<Integer> possible = searchPossible(nowGame);
 					nowGame = possible.get(i); 
 					inputRounds.put(nowGame, inputNumbers);
 					changeBallIcon(nowGame, inputNumbers, "등록", "반자동");			
@@ -440,12 +440,13 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		}
 		if (command == btnAllReset) {
 			for (int i = 0; i < 5; i++) {
-				changeBallIcon(i, inputNumbers, "삭제", "미지정");
-				numOfGames++;
-				cbQuantity.setSelectedIndex(0);
-				searchPossible(nowGame);
-				clearSelectedNumber(nowGame);
-				lblNowGame.setText("A");
+				if (inputRounds.get(i) != null) {
+					changeBallIcon(i, inputNumbers, "삭제", "미지정");
+					cbQuantity.setSelectedIndex(0);
+					searchPossible(nowGame);
+					clearSelectedNumber(nowGame);
+					lblNowGame.setText("A");
+				}
 			}
 		}
 		if (btnChoResets.contains(command)) {
