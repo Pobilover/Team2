@@ -1,6 +1,4 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -23,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.tools.DiagnosticCollector;
 
 public class StartScreen extends JFrame implements ActionListener {
 	
@@ -31,13 +28,12 @@ public class StartScreen extends JFrame implements ActionListener {
 	private RoundedButton round2;
 	private RoundedButton round3;
 	Purchase purchase = new Purchase();
-	resultScreenSet resultScreenSet = new resultScreenSet();
 	Previous previous = new Previous();
 	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
-	private RoundedButton round4;
 
 	public void ChangeImageSize() {
-		ImageIcon icon = convertToIcon("메인배경.jpg", 700, 420);
+		System.out.println("결과 확인 ");
+		ImageIcon icon = convertToIcon("128x128.png" , 200, 200);
 
 		JLabel lbl = new JLabel(icon);
 
@@ -53,26 +49,19 @@ public class StartScreen extends JFrame implements ActionListener {
 	}
 
 	public StartScreen() {
-		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(new Methods().backgroud("메인배경.jpg"));
-		pnl.setLayout(new BorderLayout());
-		JPanel under = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 40));
-		under.setBackground(new Color(255, 0, 0, 0));
+		ChangeImageSize();
+		JPanel under = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 40));
 		round1 = new RoundedButton("구매하기");
 		round2 = new RoundedButton("당첨확인");
 		round3 = new RoundedButton("이전회차");
-		round4 = new RoundedButton("미니게임");
 		round1.addActionListener(this);
 		round2.addActionListener(this);
 		round3.addActionListener(this);
-		round4.addActionListener(this);
-		under.setBackground(new Color(100, 100, 100, 150));
+		under.setBackground(Color.red);
 		under.add(round1);
 		under.add(round2);
 		under.add(round3);
-		under.add(round4);
-		pnl.add(under, "South");
-		under.setPreferredSize(new Dimension(650, 100));
-		add(pnl);
+		add(under, "South");
 
 		setSize(700, 500);
 		setTitle("나눔 Lotto");
@@ -173,9 +162,7 @@ public class StartScreen extends JFrame implements ActionListener {
 			purchase.showGUI();
 		}
 		if (command == round2) {
-			sheets = purchase.getSheets();
-			resultScreenSet.setSheets(sheets);
-			resultScreenSet.showGUI();
+			new resultScreenSet().showGUI();
 		}
 		if (command == round3) {
 			previous.showGUI();

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -36,7 +37,23 @@ class resultScreenSet extends JDialog{
 	}
 
 	public resultScreenSet() {
-		List<Integer> userNum = new ArrayList<>(Arrays.asList(5,12,16,18,25,31));
+		sheets = new Purchase().getSheets();
+		
+		List<Integer> userNum = new ArrayList<>();
+//		for (int i = 0; i < 5; i++) {
+			try {
+				userNum.addAll(sheets.get(0).get(0));
+				System.out.println("1번확인");
+			} catch (NullPointerException e) {
+				System.out.println("1번오류");
+				userNum.add(1);	
+				userNum.add(1);	
+				userNum.add(1);	
+				userNum.add(1);	
+				userNum.add(1);	
+				userNum.add(1);	
+			}			
+//		}
 		// 당첨결과 여섯개 랜덤 숫자 만들기
 		Set<Integer> winNumSet = new HashSet<>();
 		Random random = new Random();
@@ -49,16 +66,23 @@ class resultScreenSet extends JDialog{
 		// 보너스 번호 넣기
 		int winNumBonus = 0;
 		int winCount = 0;
-		int bonusRandom = random.nextInt(7) + 1;
+		int bonusRandom = random.nextInt(7);
 		winNumBonus = winNumList.get(bonusRandom);
 		winNumList.remove(bonusRandom);
 		System.out.println(winNumList);
 		// 비교하기
 		Set<Integer> duplicate = new HashSet<>();
-		duplicate.addAll(userNum);
-		duplicate.retainAll(winNumSet);
+		try {
+			duplicate.addAll(userNum);			
+		} catch (NullPointerException e) {
+			System.out.println("2번오류");
+			duplicate.add(0);
+		}
+		duplicate.retainAll(winNumList);
 		List<Integer> duplicateList = new ArrayList<>(duplicate);
+		System.out.println(userNum);
 		System.out.println(duplicateList);
+		Iterator<Integer> iterator = duplicateList.iterator();
 		
 		// panel 구성
 		JPanel pnlBox = new JPanel();
@@ -158,9 +182,19 @@ class resultScreenSet extends JDialog{
 		JLabel[][] lblUserNumbers = new JLabel[5][6];
 		for (int i = 0; i < lblUserNumbers.length; i++) {
 			for (int j = 0; j < lblUserNumbers[i].length; j++) {
-//				int number = 0;
-				String imgName = "balls/ballNull.png" ;
-				lblUserNumbers[i][j] = new JLabel(convertToIcon(imgName, 30, 30));
+				try {
+				if(duplicateList.size() != 0) {
+					System.out.println("오류확인1");
+					String imgName = "balls/ball" + duplicateList.get(j) + ".png" ;
+					lblUserNumbers[i][j] = new JLabel(convertToIcon(imgName, 30, 30));
+				} else {
+					System.out.println("오류확인2");
+					lblUserNumbers[i][j] = new JLabel(convertToIcon("balls/ballNull.png", 30, 30));										
+				}
+				} catch (NullPointerException e) {
+					System.out.println("오류확인3");
+					lblUserNumbers[i][j] = new JLabel(convertToIcon("balls/ballNull.png", 30, 30));
+				}
 			}
 		}
 		JPanel[] pnl4BoxSets = new JPanel[5];
@@ -219,6 +253,30 @@ class resultScreenSet extends JDialog{
 	public void showGUI() {
 		setVisible(true);
 	}
+	
+//	public List compareList(List user, Set winNum) {
+//		List<Integer> userNum = new ArrayList<>(user);
+//		for (int i = 0; i < 5; i++) {
+//			try {
+//				userNum.addAll(sheets.get(0).get(i));
+//			} catch (NullPointerException e) {
+//				System.out.println("1번오류");
+//				userNum.add(0);	
+//			}			
+//		}
+//		// 비교하기
+//		Set<Integer> duplicate = new HashSet<>();
+//		try {
+//			duplicate.addAll(userNum);			
+//		} catch (NullPointerException e) {
+//			System.out.println("2번오류");
+//			duplicate.add(0);
+//		}
+//		duplicate.retainAll(winNum);
+//		List<Integer> duplicateList = new ArrayList<>(duplicate);
+//		System.out.println(duplicateList);
+//		Iterator<Integer> iterator = duplicateList.iterator();
+//	}
 	
 	public ImageIcon convertToIcon(String name, int width, int height) {
 		String imageName = name;
