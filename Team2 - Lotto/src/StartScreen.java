@@ -9,6 +9,9 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.Action;
 import javax.swing.Box;
@@ -24,6 +27,8 @@ public class StartScreen extends JFrame implements ActionListener {
 	private RoundedButton round1;
 	private RoundedButton round2;
 	private RoundedButton round3;
+	Purchase purchase = new Purchase();
+	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
 
 	public void ChangeImageSize() {
 		System.out.println("결과 확인 ");
@@ -153,9 +158,10 @@ public class StartScreen extends JFrame implements ActionListener {
 		Object command = e.getSource();
 		
 		if (command == round1) {
-			new Purchase();
+			purchase.showGUI();
 		}
 		if (command == round2) {
+			sheets = purchase.getSheets();
 			new resultScreenSet();
 		}
 		if (command == round3) {

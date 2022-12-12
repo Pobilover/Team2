@@ -69,6 +69,14 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	private JButton btnPurchase;
 	private JButton btnFinish;
 	
+	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
+		return sheets;
+	}
+
+	public void setSheets(Map<Integer, Map<Integer, List<Integer>>> sheets) {
+		this.sheets = sheets;
+	}
+
 	public Purchase() {
 		setModal(true); // 부모 창이랑 상호작용 못하게 막음
 		
@@ -282,8 +290,6 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		add(pnlBuy);
 
 		setSize(720, 500);
-		setVisible(true);
-		
 	}
 	
 
@@ -662,10 +668,14 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
             }
         }
     }
+    
+    public void showGUI() {
+    	setVisible(true);
+    }
 }
 
 public class LottoPurchase {
 	public static void main(String[] args) {
-		new Purchase();
+		
 	}
 }
