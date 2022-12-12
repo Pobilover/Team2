@@ -86,12 +86,12 @@ public class Manual extends JDialog {
 		
 		JLabel lblNewLabel_10 = new JLabel("번호를 부분적으로 선택한 후 자동선택을 하면,");
 		lblNewLabel_10.setFont(new Font("휴먼편지체", Font.PLAIN, 18));
-		lblNewLabel_10.setBounds(538, 250, 306, 22);
+		lblNewLabel_10.setBounds(538, 225, 306, 22);
 		contentPanel.add(lblNewLabel_10);
 		
 		JLabel lblNewLabel_11 = new JLabel("나머지 번호는 자동으로 번호가 발급됩니다.");
 		lblNewLabel_11.setFont(new Font("휴먼편지체", Font.PLAIN, 18));
-		lblNewLabel_11.setBounds(538, 228, 290, 22);
+		lblNewLabel_11.setBounds(538, 250, 290, 22);
 		contentPanel.add(lblNewLabel_11);
 		
 		JLabel lblNewLabel_8 = new JLabel("3. 번호확인\r\n");
