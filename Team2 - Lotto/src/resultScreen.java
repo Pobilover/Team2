@@ -5,6 +5,13 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -13,9 +20,35 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 class resultScreenSet extends JDialog{
 	public resultScreenSet() {
+		List<Integer> userNum = new ArrayList<>(Arrays.asList(5,12,16,18,25,31));
+		// 당첨결과 여섯개 랜덤 숫자 만들기
+		Set<Integer> winNumSet = new HashSet<>();
+		Random random = new Random();
+		while (winNumSet.size() < 7) {
+			int num = random.nextInt(45) + 1;
+			winNumSet.add(num);
+		}
+		List<Integer> winNumList = new ArrayList<>(winNumSet);
+		Collections.sort(winNumList);
+		// 보너스 번호 넣기
+		int winNumBonus = 0;
+		int winCount = 0;
+		int bonusRandom = random.nextInt(7) + 1;
+		winNumBonus = winNumList.get(bonusRandom);
+		winNumList.remove(bonusRandom);
+		System.out.println(winNumList);
+		// 비교하기
+		Set<Integer> duplicate = new HashSet<>();
+		duplicate.addAll(userNum);
+		duplicate.retainAll(winNumSet);
+		List<Integer> duplicateList = new ArrayList<>(duplicate);
+		System.out.println(duplicateList);
+		
+		// panel 구성
 		JPanel pnlBox = new JPanel();
 		JPanel pnl1 = new JPanel();
 		JPanel pnl2 = new JPanel();
@@ -23,8 +56,10 @@ class resultScreenSet extends JDialog{
 		JPanel pnl4 = new JPanel();
 		JPanel pnl5 = new JPanel();
 		
+		// 전체적인 panel
 		pnlBox.setLayout(new BoxLayout(pnlBox, BoxLayout.Y_AXIS));
 		
+		// 제일위 당첨결과 title panel
 		JLabel turn = new JLabel("-");
 		JLabel title = new JLabel("회 당첨결과");
 		turn.setFont(new Font("휴먼편지체", Font.BOLD, 30));
@@ -32,6 +67,7 @@ class resultScreenSet extends JDialog{
 		pnl1.add(turn);
 		pnl1.add(title);
 		
+		// 당첨결과 알려주는 공 표시해주는 panel
 		pnl2.setLayout(new BoxLayout(pnl2, BoxLayout.Y_AXIS));
 		JPanel pnl2_1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		JPanel pnl2_2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -43,16 +79,19 @@ class resultScreenSet extends JDialog{
 		pnl2_2.add(lblWinNumT);
 		pnl2_2.add(Box.createHorizontalStrut(140));
 		pnl2_2.add(lblBonusNumT);
-		JLabel[] lblWinNum = new JLabel[7];
+		JLabel[] lblWinNum = new JLabel[6];
 		for (int i = 0; i < lblWinNum.length; i++) {
-			ImageIcon icon = convertToIcon("balls/ball1.png", 40, 40);
+			int ballNum = winNumList.get(i);
+			String ballName = "balls/ball" + ballNum +".png";
+			ImageIcon icon = convertToIcon(ballName, 40, 40);
 			lblWinNum[i] = new JLabel(icon);
 		}
 		JLabel plus = new JLabel("+");
 		plus.setFont(new Font("바탕", Font.BOLD, 20));
 		JLabel bonus = new JLabel();
-		bonus.setIcon(convertToIcon("balls/ball7.png", 40, 40));
-		for (int i = 0; i < lblWinNum.length - 1; i++) {
+		bonus.setIcon(convertToIcon("balls/ball" + winNumBonus +".png", 40, 40));
+		
+		for (int i = 0; i < lblWinNum.length; i++) {
 			pnl2_1.add(lblWinNum[i]);			
 		}
 		pnl2_1.add(plus);
@@ -62,36 +101,40 @@ class resultScreenSet extends JDialog{
 		pnl2.add(pnl2_1);
 		pnl2.add(pnl2_2);
 		//panel 크기 확인용
-		//pnl2_1.setBorder(new LineBorder(Color.BLACK, 2, true));
+//		pnl2_1.setBorder(new LineBorder(Color.BLACK, 2, true));
 		
+		// 회색 박스(당첨결과와 돈) 알려주는 panel
 		JPanel pnl3_1 = new JPanel();
-		pnl3_1.setPreferredSize(new Dimension(450, 60));
+		pnl3_1.setPreferredSize(new Dimension(450, 45));
 		pnl3_1.setBackground(Color.LIGHT_GRAY);
 		JLabel resultWord = new JLabel("축하합니다! 총 ");
 		JLabel resultWord2 = new JLabel("원 당첨입니다!");
 		JLabel resultMoney = new JLabel("-");
-		resultWord.setFont(new Font("휴먼편지체", Font.BOLD, 20));
-		resultWord2.setFont(new Font("휴먼편지체", Font.BOLD, 20));
-		resultMoney.setFont(new Font("휴먼편지체", Font.BOLD, 20));
+		resultWord.setFont(new Font("휴먼편지체", Font.BOLD, 18));
+		resultWord2.setFont(new Font("휴먼편지체", Font.BOLD, 18));
+		resultMoney.setFont(new Font("휴먼편지체", Font.BOLD, 18));
 		resultWord.setForeground(Color.white);
 		resultWord2.setForeground(Color.white);
 		resultMoney.setForeground(Color.white);
-		pnl3_1.add(Box.createVerticalStrut(50));
+		pnl3_1.add(Box.createVerticalStrut(40));
 		pnl3_1.add(resultWord);
 		pnl3_1.add(resultMoney);		
 		pnl3_1.add(resultWord2);
 		pnl3.add(Box.createHorizontalStrut(5));
 		pnl3.add(pnl3_1);
 		
+		// 버튼과 표 표시해주는 panel
+		JPanel pnl4Box = new JPanel();
 		JButton before = new JButton("<<<");
 		JButton after = new JButton(">>>");	
-		
-		JPanel pnl4_1 = new JPanel(new GridLayout(5, 9));		
-		JLabel lblA = new JLabel("A");
-		JLabel lblB = new JLabel("B");
-		JLabel lblC = new JLabel("C");
-		JLabel lblD = new JLabel("D");
-		JLabel lblE = new JLabel("E");
+		pnl4Box.setLayout(new BoxLayout(pnl4Box, BoxLayout.Y_AXIS));
+		pnl4Box.setBackground(Color.WHITE);
+		JLabel[] lblSequence = new JLabel[5];
+		lblSequence[0] = new JLabel("A");
+		lblSequence[1] = new JLabel("B");
+		lblSequence[2] = new JLabel("C");
+		lblSequence[3] = new JLabel("D");
+		lblSequence[4] = new JLabel("E");
 		JLabel[] lblType = new JLabel[5];
 		for (int i = 0; i < lblType.length; i++) {
 			lblType[i] = new JLabel("자동");
@@ -103,38 +146,41 @@ class resultScreenSet extends JDialog{
 		JLabel[][] lblUserNumbers = new JLabel[5][6];
 		for (int i = 0; i < lblUserNumbers.length; i++) {
 			for (int j = 0; j < lblUserNumbers[i].length; j++) {
-				int number = 0;
-				String imgName = "balls/" + number + ".png" ;
-				lblUserNumbers[i][j] = new JLabel(convertToIcon("balls/ball1.png", 30, 30));
+//				int number = 0;
+				String imgName = "balls/ballNull.png" ;
+				lblUserNumbers[i][j] = new JLabel(convertToIcon(imgName, 30, 30));
 			}
 		}
-		pnl4_1.add(lblA);
-		pnl4_1.add(lblType[0]);
-		pnl4_1.add(lblRank[0]);
-		
-		
-//		JTable resultTable = new JTable(5,4);		
-//		//table 값 만들기
-//		DefaultTableModel model = (DefaultTableModel)resultTable.getModel();
-//		String[] record = new String[4];
-//		record[0] = "A";
-//		record[1] = "자동";
-//		record[2] = "1등";
-//		record[3] = "2 3 5 6 7 9";
-//		model.addRow(record);
+		JPanel[] pnl4BoxSets = new JPanel[5];
+		for (int i = 0; i < 5; i++) {
+			pnl4BoxSets[i] = new JPanel();
+			pnl4BoxSets[i].setBackground(Color.WHITE);
+			pnl4BoxSets[i].setBorder(new LineBorder(Color.black, 1 , true));
+			pnl4BoxSets[i].setLayout(new FlowLayout(FlowLayout.CENTER));
+			pnl4BoxSets[i].add(lblSequence[i]);
+			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
+			pnl4BoxSets[i].add(lblType[i]);
+			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
+			pnl4BoxSets[i].add(lblRank[i]);
+			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
+			for (int j = 0; j < 6; j++) {
+				pnl4BoxSets[i].add(lblUserNumbers[i][j]);			
+			}
+			pnl4Box.add(pnl4BoxSets[i]);
+			
+		}
 		
 		before.setPreferredSize(new Dimension(55,40));
 		before.setBackground(Color.LIGHT_GRAY);
 		after.setPreferredSize(new Dimension(55,40));
 		after.setBackground(Color.LIGHT_GRAY);
-//		resultTable.setPreferredSize(new Dimension(300,150));
-//		resultTable.setRowHeight(30);
 		pnl4.add(before);
 		pnl4.add(Box.createHorizontalStrut(30));
-//		pnl4.add(resultTable);
+		pnl4.add(pnl4Box);
 		pnl4.add(Box.createHorizontalStrut(30));
 		pnl4.add(after);
 		
+		// 구매 갯수와 게임 갯수 알려주는 panel
 		JLabel lbl1 = new JLabel("구매: ");
 		JLabel lbl2 = new JLabel("장");
 		JLabel lbl2_1 = new JLabel(", ");		
@@ -146,6 +192,7 @@ class resultScreenSet extends JDialog{
 		pnl5.add(lbl3);
 		pnl5.add(lbl4);
 		
+		// 패널 표시해주기
 		pnlBox.add(pnl1);
 		pnlBox.add(pnl2);
 		pnlBox.add(pnl3);
@@ -166,5 +213,10 @@ class resultScreenSet extends JDialog{
 		image = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		ImageIcon icon = new ImageIcon(image);
 		return icon;
+	}
+}
+public class resultScreen {
+	public static void main(String[] args) {
+		new resultScreenSet();
 	}
 }
