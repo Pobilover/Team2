@@ -311,14 +311,14 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			String name = "num" + (index + 1) + ".png";
 			if (lottoNumsIcon[index] && nowGameCounters[nowGame] <= 6) {
 				lblNumbers.get(index).setIcon(getIcon("numbers/" + name, 30, 30)); 
-				lottoNumsIcon[index] = false;
+				lottoNumsIcon[index + 1] = false;
 				nowGameCounters[nowGame]--;
-				inputNumbers.remove(inputNumbers.indexOf(index));
+				inputNumbers.remove(inputNumbers.indexOf(index + 1));
 			} else if (!lottoNumsIcon[index] && nowGameCounters[nowGame] < 6) {
 				lblNumbers.get(index).setIcon(getIcon("afterNumbers/" + name, 30, 30));
 				lottoNumsIcon[index] = true;
 				nowGameCounters[nowGame]++;
-				inputNumbers.add(index);
+				inputNumbers.add(index + 1);
 			} else if (!lottoNumsIcon[index] && nowGameCounters[nowGame] >= 6) {
 				JOptionPane.showMessageDialog(null, "최대 6개의 숫자를 선택할 수 있습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -591,7 +591,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			inputRounds.put(nowGame, numList[nowGame]);
 			for (int i = 0; i < 6; i++) {
 				int number = inputRounds.get(nowGame).get(i);
-				String name = "ball" + (number + 1) + ".png";
+				String name = "ball" + (number) + ".png";
 				if (number == 100) {
 					name = "ball100.png";
 				}
@@ -676,6 +676,6 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 
 public class LottoPurchase {
 	public static void main(String[] args) {
-		
+		//new Purchase().showGUI();
 	}
 }
