@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.tools.DiagnosticCollector;
 
@@ -157,7 +158,11 @@ public class StartScreen extends JFrame implements ActionListener {
 		}
 		if (command == round2) {
 			this.sheets = purchase.getSheets();
-			new resultScreenSet(sheets).showGUI();
+			if (sheets.get(0) != null) {
+				new resultScreenSet(sheets).showGUI();
+			} else {
+				JOptionPane.showMessageDialog(null, "1개 이상의 게임을 구매 후 확인 가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 		if (command == round3) {
 			previous.showGUI();
