@@ -455,9 +455,11 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			lblNowGame.setVisible(true);
 			lblFinish.setVisible(false);
 			nowGame = (int) lblNowGame.getText().charAt(0) - 65;
-			showSelectedNumber(nowGame);
-			numOfGame--;
-			numOfGames--;
+			if (inputRounds.get(nowGame) != null) {
+				showSelectedNumber(nowGame);
+				numOfGame--;
+				numOfGames--;
+			}
 		}
 		if (btnChoDeletes.contains(command)) {
 			int index = btnChoDeletes.indexOf(command);
@@ -465,8 +467,10 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			lblNowGame.setText(String.valueOf(temp));
 			lblNowGame.setVisible(true);
 			lblFinish.setVisible(false);
-			nowGame = (int) lblNowGame.getText().charAt(0) - 65;
-			changeBallIcon(nowGame, inputNumbers, "삭제", "미지정");
+			if (inputRounds.get(temp) != null) {
+				nowGame = (int) lblNowGame.getText().charAt(0) - 65;
+				changeBallIcon(nowGame, inputNumbers, "삭제", "미지정");
+			}
 			clearSelectedNumber(nowGame);
 		}
 		if (command == btnPurchase && numOfGame != 0) {
