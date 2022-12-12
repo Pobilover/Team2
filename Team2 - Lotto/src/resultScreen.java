@@ -43,9 +43,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		this.sheets = sheets;
 	}
 
-	public resultScreenSet() {
-		sheets = new Purchase().getSheets();
-		
+	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets) {	
 		List<Integer> userNum = new ArrayList<>();
 //		for (int i = 0; i < 5; i++) {
 			try {
@@ -365,6 +363,6 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 }
 public class resultScreen {
 	public static void main(String[] args) {
-		new resultScreenSet().showGUI();
+		//new resultScreenSet().showGUI();
 	}
 }

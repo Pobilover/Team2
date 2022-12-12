@@ -156,7 +156,8 @@ public class StartScreen extends JFrame implements ActionListener {
 			purchase.showGUI();
 		}
 		if (command == round2) {
-			new resultScreenSet().showGUI();
+			this.sheets = purchase.getSheets();
+			new resultScreenSet(sheets).showGUI();
 		}
 		if (command == round3) {
 			previous.showGUI();
