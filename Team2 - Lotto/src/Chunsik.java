@@ -8,10 +8,10 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-class ClickMe3 extends JFrame {
+class ClickMe3 extends JDialog {
 	private Image background=new ImageIcon(Chunsik.class.getResource("chunsic/background.png")).getImage();
 	private JButton btn;
 
@@ -57,9 +57,14 @@ class ClickMe3 extends JFrame {
 		add(pnl);
 		
 		pack();
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setTitle("춘식이를 잡아라~!");
+		setModal(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	}
+	public void showGUI() {
 		setVisible(true);
 	}
+	
 	public ImageIcon convertToIcon(String name, int width, int height) {
 		String imageName = name;
 		int thisWidth = width;

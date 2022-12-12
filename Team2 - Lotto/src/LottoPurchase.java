@@ -68,6 +68,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	private int numOfGames = 0;
 	private JButton btnPurchase;
 	private JButton btnFinish;
+	private RoundedButton btnManual;
 	
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
 		return sheets;
@@ -192,12 +193,16 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		JPanel pnlReset = new JPanel();
 		JLabel lblConfirm = new JLabel("선택번호 확인");
 		lblConfirm.setFont(new Font("휴먼편지체", 1, 20));
+		btnManual = new RoundedButton("사용법");
+		btnManual.addActionListener(this);
+		btnManual.setBackground(new Color(200, 128, 128));
 		btnAllReset = new RoundedButton("초기화");
 		btnAllReset.setBackground(new Color(128, 128, 128));
 		btnAllReset.setForeground(Color.white);
 		btnAllReset.addActionListener(this);
 		pnlReset.add(lblConfirm);
-		pnlReset.add(Box.createHorizontalStrut(210));
+		pnlReset.add(Box.createHorizontalStrut(135));
+		pnlReset.add(btnManual);
 		pnlReset.add(btnAllReset);
 		
 		// 선택한 번호 보이는 패널
@@ -485,7 +490,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 					tempSet.addAll(inputRounds.get(numI));
 					Random random = new Random();
 					while (tempSet.size() < 6) {
-						int num = random.nextInt(46);
+						int num = random.nextInt(45);
 						tempSet.add(num);
 						inputRounds.get(numI).clear();
 						inputRounds.get(numI).addAll(tempSet);
@@ -521,6 +526,9 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		lbltotal.setText(String.valueOf(numOfGames * 1000));		
 		if (command == btnFinish) {
 			
+		}
+		if (command == btnManual) {
+			new Manual().showGUI();
 		}
 		
 	}
@@ -676,6 +684,6 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 
 public class LottoPurchase {
 	public static void main(String[] args) {
-		//new Purchase().showGUI();
+		new Purchase().showGUI();
 	}
 }
