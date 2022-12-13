@@ -5,11 +5,14 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
-import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -17,25 +20,76 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
-class Previous extends JDialog {
+class Previous extends JDialog implements ActionListener {
+	private Map<Integer, List<Integer>> winNumber = new TreeMap<>();
+	private List<Integer> winPrice = new ArrayList<>();
+	private Methods methods = new Methods();
+	private JLabel lblRound;
+	private JComboBox cbList;
+	private JButton btnSearch;
+	private JLabel[] lblWinNums;
+	private JLabel lblBonusNum;
+	private JPanel pnlC1;
+	private JLabel lblWinPrice;
+	private JLabel lblWinner;
+	private List<Integer> winPerson;
+	private JButton btnPre;
+	private JButton btnNext;	
+	
+	public Map<Integer, List<Integer>> getWinNumber() {
+		return winNumber;
+	}
+
+	public void setWinNumber(Map<Integer, List<Integer>> winNumber) {
+		this.winNumber = winNumber;
+	}
+
+	public List<Integer> getWinPrice() {
+		return winPrice;
+	}
+
+	public void setWinPrice(List<Integer> winPrice) {
+		this.winPrice = winPrice;
+	}
+	
+	public Previous(Map<Integer, List<Integer>> winNumber, List<Integer> winPrice) {
+		this.winNumber = winNumber;
+		this.winPrice = winPrice;
+	}
+
 	public Previous() {	
-		Methods methods = new Methods();
+		// 임시적인 값 생성
+		List<Integer> num1 = Arrays.asList(1, 2, 3, 4, 5, 6, 10);
+		List<Integer> num2 = Arrays.asList(11, 12, 13, 14, 15, 16, 11);
+		List<Integer> num3 = Arrays.asList(21, 22, 23, 24, 25, 26, 12);
+		List<Integer> num4 = Arrays.asList(31, 32, 33, 34, 35, 36, 13);
+		List<Integer> num5 = Arrays.asList(41, 42, 43, 44, 45, 6, 14);
+		winNumber.put(1, num1);
+		winNumber.put(2, num2);
+		winNumber.put(3, num3);
+		winNumber.put(4, num4);
+		winNumber.put(5, num5);
+		winPrice = Arrays.asList(100, 200, 300, 400, 500);
+		winPerson = Arrays.asList(1, 2, 3, 4, 5);
+		
 		// 주요패널 선언
 		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(methods.backgroud("배경.png"));
-		pnl.setBackground(Color.WHITE);
+		//pnl.setBackground(Color.WHITE);
 		JPanel pnlNorth = new JPanel();
-		pnlNorth.setBackground(new Color(255, 0, 0, 0));
+		//pnlNorth.setBackground(new Color(0, 0, 0, 0));
 		JPanel pnlWest = new JPanel();
-		pnlWest.setBackground(new Color(255, 0, 0, 0));
+		//pnlWest.setBackground(new Color(0, 0, 0, 0));
 		JPanel pnlCenter = new JPanel();
-		pnlCenter.setBackground(new Color(255, 0, 0, 0));
+		//pnlCenter.setBackground(new Color(0, 0, 0, 0));
 		JPanel pnlEast = new JPanel();
-		pnlEast.setBackground(new Color(255, 0, 0, 0));
+		//pnlEast.setBackground(new Color(0, 0, 0, 0));
 		JPanel pnlSouth = new JPanel();
-		pnlSouth.setBackground(new Color(255, 0, 0, 0));
+		//pnlSouth.setBackground(new Color(0, 0, 0, 0));
 
 		// 주요패널 레이아웃 선택
 		pnl.setLayout(new BorderLayout());
@@ -43,8 +97,7 @@ class Previous extends JDialog {
 		pnlCenter.setLayout(new BoxLayout(pnlCenter, BoxLayout.Y_AXIS));
 		pnlSouth.setLayout(new BoxLayout(pnlSouth, BoxLayout.Y_AXIS));
 		
-		// pnlNorth에 들어갈 component
-		JLabel lblRound = new JLabel("1");
+		lblRound = new JLabel("1");
 		lblRound.setFont(new Font("휴먼편지체", Font.BOLD, 35));
 		lblRound.setForeground(Color.ORANGE);
 		JLabel lblRoundT = new JLabel("회");
@@ -54,17 +107,22 @@ class Previous extends JDialog {
 		lblResultT.setFont(new Font("휴먼편지체", Font.BOLD, 25));
 		JLabel lblSelectT = new JLabel("회차 바로가기");
 		lblSelectT.setFont(new Font("휴먼편지체", Font.BOLD, 14));
-		String round[] = {"1", "2", "3", "4", "5"}; // 임시적인 배열
-		JComboBox cbList = new JComboBox(round);
+		String round[] = new String[winNumber.size()];
+		for (int i = 0; i < winNumber.size(); i++) {
+			round[i] = String.valueOf(i+1);
+		}
+		
+		cbList = new JComboBox(round);
 		cbList.setPreferredSize(new Dimension(100, 25));
-		JButton btnSearch = new JButton("조회");
+		btnSearch = new JButton("조회");
 		btnSearch.setFont(new Font("휴먼편지체", Font.BOLD, 14));
+		btnSearch.addActionListener(this);
 		
 		// pnlNorth에 들어갈 패널
 		JPanel pnlN1 = new JPanel();
-		pnlN1.setBackground(new Color(255, 0, 0, 0));
+		//pnlN1.setBackground(new Color(255, 0, 0, 0));
 		JPanel pnlN2 = new JPanel();
-		pnlN2.setBackground(new Color(255, 0, 0, 0));
+		//pnlN2.setBackground(new Color(255, 0, 0, 0));
 		
 		// pnlN1에 component 추가
 		pnlNorth.add(Box.createVerticalStrut(20));
@@ -81,47 +139,46 @@ class Previous extends JDialog {
 		pnlNorth.add(pnlN2);
 		pnlNorth.add(Box.createVerticalStrut(40));
 		
-		// pnlWest에 들어갈 component
-		JButton btnPre = new JButton("이전회");
+		btnPre = new JButton("이전회");
 		btnPre.setFont(new Font("휴먼편지체", Font.BOLD, 14));
+		btnPre.addActionListener(this);
 		// pnlWest에 component 추가
 		pnlWest.add(Box.createVerticalStrut(80));
 		pnlWest.add(btnPre);		
 		
-		// pnlEast에 들어갈 component
-		JButton btnNext = new JButton("다음회");	
+		btnNext = new JButton("다음회");	
 		btnNext.setFont(new Font("휴먼편지체", Font.BOLD, 14));
+		btnNext.addActionListener(this);
 		// pnlEast에 component 추가
 		pnlEast.add(Box.createVerticalStrut(80));
 		pnlEast.add(btnNext);
 		pnlEast.add(Box.createHorizontalStrut(10));
 		
-		// pnlCenter에 들어갈 component
-		JLabel[] lblWinNum = new JLabel[7];
-		for (int i = 0; i < lblWinNum.length; i++) {
-			ImageIcon icon = methods.convertToIcon("balls/ball1.png", 40, 40);
-			lblWinNum[i] = new JLabel(icon);
+		lblWinNums = new JLabel[7];
+		for (int i = 0; i < lblWinNums.length; i++) {
+			ImageIcon icon = methods.convertToIcon("balls/ballNull.png", 40, 40);
+			lblWinNums[i] = new JLabel(icon);
+			lblWinNums[i].setOpaque(false);
 		}			
 		JLabel lblPlus = new JLabel("+");
 		lblPlus.setFont(new Font("휴먼편지체", Font.BOLD, 25));
-		JLabel lblBonusNum = new JLabel();
-		lblBonusNum = new JLabel(methods.convertToIcon("balls/ball1.png", 40, 40));			
+		lblBonusNum = new JLabel();
+		lblBonusNum = new JLabel(methods.convertToIcon("balls/ballNull.png", 40, 40));			
 		JLabel lblWinNumT = new JLabel("당첨번호");
 		lblWinNumT.setFont(new Font("휴먼편지체", Font.BOLD, 15));
 		JLabel lblBonusNumT = new JLabel("보너스");
 		lblBonusNumT.setFont(new Font("휴먼편지체", Font.BOLD, 15));
 		
-		// pnlCenter에 들어갈 Panel
-		JPanel pnlC1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-		pnlC1.setBackground(new Color(255, 0, 0, 0));
+		pnlC1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+		//pnlC1.setBackground(new Color(0, 0, 0, 0));
 		pnlC1.setPreferredSize(new Dimension(0, 50));		
 		JPanel pnlC2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 183, 10));
-		pnlC2.setBackground(new Color(255, 0, 0, 0));
+		//pnlC2.setBackground(new Color(0, 0, 0, 0));
 		
 		// pnlC1에 component 추가
 //		pnlC1.add(Box.createVerticalStrut(120));
-		for (int i = 0; i < lblWinNum.length - 1; i++) {
-			pnlC1.add(lblWinNum[i]);			
+		for (int i = 0; i < lblWinNums.length - 1; i++) {
+			pnlC1.add(lblWinNums[i]);			
 		}
 		pnlC1.add(lblPlus);
 		pnlC1.add(lblBonusNum);
@@ -139,18 +196,18 @@ class Previous extends JDialog {
 		// pnlSouth에 들어갈 component
 		JLabel lblWinPriceT = new JLabel("1등 당첨금액 : ");
 		lblWinPriceT.setFont(new Font("휴먼편지체", Font.PLAIN, 25));
-		JLabel lblWinPrice = new JLabel("0");
+		lblWinPrice = new JLabel("0");
 		lblWinPrice.setFont(new Font("휴먼편지체", Font.PLAIN, 25));
 		JLabel lblWinnerT = new JLabel("당첨자수 : ");
 		lblWinnerT.setFont(new Font("휴먼편지체", Font.PLAIN, 25));
-		JLabel lblWinner = new JLabel("0");
+		lblWinner = new JLabel("0");
 		lblWinner.setFont(new Font("휴먼편지체", Font.PLAIN, 25));
 		
 		// pnlSouth에 들어갈 패널
 		JPanel pnlS1 = new JPanel();
-		pnlS1.setBackground(new Color(255, 0, 0, 0));
+		//pnlS1.setBackground(new Color(255, 0, 0, 0));
 		JPanel pnlS2 = new JPanel();
-		pnlS2.setBackground(new Color(255, 0, 0, 0));
+		//pnlS2.setBackground(new Color(255, 0, 0, 0));
 		
 		// pnlS1에 component 추가
 		pnlS1.add(lblWinPriceT);
@@ -174,6 +231,8 @@ class Previous extends JDialog {
 		
 		add(pnl);
 		
+		searchRound();
+		
 		setSize(700, 500);
 		setTitle("이전회차 조회");
 		setModal(true);
@@ -182,5 +241,77 @@ class Previous extends JDialog {
 	
 	public void showGUI() {
 		setVisible(true);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object command = e.getSource();
+		if (command == btnSearch) {
+			searchRound();
+		}
+		if (command == btnPre) {
+			int index = cbList.getSelectedIndex();
+			if (index - 1 >= 0) {
+				int round = Integer.parseInt(lblRound.getText());
+				round--;
+				lblRound.setText(String.valueOf(round));
+				cbList.setSelectedIndex(index - 1);
+				searchRound();
+			} else {
+				JOptionPane.showMessageDialog(null, "가장 처음장 입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+		if (command == btnNext) {
+			int index = cbList.getSelectedIndex();
+			if (index + 1 < winNumber.size()) { 
+				int round = Integer.parseInt(lblRound.getText());
+				round++;
+				lblRound.setText(String.valueOf(round));				
+				cbList.setSelectedIndex(index + 1);
+				searchRound();
+			} else {
+				JOptionPane.showMessageDialog(null, "마지막장 입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+		
+	}
+	
+	public void searchRound() {
+		int round = cbList.getSelectedIndex() + 1;
+		for (int i = 0; i < 7; i++) {
+			int num = winNumber.get(round).get(i);
+			String name = "balls/ball" + num + ".png"; 
+			lblWinNums[i].setIcon(convertToIcon(name, 40, 40));
+			lblBonusNum.setIcon(convertToIcon(name, 40, 40));
+		}
+		lblWinPrice.setText(String.valueOf(winPrice.get(round - 1)));
+		lblWinner.setText(String.valueOf(winPerson.get(round - 1)));		
+	}
+	
+	public ImageIcon convertToIcon(String name, int width, int height) {
+		String imageName = name;
+		int thisWidth = width;
+		int thisHeight = height;
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		ClassLoader classLoader = getClass().getClassLoader();
+		try {
+			Image image = kit.getImage(classLoader.getResource(imageName));
+			image = image.getScaledInstance(thisWidth, thisHeight, Image.SCALE_SMOOTH);
+			// 이미지크기조절
+			ImageIcon icon = new ImageIcon(image);
+			return icon;
+		} catch (NullPointerException e) {
+			System.out.println(name + " 해당 이미지 파일을 찾을 수 없습니다.");
+		}
+		return null;
+	 }
+	
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new Previous().showGUI();
+			}
+		});
 	}
 }

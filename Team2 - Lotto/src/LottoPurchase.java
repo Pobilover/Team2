@@ -468,8 +468,8 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			lblNowGame.setText(String.valueOf(temp));
 			lblNowGame.setVisible(true);
 			lblFinish.setVisible(false);
-			if (inputRounds.get(temp) != null) {
-				nowGame = (int) lblNowGame.getText().charAt(0) - 65;
+			if (inputRounds.get(index) != null) {
+				nowGame = lblNowGame.getText().charAt(0) - 65;
 				changeBallIcon(nowGame, inputNumbers, "삭제", "미지정");
 			}
 			clearSelectedNumber(nowGame);

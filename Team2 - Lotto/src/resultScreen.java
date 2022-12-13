@@ -184,24 +184,24 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		for (int i = 0; i < lblRank.length; i++) {
 			lblRank[i] = new JLabel("1등");
 		}
-		lblUserNumbers = new JLabel[5][6];
-		for (int i = 0; i < lblUserNumbers.length; i++) {
-			for (int j = 0; j < lblUserNumbers[i].length; j++) {
-				try {
-				if(duplicateList.size() != 0) {
-					System.out.println("오류확인1");
-					String imgName = "balls/ball" + duplicateList.get(j) + ".png" ;
-					lblUserNumbers[i][j] = new JLabel(convertToIcon(imgName, 30, 30));
-				} else {
-					System.out.println("오류확인2");
-					lblUserNumbers[i][j] = new JLabel(convertToIcon("balls/ballNull.png", 30, 30));										
-				}
-				} catch (NullPointerException e) {
-					System.out.println("오류확인3");
-					lblUserNumbers[i][j] = new JLabel(convertToIcon("balls/ballNull.png", 30, 30));
-				}
-			}
-		}
+//		lblUserNumbers = new JLabel[5][6];
+//		for (int i = 0; i < lblUserNumbers.length; i++) {
+//			for (int j = 0; j < lblUserNumbers[i].length; j++) {
+//				try {
+//				if(duplicateList.size() != 0) {
+//					System.out.println("오류확인1");
+//					String imgName = "balls/ball" + duplicateList.get(j) + ".png" ;
+//					lblUserNumbers[i][j] = new JLabel(convertToIcon(imgName, 30, 30));
+//				} else {
+//					System.out.println("오류확인2");
+//					lblUserNumbers[i][j] = new JLabel(convertToIcon("balls/ballNull.png", 30, 30));										
+//				}
+//				} catch (NullPointerException e) {
+//					System.out.println("오류확인3");
+//					lblUserNumbers[i][j] = new JLabel(convertToIcon("balls/ballNull.png", 30, 30));
+//				}
+//			}
+//		}
 		JPanel[] pnl4BoxSets = new JPanel[5];
 		for (int i = 0; i < 5; i++) {
 			pnl4BoxSets[i] = new JPanel();
@@ -214,9 +214,9 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
 			pnl4BoxSets[i].add(lblRank[i]);
 			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
-			for (int j = 0; j < 6; j++) {
-				pnl4BoxSets[i].add(lblUserNumbers[i][j]);			
-			}
+//			for (int j = 0; j < 6; j++) {
+//				pnl4BoxSets[i].add(lblUserNumbers[i][j]);			
+//			}
 			pnl4Box.add(pnl4BoxSets[i]);
 			
 		}
