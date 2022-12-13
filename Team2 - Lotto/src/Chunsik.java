@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-class ClickMe3 extends JFrame {
+class ClickMe extends JFrame {
 	private JButton btn; // 춘식이
 	private JButton btn2; // 안보이는 버튼
 	private JLabel lbltime;
@@ -25,7 +25,7 @@ class ClickMe3 extends JFrame {
 	private int time = 30;
 	private Timer timer;
 
-	public ClickMe3() {
+	public ClickMe() {
 		
 		ImageIcon icon = convertToIconGIF("춘식이.gif");
 		ImageIcon icon2 = convertToIcon("돈주머니.png", 80, 80); // 사이즈 지정 안하면 원본?
@@ -43,6 +43,7 @@ class ClickMe3 extends JFrame {
 		pnl.setLayout(null);
 		pnl.setPreferredSize(new Dimension(500, 500));
 		btn = new JButton();
+		btn2 = new JButton("다시하기");
 		btn.setOpaque(false);
 		btn.setIcon(icon); // 춘식이
 		sign1.setBounds(0, 0, 700, 500);
@@ -51,11 +52,14 @@ class ClickMe3 extends JFrame {
 		btn.setBorderPainted(false);
 		btn.setFocusPainted(false); // 테두리 없애기
 		btn.setBounds(280, 180, 120, 120); // 춘식
+		btn2.setBounds(530, 400, 100, 40);
 		pnl.add(lbltime);
 		pnl.add(btn);
+		pnl.add(btn2);
 		pnl.add(sign1);
 		pnl.add(sign2);
 		lbltime.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		btn2.setVisible(true);
 		sign1.setVisible(false);
 		sign2.setVisible(false);
 		lbltime.setVisible(true);
@@ -148,6 +152,6 @@ class ClickMe3 extends JFrame {
 	
 public class Chunsik {
 	public static void main(String[] args) {
-		ClickMe3 frame = new ClickMe3();
+		ClickMe frame = new ClickMe();
 	}
 }
