@@ -49,7 +49,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		this.sheets = sheets;
 	}
 
-	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets) {	
+	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets, Map<Integer, Map<Integer, String>> sheetTypes) {	
 		
 		sheetNum = sheets.size();
 		for (int i = 0; i < sheetNum; i++) {
