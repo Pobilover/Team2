@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
@@ -56,8 +57,11 @@ public class MiniGame extends JDialog {
 			if(count == btn.length) {
 				count = 0;
 				System.out.println("끝");
+				for (int i = 0; i < btn.length; i++) {
+					click[i] = false;
+//					JOptionPane.showMessageDialog(null, "미니게임은 끝\n이제 로또 구매하러 갑시다~", "알림", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
-			
 		}
 	};
 

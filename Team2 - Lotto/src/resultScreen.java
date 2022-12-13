@@ -2,7 +2,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -10,12 +9,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
@@ -34,6 +33,13 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private JButton before;
 	private JButton after;
 	private JLabel[][] lblUserNumbers;
+	private int sheetNum;
+	private List<Integer> gameNum = new ArrayList<>();
+	private Map<Integer, List<Integer>> userNum = new TreeMap<>();
+	private Map<Integer, List<Integer>> duplicateNum = new TreeMap<>();
+	private Map<Integer, Map<Integer, List<Integer>>> duplicateList = new TreeMap<>();
+	private int index = 0;
+	private int pageCount = 0;
 	
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
 		return sheets;
@@ -43,22 +49,26 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		this.sheets = sheets;
 	}
 
-	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets) {	
-		List<Integer> userNum = new ArrayList<>();
-//		for (int i = 0; i < 5; i++) {
-			try {
-				userNum.addAll(sheets.get(0).get(0));
-				System.out.println("1번확인");
-			} catch (NullPointerException e) {
-				System.out.println("1번오류");
-				userNum.add(1);	
-				userNum.add(1);	
-				userNum.add(1);	
-				userNum.add(1);	
-				userNum.add(1);	
-				userNum.add(1);	
-			}			
-//		}
+	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets, Map<Integer, Map<Integer, String>> sheetTypes) {	
+		
+		sheetNum = sheets.size();
+		for (int i = 0; i < sheetNum; i++) {
+			gameNum.add(sheets.get(i).size());
+		}
+		
+	int[][] searchRounds = new int[sheets.size()][];
+		
+      for (int i = 0; i < sheets.size(); i++) {
+         searchRounds[i] = new int[sheets.get(i).size()];
+         Iterator<Entry<Integer, List<Integer>>> entries = sheets.get(i).entrySet().iterator();
+         int round = 0;
+         while(entries.hasNext()){
+             Map.Entry<Integer, List<Integer>> entry = entries.next();
+             searchRounds[i][round] = entry.getKey();
+             round++;
+         }
+      }
+		
 		// 당첨결과 여섯개 랜덤 숫자 만들기
 		Set<Integer> winNumSet = new HashSet<>();
 		Random random = new Random();
@@ -70,24 +80,26 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		Collections.sort(winNumList);
 		// 보너스 번호 넣기
 		int winNumBonus = 0;
-		int winCount = 0;
 		int bonusRandom = random.nextInt(7);
 		winNumBonus = winNumList.get(bonusRandom);
 		winNumList.remove(bonusRandom);
-		System.out.println(winNumList);
+		System.out.println("당첨번호" + winNumList);
 		// 비교하기
-		Set<Integer> duplicate = new HashSet<>();
-		try {
-			duplicate.addAll(userNum);			
-		} catch (NullPointerException e) {
-			System.out.println("2번오류");
-			duplicate.add(0);
-		}
-		duplicate.retainAll(winNumList);
-		List<Integer> duplicateList = new ArrayList<>(duplicate);
-		System.out.println(userNum);
-		System.out.println(duplicateList);
-		Iterator<Integer> iterator = duplicateList.iterator();
+		for (int i = 0; i < sheetNum; i++) {
+			Map<Integer, List<Integer>> tempMap = new TreeMap<>();
+			for (int j = 0; j < 5; j++) {
+				if(sheets.get(i).get(j) != null) {
+					Set<Integer> duplicate = new HashSet<>();
+					duplicate.addAll(sheets.get(i).get(j));			
+					duplicate.retainAll(winNumList);
+					List<Integer> duplicateToList = new ArrayList<>(duplicate);
+					Collections.sort(duplicateToList);
+					tempMap.put(j, duplicateToList);	
+				}
+			}
+			duplicateList.put(i, tempMap);
+		}		
+		System.out.println("겹치는거" + duplicateList);			
 		
 		// panel 구성
 		JPanel pnlBox = new JPanel();
@@ -184,26 +196,32 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		for (int i = 0; i < lblRank.length; i++) {
 			lblRank[i] = new JLabel("1등");
 		}
-//		lblUserNumbers = new JLabel[5][6];
-//		for (int i = 0; i < lblUserNumbers.length; i++) {
-//			for (int j = 0; j < lblUserNumbers[i].length; j++) {
-//				try {
-//				if(duplicateList.size() != 0) {
-//					System.out.println("오류확인1");
-//					String imgName = "balls/ball" + duplicateList.get(j) + ".png" ;
-//					lblUserNumbers[i][j] = new JLabel(convertToIcon(imgName, 30, 30));
-//				} else {
-//					System.out.println("오류확인2");
-//					lblUserNumbers[i][j] = new JLabel(convertToIcon("balls/ballNull.png", 30, 30));										
-//				}
-//				} catch (NullPointerException e) {
-//					System.out.println("오류확인3");
-//					lblUserNumbers[i][j] = new JLabel(convertToIcon("balls/ballNull.png", 30, 30));
-//				}
-//			}
-//		}
+		
+		lblUserNumbers = new JLabel[5][6];
+		pageCount = 0;
+		userNum.putAll(sheets.get(pageCount));
+		duplicateNum.putAll(duplicateList.get(pageCount));
+		
+		for (int i = 0; i < gameNum.get(pageCount); i++) {
+				for (int j = 0; j < 6; j++) {
+					try {
+						if(lblUserNumbers[i][j] == null) {
+							String imgName2 = "numbers/num" + userNum.get(searchRounds[pageCount][i]).get(j) +".png";
+							lblUserNumbers[i][j] = new JLabel(convertToIcon(imgName2, 30, 30));	
+						}
+						if(userNum.get(searchRounds[pageCount][i]).indexOf(duplicateNum.get(searchRounds[pageCount][i]).get(j)) >= 0) {
+							index = userNum.get(searchRounds[pageCount][i]).indexOf(duplicateNum.get(searchRounds[pageCount][i]).get(j));
+							String imgName = "balls/ball" + duplicateNum.get(searchRounds[pageCount][i]).get(j) + ".png" ;
+							lblUserNumbers[i][index] = new JLabel(convertToIcon(imgName, 30, 30));
+						} 
+					} catch (IndexOutOfBoundsException e) {
+						continue;
+					}
+				}
+		}
+		
 		JPanel[] pnl4BoxSets = new JPanel[5];
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < gameNum.get(pageCount); i++) {
 			pnl4BoxSets[i] = new JPanel();
 			pnl4BoxSets[i].setBackground(Color.WHITE);
 			pnl4BoxSets[i].setBorder(new LineBorder(Color.black, 1 , true));
@@ -214,16 +232,15 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
 			pnl4BoxSets[i].add(lblRank[i]);
 			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
-//			for (int j = 0; j < 6; j++) {
-//				pnl4BoxSets[i].add(lblUserNumbers[i][j]);			
-//			}
-			pnl4Box.add(pnl4BoxSets[i]);
-			
+			for (int j = 0; j < 6; j++) {
+				pnl4BoxSets[i].add(lblUserNumbers[i][j]);			
+			}
+			pnl4Box.add(pnl4BoxSets[i]);			
 		}
 		
-		before.setPreferredSize(new Dimension(55,40));
+		before.setPreferredSize(new Dimension(60,40));
 		before.setBackground(Color.LIGHT_GRAY);
-		after.setPreferredSize(new Dimension(55,40));
+		after.setPreferredSize(new Dimension(60,40));
 		after.setBackground(Color.LIGHT_GRAY);
 		pnl4.add(before);
 		pnl4.add(Box.createHorizontalStrut(30));
@@ -259,29 +276,9 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		setVisible(true);
 	}
 	
-//	public List compareList(List user, Set winNum) {
-//		List<Integer> userNum = new ArrayList<>(user);
-//		for (int i = 0; i < 5; i++) {
-//			try {
-//				userNum.addAll(sheets.get(0).get(i));
-//			} catch (NullPointerException e) {
-//				System.out.println("1번오류");
-//				userNum.add(0);	
-//			}			
-//		}
-//		// 비교하기
-//		Set<Integer> duplicate = new HashSet<>();
-//		try {
-//			duplicate.addAll(userNum);			
-//		} catch (NullPointerException e) {
-//			System.out.println("2번오류");
-//			duplicate.add(0);
-//		}
-//		duplicate.retainAll(winNum);
-//		List<Integer> duplicateList = new ArrayList<>(duplicate);
-//		System.out.println(duplicateList);
-//		Iterator<Integer> iterator = duplicateList.iterator();
-//	}
+	
+		
+		
 	
 	public ImageIcon convertToIcon(String name, int width, int height) {
 		String imageName = name;
