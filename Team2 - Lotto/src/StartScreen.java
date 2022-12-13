@@ -170,7 +170,7 @@ public class StartScreen extends JFrame implements ActionListener {
 			previous.showGUI();
 		}
 		if (command == round4) {
-			new ClickMe3().showGUI();
+			new ClickMe();
 		}
 	}
 
