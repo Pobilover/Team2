@@ -30,9 +30,10 @@ import javax.swing.border.LineBorder;
 
 class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
+	private Map<Integer, Map<Integer, String>> sheetTypes = new TreeMap<>();
 	private JButton before;
 	private JButton after;
-	private JLabel[][] lblUserNumbers;
+	private JLabel[][] lblUserNumbers  = new JLabel[5][6];
 	private int sheetNum;
 	private List<Integer> gameNum = new ArrayList<>();
 	private Map<Integer, List<Integer>> userNum = new TreeMap<>();
@@ -40,6 +41,12 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private Map<Integer, Map<Integer, List<Integer>>> duplicateList = new TreeMap<>();
 	private int index = 0;
 	private int pageCount = 0;
+	private int[][] searchRounds;
+	private JPanel[] pnl4BoxSets = new JPanel[5];
+	private JLabel[] lblRanks = new JLabel[5];
+	private JLabel[] lblTypes = new JLabel[5];;
+	private JLabel[] lblSequences = new JLabel[5];;
+	private JPanel pnl4Box = new JPanel();
 	
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
 		return sheets;
@@ -50,24 +57,27 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	}
 
 	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets, Map<Integer, Map<Integer, String>> sheetTypes) {	
+		this.sheets = sheets;
+		this.sheetTypes = sheetTypes;
 		
 		sheetNum = sheets.size();
 		for (int i = 0; i < sheetNum; i++) {
 			gameNum.add(sheets.get(i).size());
 		}
 		
-	int[][] searchRounds = new int[sheets.size()][];
-		
-      for (int i = 0; i < sheets.size(); i++) {
-         searchRounds[i] = new int[sheets.get(i).size()];
-         Iterator<Entry<Integer, List<Integer>>> entries = sheets.get(i).entrySet().iterator();
-         int round = 0;
-         while(entries.hasNext()){
-             Map.Entry<Integer, List<Integer>> entry = entries.next();
-             searchRounds[i][round] = entry.getKey();
-             round++;
-         }
-      }
+		searchRounds = new int[sheets.size()][];
+		int numOfGames = 0;	
+	    for (int i = 0; i < sheets.size(); i++) {
+	        searchRounds[i] = new int[sheets.get(i).size()];
+	        Iterator<Entry<Integer, List<Integer>>> entries = sheets.get(i).entrySet().iterator();
+	        int round = 0;
+	        while(entries.hasNext()){
+	            Map.Entry<Integer, List<Integer>> entry = entries.next();
+	            searchRounds[i][round] = entry.getKey();
+	            round++;
+	            numOfGames++;
+	        }
+	     }
 		
 		// 당첨결과 여섯개 랜덤 숫자 만들기
 		Set<Integer> winNumSet = new HashSet<>();
@@ -176,72 +186,19 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnl3.add(Box.createHorizontalStrut(5));
 		pnl3.add(pnl3_1);
 		
-		// 버튼과 표 표시해주는 panel
-		JPanel pnl4Box = new JPanel();
 		before = new JButton("<<<");
-		after = new JButton(">>>");	
+		after = new JButton(">>>");
 		pnl4Box.setLayout(new BoxLayout(pnl4Box, BoxLayout.Y_AXIS));
 		pnl4Box.setBackground(Color.WHITE);
-		JLabel[] lblSequence = new JLabel[5];
-		lblSequence[0] = new JLabel("A");
-		lblSequence[1] = new JLabel("B");
-		lblSequence[2] = new JLabel("C");
-		lblSequence[3] = new JLabel("D");
-		lblSequence[4] = new JLabel("E");
-		JLabel[] lblType = new JLabel[5];
-		for (int i = 0; i < lblType.length; i++) {
-			lblType[i] = new JLabel("자동");
-		}
-		JLabel[] lblRank = new JLabel[5];
-		for (int i = 0; i < lblRank.length; i++) {
-			lblRank[i] = new JLabel("1등");
-		}
+		showResult(0);
 		
-		lblUserNumbers = new JLabel[5][6];
-		pageCount = 0;
-		userNum.putAll(sheets.get(pageCount));
-		duplicateNum.putAll(duplicateList.get(pageCount));
-		
-		for (int i = 0; i < gameNum.get(pageCount); i++) {
-				for (int j = 0; j < 6; j++) {
-					try {
-						if(lblUserNumbers[i][j] == null) {
-							String imgName2 = "numbers/num" + userNum.get(searchRounds[pageCount][i]).get(j) +".png";
-							lblUserNumbers[i][j] = new JLabel(convertToIcon(imgName2, 30, 30));	
-						}
-						if(userNum.get(searchRounds[pageCount][i]).indexOf(duplicateNum.get(searchRounds[pageCount][i]).get(j)) >= 0) {
-							index = userNum.get(searchRounds[pageCount][i]).indexOf(duplicateNum.get(searchRounds[pageCount][i]).get(j));
-							String imgName = "balls/ball" + duplicateNum.get(searchRounds[pageCount][i]).get(j) + ".png" ;
-							lblUserNumbers[i][index] = new JLabel(convertToIcon(imgName, 30, 30));
-						} 
-					} catch (IndexOutOfBoundsException e) {
-						continue;
-					}
-				}
-		}
-		
-		JPanel[] pnl4BoxSets = new JPanel[5];
-		for (int i = 0; i < gameNum.get(pageCount); i++) {
-			pnl4BoxSets[i] = new JPanel();
-			pnl4BoxSets[i].setBackground(Color.WHITE);
-			pnl4BoxSets[i].setBorder(new LineBorder(Color.black, 1 , true));
-			pnl4BoxSets[i].setLayout(new FlowLayout(FlowLayout.CENTER));
-			pnl4BoxSets[i].add(lblSequence[i]);
-			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
-			pnl4BoxSets[i].add(lblType[i]);
-			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
-			pnl4BoxSets[i].add(lblRank[i]);
-			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
-			for (int j = 0; j < 6; j++) {
-				pnl4BoxSets[i].add(lblUserNumbers[i][j]);			
-			}
-			pnl4Box.add(pnl4BoxSets[i]);			
-		}
 		
 		before.setPreferredSize(new Dimension(60,40));
 		before.setBackground(Color.LIGHT_GRAY);
+		before.addActionListener(this);
 		after.setPreferredSize(new Dimension(60,40));
 		after.setBackground(Color.LIGHT_GRAY);
+		after.addActionListener(this);
 		pnl4.add(before);
 		pnl4.add(Box.createHorizontalStrut(30));
 		pnl4.add(pnl4Box);
@@ -250,14 +207,18 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		
 		// 구매 갯수와 게임 갯수 알려주는 panel
 		JLabel lbl1 = new JLabel("구매: ");
+		JLabel lbl1_1 = new JLabel(String.valueOf(sheets.size()));
 		JLabel lbl2 = new JLabel("장");
 		JLabel lbl2_1 = new JLabel(", ");		
 		JLabel lbl3 = new JLabel("게임: ");
+		JLabel lbl3_1 = new JLabel(String.valueOf(numOfGames));
 		JLabel lbl4 = new JLabel("게임");
 		pnl5.add(lbl1);
+		pnl5.add(lbl1_1);
 		pnl5.add(lbl2);
 		pnl5.add(lbl2_1);
 		pnl5.add(lbl3);
+		pnl5.add(lbl3_1);
 		pnl5.add(lbl4);
 		
 		// 패널 표시해주기
@@ -276,9 +237,66 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		setVisible(true);
 	}
 	
-	
+	public void showResult(int pageCount) {
+		for (int i = 0; i < lblSequences.length; i++) {
+			lblSequences[i] = new JLabel();
+		}
+
+		for (int i = 0; i < lblTypes.length; i++) {
+			lblTypes[i] = new JLabel();
+		}
 		
+		for (int i = 0; i < lblRanks.length; i++) {
+			lblRanks[i] = new JLabel("1등");
+		}
 		
+		userNum.putAll(sheets.get(pageCount));
+		duplicateNum.putAll(duplicateList.get(pageCount));
+		
+		for (int i = 0; i < gameNum.get(pageCount); i++) {
+			int indexOfRound = searchRounds[pageCount][i];
+				for (int j = 0; j < 6; j++) {
+					try {
+						if(lblUserNumbers[indexOfRound][j] == null) {
+							String imgName2 = "numbers/num" + userNum.get(indexOfRound).get(j) +".png";
+							lblUserNumbers[indexOfRound][j] = new JLabel(convertToIcon(imgName2, 30, 30));
+						}
+						if(userNum.get(indexOfRound).indexOf(duplicateNum.get(indexOfRound).get(j)) >= 0) {
+							index = userNum.get(indexOfRound).indexOf(duplicateNum.get(indexOfRound).get(j));
+							String imgName = "balls/ball" + duplicateNum.get(indexOfRound).get(j) + ".png" ;
+							lblUserNumbers[indexOfRound][index] = new JLabel(convertToIcon(imgName, 30, 30));
+						} 
+					} catch (IndexOutOfBoundsException e) {
+						continue;
+					}
+				}
+		}
+		
+		userNum.clear();
+		duplicateNum.clear();
+		
+		for (int i = 0; i < gameNum.get(pageCount); i++) {
+			int indexOfRound = searchRounds[pageCount][i];
+			pnl4BoxSets[i] = new JPanel();
+			pnl4BoxSets[i].setBackground(Color.WHITE);
+			pnl4BoxSets[i].setBorder(new LineBorder(Color.black, 1 , true));
+			pnl4BoxSets[i].setLayout(new FlowLayout(FlowLayout.CENTER));
+			pnl4BoxSets[i].add(lblSequences[i]);
+			lblSequences[i].setText(String.valueOf((char) (indexOfRound + 65)));
+			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
+			pnl4BoxSets[i].add(lblTypes[i]);
+			String type = sheetTypes.get(pageCount).get(indexOfRound);
+			lblTypes[i].setText(type);
+			lblTypes[i].setPreferredSize(new Dimension(40, 15));
+			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
+			pnl4BoxSets[i].add(lblRanks[i]);
+			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
+			for (int j = 0; j < 6; j++) {
+				pnl4BoxSets[i].add(lblUserNumbers[i][j]);			
+			}
+			pnl4Box.add(pnl4BoxSets[i]);			
+		}		
+	}	
 	
 	public ImageIcon convertToIcon(String name, int width, int height) {
 		String imageName = name;
@@ -353,7 +371,27 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+	Object command = e.getSource();
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 6; j++) {
+			lblUserNumbers[i][j] = null;
+		}
+	}
 	
+	if (command == before && pageCount > 0) {
+		pnl4Box.removeAll();
+		pageCount--;
+		showResult(pageCount);
+		pnl4Box.revalidate();
+		pnl4Box.repaint();
+	}
+	if (command == after && pageCount < sheets.size() -1) {
+		pnl4Box.removeAll();
+		pageCount++;
+		showResult(pageCount);
+		pnl4Box.revalidate();
+		pnl4Box.repaint();
+	}
 		
 	}
 	
