@@ -14,7 +14,9 @@ import javax.swing.border.LineBorder;
 public class MiniGame extends JDialog {
 	private JPanel pnlGame;
 	private JButton[] btn;
-
+	private int count = 0;
+	private boolean[] click = new boolean[48];
+	
 	public MiniGame() {
 		setModal(true);
 		
@@ -39,27 +41,23 @@ public class MiniGame extends JDialog {
 	}
 
 	MouseAdapter adapter = new MouseAdapter() {
-		
 		@Override
-		public void mouseClicked(MouseEvent e) {
+		public void mouseClicked(MouseEvent e) {		
 			Object command = e.getSource();
-			int count = 0;
-			boolean[] click = new boolean[btn.length];
+			
 			for (int i = 0; i < btn.length; i++) {
-				if(command == btn[i]) {
+				if(command == btn[i] && !click[i]) {
 					ImageIcon imgName = convertToIcon("e/e" + (i + 1) +".png", 100, 100);
 					btn[i].setIcon(imgName);
 					click[i] = true;
-				}
-			}
-			for(int i = 0; i < btn.length; i++) {
-				if (click[i] == true) {
 					count++;
-					System.out.println(count);
-				}
-				if(count == btn.length) {
 				}
 			}
+			if(count == btn.length) {
+				count = 0;
+				System.out.println("끝");
+			}
+			
 		}
 	};
 
