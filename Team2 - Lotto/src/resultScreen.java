@@ -31,6 +31,7 @@ import javax.swing.border.LineBorder;
 
 class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
+	private Map<Integer, Map<Integer, String>> sheetTypes = new TreeMap<>();
 	private JButton before;
 	private JButton after;
 	private JLabel[][] lblUserNumbers;
@@ -42,8 +43,16 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	public void setSheets(Map<Integer, Map<Integer, List<Integer>>> sheets) {
 		this.sheets = sheets;
 	}
+	
+	public Map<Integer, Map<Integer, String>> getSheetTypes() {
+		return sheetTypes;
+	}
 
-	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets) {	
+	public void setSheetTypes(Map<Integer, Map<Integer, String>> sheetTypes) {
+		this.sheetTypes = sheetTypes;
+	}
+
+	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets, Map<Integer, Map<Integer, String>> sheetTypes) {	
 		List<Integer> userNum = new ArrayList<>();
 //		for (int i = 0; i < 5; i++) {
 			try {

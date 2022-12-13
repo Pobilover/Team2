@@ -31,10 +31,11 @@ public class StartScreen extends JFrame implements ActionListener {
 	private RoundedButton round1;
 	private RoundedButton round2;
 	private RoundedButton round3;
+	private RoundedButton round4;
 	Purchase purchase = new Purchase();
 	Previous previous = new Previous();
 	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
-	private RoundedButton round4;
+	private Map<Integer, Map<Integer, String>> sheetTypes = new TreeMap<>();
 
 	public StartScreen() {
 		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(new Methods().backgroud("메인배경.jpg"));
@@ -158,8 +159,9 @@ public class StartScreen extends JFrame implements ActionListener {
 		}
 		if (command == round2) {
 			this.sheets = purchase.getSheets();
+			this.sheetTypes = purchase.getSheetTypes();
 			if (sheets.get(0) != null) {
-				new resultScreenSet(sheets).showGUI();
+				new resultScreenSet(sheets, sheetTypes).showGUI();
 			} else {
 				JOptionPane.showMessageDialog(null, "1개 이상의 게임을 구매 후 확인 가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			}

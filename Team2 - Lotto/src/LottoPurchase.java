@@ -47,6 +47,8 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
 	private Map<Integer, List<Integer>> inputRounds = new TreeMap<>();
 	private List<Integer> inputNumbers = new ArrayList<>();
+	private Map<Integer, Map<Integer, String>> sheetTypes = new TreeMap<>();
+	private Map<Integer, String> roundTypes = new TreeMap<>();
 	private JLabel lblSheet;
 	private JComboBox cbQuantity;
 	private int numOfGame = 0;
@@ -76,6 +78,15 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 
 	public void setSheets(Map<Integer, Map<Integer, List<Integer>>> sheets) {
 		this.sheets = sheets;
+	}
+	
+	
+	public Map<Integer, Map<Integer, String>> getSheetTypes() {
+		return sheetTypes;
+	}
+
+	public void setSheetTypes(Map<Integer, Map<Integer, String>> sheetTypes) {
+		this.sheetTypes = sheetTypes;
 	}
 
 	public Purchase() {
@@ -377,7 +388,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			for (int i = 0; i < selectedQuantity - 1; i++) {
 				nowGame = possible.get(i);
 				inputNumbers = randomNumbers(nowGame, inputNumbers);
-				changeBallIcon(nowGame, inputNumbers, "등록", "자동");		
+				changeBallIcon(nowGame, inputNumbers, "등록", "자동");	
 				inputNumbers.clear();
 			}
 			cbQuantity.setSelectedIndex(0);
@@ -395,7 +406,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			for (int i = 0; i < temp; i++) {
 				nowGame = possible.get(i); 
 				inputRounds.put(nowGame, inputNumbers);
-				changeBallIcon(nowGame, inputNumbers, "등록", "수동");	
+				changeBallIcon(nowGame, inputNumbers, "등록", "수동");
 				selectedQuantity--;
 			}
 			cbQuantity.setSelectedIndex(0);
@@ -426,7 +437,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 				for (int i = 0; i < selectedQuantity; i++) {
 					nowGame = possible.get(i); 
 					inputRounds.put(nowGame, inputNumbers);
-					changeBallIcon(nowGame, inputNumbers, "등록", "반자동");			
+					changeBallIcon(nowGame, inputNumbers, "등록", "반자동");
 				}				
 				cbQuantity.setSelectedIndex(0);
 				searchPossible(nowGame);
@@ -495,7 +506,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 					tempSet.addAll(inputRounds.get(numI));
 					Random random = new Random();
 					while (tempSet.size() < 6) {
-						int num = random.nextInt(45);
+						int num = random.nextInt(44) + 1;
 						tempSet.add(num);
 						inputRounds.get(numI).clear();
 						inputRounds.get(numI).addAll(tempSet);
@@ -503,10 +514,15 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 					}					
 				}
 			}
-			Map<Integer, List<Integer>>[] tempMap = new TreeMap[100];
-			tempMap[numOfSheet] = new TreeMap<>();
-			tempMap[numOfSheet].putAll(inputRounds);
-			sheets.put(numOfSheet, tempMap[numOfSheet]);
+			Map<Integer, List<Integer>>[] tempSheets = new TreeMap[100];
+			Map<Integer, String>[] tempTypes = new TreeMap[100];
+			tempSheets[numOfSheet] = new TreeMap<>();
+			tempSheets[numOfSheet].putAll(inputRounds);
+			sheets.put(numOfSheet, tempSheets[numOfSheet]);
+			tempTypes[numOfSheet] = new TreeMap<>();
+			tempTypes[numOfSheet].putAll(roundTypes);
+			sheetTypes.put(numOfSheet, tempTypes[numOfSheet]);
+			System.out.println(sheetTypes);
 			for (int i = 0; i < 5; i++) {
 				if (inputRounds.get(i) != null) {
 					changeBallIcon(i, inputNumbers, "삭제", "미등록");
@@ -602,6 +618,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			}
 			numList[nowGame].addAll(inputNumbers);
 			inputRounds.put(nowGame, numList[nowGame]);
+			roundTypes.put(nowGame, type);
 			for (int i = 0; i < 6; i++) {
 				int number = inputRounds.get(nowGame).get(i);
 				String name = "ball" + (number) + ".png";
@@ -622,6 +639,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			}
 			lblTypes.get(nowGame).setText("미지정");
 			inputRounds.remove(nowGame);
+			roundTypes.remove(nowGame);
 			numOk[nowGame] = false;
 			numOfGame--;
 			numOfGames--;
