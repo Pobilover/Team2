@@ -79,17 +79,17 @@ class Previous extends JDialog implements ActionListener {
 		
 		// 주요패널 선언
 		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(methods.backgroud("배경.png"));
-		//pnl.setBackground(Color.WHITE);
 		JPanel pnlNorth = new JPanel();
-		//pnlNorth.setBackground(new Color(0, 0, 0, 0));
 		JPanel pnlWest = new JPanel();
-		//pnlWest.setBackground(new Color(0, 0, 0, 0));
 		JPanel pnlCenter = new JPanel();
-		//pnlCenter.setBackground(new Color(0, 0, 0, 0));
 		JPanel pnlEast = new JPanel();
-		//pnlEast.setBackground(new Color(0, 0, 0, 0));
 		JPanel pnlSouth = new JPanel();
-		//pnlSouth.setBackground(new Color(0, 0, 0, 0));
+		
+		pnlNorth.setOpaque(false);
+		pnlWest.setOpaque(false);
+		pnlCenter.setOpaque(false);
+		pnlEast.setOpaque(false);
+		pnlSouth.setOpaque(false);
 
 		// 주요패널 레이아웃 선택
 		pnl.setLayout(new BorderLayout());
@@ -120,9 +120,10 @@ class Previous extends JDialog implements ActionListener {
 		
 		// pnlNorth에 들어갈 패널
 		JPanel pnlN1 = new JPanel();
-		//pnlN1.setBackground(new Color(255, 0, 0, 0));
 		JPanel pnlN2 = new JPanel();
-		//pnlN2.setBackground(new Color(255, 0, 0, 0));
+		
+		pnlN1.setOpaque(false);
+		pnlN2.setOpaque(false);
 		
 		// pnlN1에 component 추가
 		pnlNorth.add(Box.createVerticalStrut(20));
@@ -170,10 +171,10 @@ class Previous extends JDialog implements ActionListener {
 		lblBonusNumT.setFont(new Font("휴먼편지체", Font.BOLD, 15));
 		
 		pnlC1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-		//pnlC1.setBackground(new Color(0, 0, 0, 0));
+		pnlC1.setOpaque(false);
 		pnlC1.setPreferredSize(new Dimension(0, 50));		
 		JPanel pnlC2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 183, 10));
-		//pnlC2.setBackground(new Color(0, 0, 0, 0));
+		pnlC2.setOpaque(false);
 		
 		// pnlC1에 component 추가
 //		pnlC1.add(Box.createVerticalStrut(120));
@@ -205,9 +206,9 @@ class Previous extends JDialog implements ActionListener {
 		
 		// pnlSouth에 들어갈 패널
 		JPanel pnlS1 = new JPanel();
-		//pnlS1.setBackground(new Color(255, 0, 0, 0));
+		pnlS1.setOpaque(false);
 		JPanel pnlS2 = new JPanel();
-		//pnlS2.setBackground(new Color(255, 0, 0, 0));
+		pnlS2.setOpaque(false);
 		
 		// pnlS1에 component 추가
 		pnlS1.add(lblWinPriceT);
