@@ -122,7 +122,7 @@ class Previous extends JDialog implements ActionListener {
 		JPanel pnlN1 = new JPanel();
 		JPanel pnlN2 = new JPanel();
 		
-		pnlN1.setOpaque(false);
+		//pnlN1.setOpaque(false);
 		pnlN2.setOpaque(false);
 		
 		// pnlN1에 component 추가
@@ -130,6 +130,7 @@ class Previous extends JDialog implements ActionListener {
 		pnlN1.add(lblRound);
 		pnlN1.add(lblRoundT);
 		pnlN1.add(lblResultT);
+		pnlN1.setBackground(new Color(200,200,200,122));
 		// pnlN2에 component 추가
 		pnlN2.add(Box.createHorizontalStrut(400));
 		pnlN2.add(lblSelectT);
@@ -266,6 +267,8 @@ class Previous extends JDialog implements ActionListener {
 			int index = cbList.getSelectedIndex();
 			if (index + 1 < winNumber.size()) { 
 				int round = Integer.parseInt(lblRound.getText());
+				lblRound.revalidate();
+				lblRound.repaint();
 				round++;
 				lblRound.setText(String.valueOf(round));				
 				cbList.setSelectedIndex(index + 1);
