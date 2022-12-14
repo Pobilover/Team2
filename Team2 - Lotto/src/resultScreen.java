@@ -292,7 +292,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 			pnl4BoxSets[i].add(lblRanks[i]);
 			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
 			for (int j = 0; j < 6; j++) {
-				pnl4BoxSets[i].add(lblUserNumbers[i][j]);			
+				pnl4BoxSets[i].add(lblUserNumbers[indexOfRound][j]);			
 			}
 			pnl4Box.add(pnl4BoxSets[i]);			
 		}		
