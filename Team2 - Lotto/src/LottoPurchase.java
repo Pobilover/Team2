@@ -71,6 +71,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	private JButton btnPurchase;
 	private JButton btnFinish;
 	private RoundedButton btnManual;
+	private boolean[] resetING = new boolean[5]; 
 	
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
 		return sheets;
@@ -311,9 +312,24 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) {	
 		Object command = e.getSource();
 		int nowGame = (int) lblNowGame.getText().charAt(0) - 65;
+		for (int i = 0; i < 5; i++) {
+			if (resetING[i] == true && !lblNumbers.contains(command)) {
+				String type = lblTypes.get(i).getText();
+				changeBallIcon(i, inputNumbers, "등록", type);
+				cbQuantity.setSelectedIndex(0);
+				searchPossible(i);
+				clearSelectedNumber(i);
+				resetING[i] = false;
+				pnlChoSets.get(i).setBackground(Color.white);
+				lblGame.setText(String.valueOf(numOfGames));
+				lbltotal.setText(String.valueOf(numOfGames * 1000));	
+			}
+		}
+		
+		
 		if (pnlChoSets.contains(command)) {
 			clearSelectedNumber(nowGame);
 			int index = pnlChoSets.indexOf(command);
@@ -335,6 +351,14 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 				lottoNumsIcon[index] = true;
 				nowGameCounters[nowGame]++;
 				inputNumbers.add(index);
+			} else if (!lottoNumsIcon[index] && nowGameCounters[nowGame] >= 6 && inputNumbers.contains(100)) {
+				int deleteNum = inputNumbers.indexOf(100);
+				inputNumbers.remove(deleteNum);
+				nowGameCounters[nowGame]--;
+				lblNumbers.get(index).setIcon(getIcon("afterNumbers/" + name, 30, 30));
+				lottoNumsIcon[index] = true;
+				nowGameCounters[nowGame]++;
+				inputNumbers.add(index);
 			} else if (!lottoNumsIcon[index] && nowGameCounters[nowGame] >= 6) {
 				JOptionPane.showMessageDialog(null, "최대 6개의 숫자를 선택할 수 있습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -344,11 +368,13 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		Object command = e.getSource();
-		if (pnlChoSets.contains(command)) {
+		String state = lblFinish.getText();
+		int num = pnlChoSets.indexOf(command);
+		if (pnlChoSets.contains(command) && !resetING[num]) {
 			int index = pnlChoSets.indexOf(command);
 			pnlChoSets.get(index).setBackground(new Color(180, 180, 180));
 		}
-		if (lblNumbers.contains(command)) {
+		if (lblNumbers.contains(command) && !state.equals("선택완료")) {
 			Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
 			int index = lblNumbers.indexOf(command);
 			lblNumbers.get(index).setCursor(cursor);
@@ -358,8 +384,8 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	@Override
 	public void mouseExited(MouseEvent e) {
 		Object command = e.getSource();
-		if (pnlChoSets.contains(command)) {
-			int num = pnlChoSets.indexOf(command);
+		int num = pnlChoSets.indexOf(command);
+		if (pnlChoSets.contains(command) && !resetING[num]) {
 			pnlChoSets.get(num).setBackground(Color.white);
 		}	
 	}
@@ -375,6 +401,22 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object command = e.getSource();
+		
+		for (int i = 0; i < 5; i++) {
+			if (resetING[i] == true && command != btnOk) {
+				String type = lblTypes.get(i).getText();
+				changeBallIcon(i, inputNumbers, "등록", type);
+				cbQuantity.setSelectedIndex(0);
+				searchPossible(i);
+				clearSelectedNumber(i);
+				lblGame.setText(String.valueOf(numOfGames));
+				lbltotal.setText(String.valueOf(numOfGames * 1000));	
+				resetING[i] = false;
+				pnlChoSets.get(i).setBackground(Color.white);
+			}
+		}
+		
+		
 		int nowGame = (int) lblNowGame.getText().charAt(0) - 65;
 		int selectedQuantity = cbQuantity.getSelectedIndex() + 1;
 		int games = numOfGame + selectedQuantity; 
@@ -468,9 +510,16 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			lblFinish.setVisible(false);
 			nowGame = (int) lblNowGame.getText().charAt(0) - 65;
 			if (inputRounds.get(nowGame) != null) {
+				pnlChoSets.get(nowGame).setBackground(new Color(220, 180, 180));
+				resetING[nowGame] = true;
 				showSelectedNumber(nowGame);
 				numOfGame--;
 				numOfGames--;
+				ckAuto.setSelected(false);
+				pnlNum.setVisible(true);
+				pnlAllAuto.setVisible(false);		
+				btnReset.setEnabled(true);
+				btnAuto.setEnabled(true);					
 			}
 		}
 		if (btnChoDeletes.contains(command)) {
@@ -551,12 +600,29 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		if (command == btnManual) {
 			new Manual().showGUI();
 		}
-		
+		if (command == btnOk) {
+			for (int i = 0; i < 5; i++) {
+				pnlChoSets.get(i).setBackground(Color.white);
+			}
+		}
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		int nowGame = (int) lblNowGame.getText().charAt(0) - 65;
+		for (int i = 0; i < 5; i++) {
+			if (resetING[i] == true) {
+				String type = lblTypes.get(i).getText();
+				changeBallIcon(i, inputNumbers, "등록", type);
+				cbQuantity.setSelectedIndex(0);
+				searchPossible(i);
+				clearSelectedNumber(i);
+				resetING[i] = false;
+				pnlChoSets.get(i).setBackground(Color.white);
+				lblGame.setText(String.valueOf(numOfGames));
+				lbltotal.setText(String.valueOf(numOfGames * 1000));	
+			}
+		}
 		if (ckAuto.isSelected()) {	
 			clearSelectedNumber(nowGame);
 			pnlNum.setVisible(false);
@@ -611,7 +677,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	
 	public void changeBallIcon(int nowGame, List<Integer> inputNumbers, String function, String type) {
 		Collections.sort(inputNumbers);
-		if (function.equals("등록")) {
+		if (function.equals("등록") && nowGameCounters[nowGame] != 0) {
 			List<Integer>[] numList = new ArrayList[5];
 			for (int i = 0; i < 5; i ++) {
 				numList[i] = new ArrayList(6);
@@ -621,7 +687,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			roundTypes.put(nowGame, type);
 			for (int i = 0; i < 6; i++) {
 				int number = inputRounds.get(nowGame).get(i);
-				String name = "ball" + (number) + ".png";
+				String name = "ball" + (number + 1) + ".png";
 				if (number == 100) {
 					name = "ball100.png";
 				}
