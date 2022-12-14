@@ -42,7 +42,7 @@ class ClickMe3 extends JPanel {
 		sign2 = new JLabel(icon4);
 		lbltime.setBounds(25, 20, 50, 50); // 시계 위치
 
-		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(new Methods().backgroud("겨울배경.png"));
+		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("겨울배경.png", 800, 600).getImage());
 		add(pnl); // 백그라운드 이미지 추가
 		
 

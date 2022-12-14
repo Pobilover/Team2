@@ -42,7 +42,7 @@ public class StartScreen extends JFrame implements ActionListener {
 	private Map<Integer, Map<Integer, String>> sheetTypes = new TreeMap<>();
 
 	public StartScreen() {
-		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(new Methods().backgroud("로또기계.png"));
+		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("로또기계.png", 700, 500).getImage());
 		pnl.setLayout(new BorderLayout());
 		JPanel under = new JPanel(new FlowLayout(FlowLayout.CENTER, 45, 30));
 		under.setBackground(new Color(255, 0, 0, 0));

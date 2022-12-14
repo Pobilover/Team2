@@ -80,7 +80,7 @@ class Previous extends JDialog implements ActionListener {
 		winPerson = Arrays.asList(1, 2, 3, 4, 5);
 		
 		// 주요패널 선언
-		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(methods.backgroud("미국돈.png"));
+		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("미국돈.png", 700, 500).getImage());
 		pnlNorth = new JPanel();
 		JPanel pnlWest = new JPanel();
 		JPanel pnlCenter = new JPanel();

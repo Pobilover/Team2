@@ -1,13 +1,12 @@
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Enumeration;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
@@ -38,21 +37,6 @@ public class Methods {
 		return null;
 	 }
 	
-	// 패널에 배경을 넣기위한 메소드
-	// 파라미터에는 이미지 파일이름
-	// 배경을 넣을 패널은 JPanel이 아닌 MyImageBackgroundPanel로 선언
-	// 사용예시 : MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(backgroud("배경.png"));
-	public BufferedImage backgroud(String name) {
-		ClassLoader loader = getClass().getClassLoader();	
-		URL imageURL = loader.getResource(name);
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(imageURL);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return image;
-	}
 	
 	// 창 전체 폰트 설정하는 메소드
 	// 이 메소드를 복사하여 적용시킬 클래스에 붙여넣기
@@ -68,5 +52,21 @@ public class Methods {
                 UIManager.put(key, new FontUIResource(font));
             }
         }
-    }	
+    }
+    
 }
+
+class ImagePanel extends JPanel {
+	  private Image img;
+	  
+	  public ImagePanel(Image img) {
+	      this.img = img;
+	      setSize(new Dimension(img.getWidth(null), img.getHeight(null)));
+	      setPreferredSize(new Dimension(img.getWidth(null), img.getHeight(null)));
+	      setLayout(null);
+	  }
+	  
+	  public void paintComponent(Graphics g) {
+	      g.drawImage(img, 0, 0, null);
+	  }
+	}
