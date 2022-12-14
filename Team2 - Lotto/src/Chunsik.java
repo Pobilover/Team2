@@ -11,12 +11,11 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
-class ClickMe3 extends JFrame {
+class ClickMe3 extends JPanel {
 	private JButton bt; // 설명버튼
 	private JButton btn; // 춘식이
 	private JButton btn2; // 안보이는 버튼
@@ -207,9 +206,8 @@ class ClickMe3 extends JFrame {
 
 		add(pnl);
 
-		pack();
+
 		setSize(800, 600);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true); // 창이 보인다
 	}
 	

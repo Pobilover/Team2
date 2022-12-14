@@ -8,7 +8,7 @@ public class MiniGames extends JDialog {
 		
 		JTabbedPane jTab = new JTabbedPane();
 		MiniGame2 miniGame = new MiniGame2();
-		ClickMe ClickMe = new ClickMe();
+		ClickMe3 ClickMe = new ClickMe3();
 		
 		jTab.addTab("춘식이를 잡아라~!", ClickMe);
 		jTab.addTab("퍼즐 - 같은 그림을 두번 두르면 정답이미지가 보입니다.", miniGame);
