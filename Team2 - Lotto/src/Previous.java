@@ -38,8 +38,10 @@ class Previous extends JDialog implements ActionListener {
 	private JLabel lblWinPrice;
 	private JLabel lblWinner;
 	private List<Integer> winPerson;
-	private JButton btnPre;
-	private JButton btnNext;	
+	private RoundedButton btnPre;
+	private RoundedButton btnNext;
+	private JPanel pnlN1;
+	private JPanel pnlNorth;	
 	
 	public Map<Integer, List<Integer>> getWinNumber() {
 		return winNumber;
@@ -78,8 +80,8 @@ class Previous extends JDialog implements ActionListener {
 		winPerson = Arrays.asList(1, 2, 3, 4, 5);
 		
 		// 주요패널 선언
-		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(methods.backgroud("배경.png"));
-		JPanel pnlNorth = new JPanel();
+		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(methods.backgroud("미국돈.png"));
+		pnlNorth = new JPanel();
 		JPanel pnlWest = new JPanel();
 		JPanel pnlCenter = new JPanel();
 		JPanel pnlEast = new JPanel();
@@ -99,12 +101,13 @@ class Previous extends JDialog implements ActionListener {
 		
 		lblRound = new JLabel("1");
 		lblRound.setFont(new Font("휴먼편지체", Font.BOLD, 35));
-		lblRound.setForeground(Color.ORANGE);
+		lblRound.setForeground(Color.black);
+		lblRound.setOpaque(false);
 		JLabel lblRoundT = new JLabel("회");
 		lblRoundT.setFont(new Font("휴먼편지체", Font.BOLD, 35));
-		lblRoundT.setForeground(Color.ORANGE);
+		lblRoundT.setForeground(Color.black);
 		JLabel lblResultT = new JLabel("당첨결과");
-		lblResultT.setFont(new Font("휴먼편지체", Font.BOLD, 25));
+		lblResultT.setFont(new Font("휴먼편지체", Font.BOLD, 35));
 		JLabel lblSelectT = new JLabel("회차 바로가기");
 		lblSelectT.setFont(new Font("휴먼편지체", Font.BOLD, 14));
 		String round[] = new String[winNumber.size()];
@@ -114,15 +117,13 @@ class Previous extends JDialog implements ActionListener {
 		
 		cbList = new JComboBox(round);
 		cbList.setPreferredSize(new Dimension(100, 25));
-		btnSearch = new JButton("조회");
+		btnSearch = new RoundedButton("조회");
 		btnSearch.setFont(new Font("휴먼편지체", Font.BOLD, 14));
 		btnSearch.addActionListener(this);
 		
-		// pnlNorth에 들어갈 패널
-		JPanel pnlN1 = new JPanel();
+		pnlN1 = new JPanel();
 		JPanel pnlN2 = new JPanel();
-		
-		//pnlN1.setOpaque(false);
+		pnlN1.setBackground(new Color(255, 255, 255, 150));
 		pnlN2.setOpaque(false);
 		
 		// pnlN1에 component 추가
@@ -130,7 +131,6 @@ class Previous extends JDialog implements ActionListener {
 		pnlN1.add(lblRound);
 		pnlN1.add(lblRoundT);
 		pnlN1.add(lblResultT);
-		pnlN1.setBackground(new Color(200,200,200,122));
 		// pnlN2에 component 추가
 		pnlN2.add(Box.createHorizontalStrut(400));
 		pnlN2.add(lblSelectT);
@@ -141,14 +141,14 @@ class Previous extends JDialog implements ActionListener {
 		pnlNorth.add(pnlN2);
 		pnlNorth.add(Box.createVerticalStrut(40));
 		
-		btnPre = new JButton("이전회");
+		btnPre = new RoundedButton("이전회");
 		btnPre.setFont(new Font("휴먼편지체", Font.BOLD, 14));
 		btnPre.addActionListener(this);
 		// pnlWest에 component 추가
 		pnlWest.add(Box.createVerticalStrut(80));
 		pnlWest.add(btnPre);		
 		
-		btnNext = new JButton("다음회");	
+		btnNext = new RoundedButton("다음회");	
 		btnNext.setFont(new Font("휴먼편지체", Font.BOLD, 14));
 		btnNext.addActionListener(this);
 		// pnlEast에 component 추가
@@ -259,6 +259,8 @@ class Previous extends JDialog implements ActionListener {
 				lblRound.setText(String.valueOf(round));
 				cbList.setSelectedIndex(index - 1);
 				searchRound();
+				pnlNorth.revalidate();
+				pnlNorth.repaint();
 			} else {
 				JOptionPane.showMessageDialog(null, "가장 처음장 입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -267,12 +269,12 @@ class Previous extends JDialog implements ActionListener {
 			int index = cbList.getSelectedIndex();
 			if (index + 1 < winNumber.size()) { 
 				int round = Integer.parseInt(lblRound.getText());
-				lblRound.revalidate();
-				lblRound.repaint();
 				round++;
 				lblRound.setText(String.valueOf(round));				
 				cbList.setSelectedIndex(index + 1);
 				searchRound();
+				pnlNorth.revalidate();
+				pnlNorth.repaint();
 			} else {
 				JOptionPane.showMessageDialog(null, "마지막장 입니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			}
