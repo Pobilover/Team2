@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -38,9 +39,9 @@ public class StartScreen extends JFrame implements ActionListener {
 	private Map<Integer, Map<Integer, String>> sheetTypes = new TreeMap<>();
 
 	public StartScreen() {
-		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(new Methods().backgroud("메인배경.jpg"));
+		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(new Methods().backgroud("로또기계.png"));
 		pnl.setLayout(new BorderLayout());
-		JPanel under = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 40));
+		JPanel under = new JPanel(new FlowLayout(FlowLayout.CENTER, 45, 30));
 		under.setBackground(new Color(255, 0, 0, 0));
 		round1 = new RoundedButton("구매하기");
 		round2 = new RoundedButton("당첨확인");
@@ -50,12 +51,16 @@ public class StartScreen extends JFrame implements ActionListener {
 		round2.addActionListener(this);
 		round3.addActionListener(this);
 		round4.addActionListener(this);
-		under.setBackground(new Color(100, 100, 100, 150));
+		under.setBackground(new Color(100, 100, 100, 50));
 		under.add(round1);
 		under.add(round2);
 		under.add(round3);
 		under.add(round4);
 		pnl.add(under, "South");
+		round1.setFont(new Font("빙그레체", Font.PLAIN, 20));
+		round2.setFont(new Font("빙그레체", Font.PLAIN, 20));
+		round3.setFont(new Font("빙그레체", Font.PLAIN, 20));
+		round4.setFont(new Font("빙그레체", Font.PLAIN, 20));
 		under.setPreferredSize(new Dimension(650, 100));
 		add(pnl);
 
