@@ -205,7 +205,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		
 		// 전체적인 panel
 		pnlBox.setLayout(new BoxLayout(pnlBox, BoxLayout.Y_AXIS));
-		pnlBox.setPreferredSize(new Dimension(700, 500));
+		pnlBox.setPreferredSize(new Dimension(700, 460));
 		
 		// 제일위 당첨결과 title panel
 		JLabel turn = new JLabel("-");
@@ -223,7 +223,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		lblWinNumT.setFont(new Font("휴먼편지체", Font.BOLD, 12));
 		JLabel lblBonusNumT = new JLabel("보너스");
 		lblBonusNumT.setFont(new Font("휴먼편지체", Font.BOLD, 12));
-		pnl2_2.add(Box.createHorizontalStrut(280));
+		pnl2_2.add(Box.createHorizontalStrut(290));
 		pnl2_2.add(lblWinNumT);
 		pnl2_2.add(Box.createHorizontalStrut(140));
 		pnl2_2.add(lblBonusNumT);
@@ -244,8 +244,8 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		}
 		pnl2_1.add(plus);
 		pnl2_1.add(bonus);
-		pnl2_1.setPreferredSize(new Dimension(0, 40));
-		pnl2_2.setPreferredSize(new Dimension(0, 10));
+		pnl2_1.setPreferredSize(new Dimension(0, 45));
+		pnl2_2.setPreferredSize(new Dimension(0, 15));
 		pnl2.add(pnl2_1);
 		pnl2.add(pnl2_2);
 		//panel 크기 확인용
@@ -257,8 +257,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnl3_1.setBackground(Color.LIGHT_GRAY);
 		resultWord.setFont(new Font("휴먼편지체", Font.BOLD, 15));
 		pnl3_1.add(resultWord, "Center");
-		pnl3.add(Box.createHorizontalStrut(5));
-		pnl3.add(pnl3_1);
+		pnl3.add(pnl3_1, "Center");
 		
 		before = new JButton("<<<");
 		after = new JButton(">>>");
@@ -273,6 +272,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		after.setPreferredSize(new Dimension(70,40));
 		after.setBackground(Color.LIGHT_GRAY);
 		after.addActionListener(this);
+		pnl4.setPreferredSize(new Dimension(0, 230));
 		pnl4.add(before);
 		pnl4.add(Box.createHorizontalStrut(30));
 		pnl4.add(pnl4Box);
@@ -294,7 +294,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnl5.add(lbl3);
 		pnl5.add(lbl3_1);
 		pnl5.add(lbl4);
-		
+
 		// 패널 표시해주기
 		pnlBox.add(pnl1);
 		pnlBox.add(pnl2);
