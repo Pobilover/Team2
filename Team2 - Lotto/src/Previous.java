@@ -174,7 +174,7 @@ class Previous extends JDialog implements ActionListener {
 		pnlC1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
 		pnlC1.setOpaque(false);
 		pnlC1.setPreferredSize(new Dimension(0, 50));		
-		JPanel pnlC2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 183, 10));
+		JPanel pnlC2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 175, 10));
 		pnlC2.setOpaque(false);
 		
 		// pnlC1에 component 추가
