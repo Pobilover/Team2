@@ -259,25 +259,34 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnl3_1.add(resultWord, "Center");
 		pnl3.add(pnl3_1, "Center");
 		
+		// pnl4에 들어갈 구성 버튼과 표
 		before = new JButton("<<<");
 		after = new JButton(">>>");
-		pnl4Box.setLayout(new BoxLayout(pnl4Box, BoxLayout.Y_AXIS));
-		pnl4Box.setBackground(Color.WHITE);
-		showResult(0);
-		showResultWord();
-		
 		before.setPreferredSize(new Dimension(70,40));
 		before.setBackground(Color.LIGHT_GRAY);
 		before.addActionListener(this);
 		after.setPreferredSize(new Dimension(70,40));
 		after.setBackground(Color.LIGHT_GRAY);
 		after.addActionListener(this);
+
+		pnl4Box.setLayout(new BoxLayout(pnl4Box, BoxLayout.Y_AXIS));
+		pnl4Box.setBackground(Color.WHITE);
+		showResult(0);
+		showResultWord();
+		
+		// pnl4구성
+		JPanel beforeBox = new JPanel();
+		JPanel afterBox = new JPanel();
+		beforeBox.add(Box.createVerticalStrut(200));
+		beforeBox.add(before);
+		afterBox.add(Box.createVerticalStrut(200));
+		afterBox.add(after);
 		pnl4.setPreferredSize(new Dimension(0, 230));
-		pnl4.add(before);
+		pnl4.add(beforeBox);
 		pnl4.add(Box.createHorizontalStrut(30));
 		pnl4.add(pnl4Box);
 		pnl4.add(Box.createHorizontalStrut(30));
-		pnl4.add(after);
+		pnl4.add(afterBox);
 		
 		// 구매 갯수와 게임 갯수 알려주는 panel
 		JLabel lbl1 = new JLabel("구매: ");
