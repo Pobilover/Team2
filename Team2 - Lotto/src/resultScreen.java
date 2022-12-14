@@ -366,7 +366,6 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 			String type = sheetTypes.get(pageCount).get(indexOfRound);
 			lblTypes[i].setText(type);
 			lblTypes[i].setPreferredSize(new Dimension(40, 15));
-			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
 			pnl4BoxSets[i].add(lblRanks[i]);
 			if(duplicateSize.get(i) == 6) {
 				lblRanks[i].setText(" 1등");
