@@ -313,6 +313,46 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 
 	@Override
 	public void mouseClicked(MouseEvent e) {	
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		Object command = e.getSource();
+		String state = lblFinish.getText();
+		int num = pnlChoSets.indexOf(command);
+		if (pnlChoSets.contains(command) && !resetING[num]) {
+			int index = pnlChoSets.indexOf(command);
+			pnlChoSets.get(index).setBackground(new Color(180, 180, 180));
+		}
+		
+		int count = 0;
+		for (int i = 0; i < 5; i++) {
+			if (numOk[i]) {
+				count++;
+			}
+		}
+		if (lblNumbers.contains(command) && count < 5) {
+			Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+			int index = lblNumbers.indexOf(command);
+			lblNumbers.get(index).setCursor(cursor);
+		} else if (lblNumbers.contains(command) && count >= 5) {
+			Cursor cursor = new Cursor(Cursor.DEFAULT_CURSOR);
+			int index = lblNumbers.indexOf(command);
+			lblNumbers.get(index).setCursor(cursor);			
+		}
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		Object command = e.getSource();
+		int num = pnlChoSets.indexOf(command);
+		if (pnlChoSets.contains(command) && !resetING[num]) {
+			pnlChoSets.get(num).setBackground(Color.white);
+		}	
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
 		Object command = e.getSource();
 		int nowGame = (int) lblNowGame.getText().charAt(0) - 65;
 		for (int i = 0; i < 5; i++) {
@@ -362,47 +402,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			} else if (!lottoNumsIcon[index] && nowGameCounters[nowGame] >= 6) {
 				JOptionPane.showMessageDialog(null, "최대 6개의 숫자를 선택할 수 있습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			}
-		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		Object command = e.getSource();
-		String state = lblFinish.getText();
-		int num = pnlChoSets.indexOf(command);
-		if (pnlChoSets.contains(command) && !resetING[num]) {
-			int index = pnlChoSets.indexOf(command);
-			pnlChoSets.get(index).setBackground(new Color(180, 180, 180));
-		}
-		
-		int count = 0;
-		for (int i = 0; i < 5; i++) {
-			if (numOk[i]) {
-				count++;
-			}
-		}
-		if (lblNumbers.contains(command) && count < 5) {
-			Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
-			int index = lblNumbers.indexOf(command);
-			lblNumbers.get(index).setCursor(cursor);
-		} else if (lblNumbers.contains(command) && count >= 5) {
-			Cursor cursor = new Cursor(Cursor.DEFAULT_CURSOR);
-			int index = lblNumbers.indexOf(command);
-			lblNumbers.get(index).setCursor(cursor);			
-		}
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		Object command = e.getSource();
-		int num = pnlChoSets.indexOf(command);
-		if (pnlChoSets.contains(command) && !resetING[num]) {
-			pnlChoSets.get(num).setBackground(Color.white);
-		}	
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
+		}		
 	}
 
 	@Override
