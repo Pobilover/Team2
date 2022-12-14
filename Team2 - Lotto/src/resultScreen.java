@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -17,6 +18,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeMap;
 
 import javax.swing.Box;
@@ -47,6 +50,11 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private JLabel[] lblTypes = new JLabel[5];;
 	private JLabel[] lblSequences = new JLabel[5];;
 	private JPanel pnl4Box = new JPanel();
+	private JPanel pnlLoading;
+	private JPanel pnlBox;
+	private int numTime;
+	private JButton btnSkip;
+	private Timer timer;
 	
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
 		return sheets;
@@ -111,16 +119,58 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		}		
 		System.out.println("겹치는거" + duplicateList);			
 		
-		// panel 구성
-		JPanel pnlBox = new JPanel();
+		JPanel pnlFirst = new JPanel();
+		
+		// 로딩화면 구성
+		pnlLoading = new JPanel(new BorderLayout());
+		JPanel pnlMessage = new JPanel();
+		JLabel lblLoadingImg = new JLabel(convertToIconGIF("행복회로.gif"));
+		lblLoadingImg.setPreferredSize(new Dimension(700, 400));
+		JLabel lblMessage = new JLabel("당첨번호 추첨을 시작합니다.");
+		lblMessage.setPreferredSize(new Dimension(350, 20));
+		lblMessage.setFont(new Font("휴먼편지체", Font.BOLD, 20));
+		String[] messages = {"당신의 행복회로가 돌아가는 중입니다.",
+							 "당신의 행복회로가 과부화 됩니다.",
+							 "인생은 한방입니다. 포기하지 마세요",
+							 "단돈 1,000원에 기회를 잡을 수 있습니다."};
+		btnSkip = new JButton("Skip");
+		btnSkip.addActionListener(this);
+		pnlMessage.add(Box.createHorizontalStrut(140));
+		pnlMessage.add(lblMessage);
+		pnlMessage.add(Box.createHorizontalStrut(80));
+		pnlMessage.add(btnSkip);
+		pnlLoading.add(lblLoadingImg, "Center");
+		pnlLoading.add(pnlMessage, "South");
+		timer = new Timer();
+		numTime = 0;
+		TimerTask tTask = new TimerTask(){
+			@Override
+			public void run() {
+				if (numTime >= 4) {
+					timer.cancel();
+					pnlLoading.setVisible(false);
+					pnlBox.setVisible(true);
+				} else {
+					lblMessage.setText(messages[numTime]);
+					numTime++;
+				}
+			}
+		};
+		timer.schedule(tTask, 1000, 1000);
+		
+		
+		// 전체 pnl
+		pnlBox = new JPanel();
 		JPanel pnl1 = new JPanel();
 		JPanel pnl2 = new JPanel();
 		JPanel pnl3 = new JPanel();
 		JPanel pnl4 = new JPanel();
 		JPanel pnl5 = new JPanel();
 		
+		
 		// 전체적인 panel
 		pnlBox.setLayout(new BoxLayout(pnlBox, BoxLayout.Y_AXIS));
+		pnlBox.setPreferredSize(new Dimension(700, 500));
 		
 		// 제일위 당첨결과 title panel
 		JLabel turn = new JLabel("-");
@@ -228,7 +278,11 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnlBox.add(pnl4);
 		pnlBox.add(pnl5);
 		
-		add(pnlBox);
+		pnlFirst.add(pnlLoading);
+		pnlFirst.add(pnlBox);
+		pnlBox.setVisible(false);
+		
+		add(pnlFirst);
 		setModal(true);
 		setSize(700,500);
 	}
@@ -308,6 +362,16 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		return icon;
 		
 	}
+	
+	public ImageIcon convertToIconGIF(String name) {
+		String imageName = name;
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		ClassLoader classLoader = getClass().getClassLoader();
+		Image image = kit.getImage(classLoader.getResource(imageName));
+		ImageIcon icon = new ImageIcon(image);
+		return icon;
+		
+	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// 다시 수정예정............
@@ -372,6 +436,13 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	Object command = e.getSource();
+	
+	if (command == btnSkip) {
+		timer.cancel();
+		pnlLoading.setVisible(false);
+		pnlBox.setVisible(true);
+	}
+	
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < 6; j++) {
 			lblUserNumbers[i][j] = null;
