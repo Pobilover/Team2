@@ -566,7 +566,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 					tempSet.addAll(inputRounds.get(numI));
 					Random random = new Random();
 					while (tempSet.size() < 6) {
-						int num = random.nextInt(44) + 1;
+						int num = random.nextInt(45) + 1;
 						tempSet.add(num);
 						inputRounds.get(numI).clear();
 						inputRounds.get(numI).addAll(tempSet);

@@ -11,12 +11,12 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
-class ClickMe extends JFrame {
+class ClickMe extends JPanel {
 	private JButton btn; // 춘식이
 	private JButton btn2; // 안보이는 버튼
 	private JLabel lbltime;
@@ -41,7 +41,7 @@ class ClickMe extends JFrame {
 		setVisible(true);
 
 		pnl.setLayout(null);
-		pnl.setPreferredSize(new Dimension(500, 500));
+		pnl.setPreferredSize(new Dimension(700, 500));
 		btn = new JButton();
 		btn2 = new JButton("다시하기");
 		btn.setOpaque(false);
@@ -109,10 +109,7 @@ class ClickMe extends JFrame {
 		});
 
 		add(pnl);
-
-		pack();
 		setSize(700, 500);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true); // 창이 보인다
 	}
 
