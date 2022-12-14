@@ -374,10 +374,21 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			int index = pnlChoSets.indexOf(command);
 			pnlChoSets.get(index).setBackground(new Color(180, 180, 180));
 		}
-		if (lblNumbers.contains(command) && !state.equals("선택완료")) {
+		
+		int count = 0;
+		for (int i = 0; i < 5; i++) {
+			if (numOk[i]) {
+				count++;
+			}
+		}
+		if (lblNumbers.contains(command) && count < 5) {
 			Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
 			int index = lblNumbers.indexOf(command);
 			lblNumbers.get(index).setCursor(cursor);
+		} else if (lblNumbers.contains(command) && count >= 5) {
+			Cursor cursor = new Cursor(Cursor.DEFAULT_CURSOR);
+			int index = lblNumbers.indexOf(command);
+			lblNumbers.get(index).setCursor(cursor);			
 		}
 	}
 
