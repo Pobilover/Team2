@@ -347,7 +347,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 				for (int j = 0; j < 6; j++) {
 					try {
 						if(lblUserNumbers[indexOfRound][j] == null) {
-							String imgName2 = "numbers/num" + userNum.get(indexOfRound).get(j) +".png";
+							String imgName2 = "normal/ball" + userNum.get(indexOfRound).get(j) +".png";
 							lblUserNumbers[indexOfRound][j] = new JLabel(convertToIcon(imgName2, 30, 30));
 						}
 						if(userNum.get(indexOfRound).indexOf(duplicateNum.get(indexOfRound).get(j)) >= 0) {
