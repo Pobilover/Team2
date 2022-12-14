@@ -1,10 +1,13 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.FontUIResource;
 
@@ -43,7 +47,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	private JLabel lblNowGame;
 	private JLabel[][] lblChoNums2;
 	private int[] nowGameCounters;
-	private JButton btnOk;
+	private RoundedButton btnOk;
 	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
 	private Map<Integer, List<Integer>> inputRounds = new TreeMap<>();
 	private List<Integer> inputNumbers = new ArrayList<>();
@@ -53,7 +57,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	private JComboBox cbQuantity;
 	private int numOfGame = 0;
 	private boolean[] numOk = new boolean[5];
-	private JButton btnReset;
+	private RoundedButton btnReset;
 	private JToggleButton btnAuto;
 	private JCheckBox ckAuto;
 	private RoundedButton btnAllReset;
@@ -68,8 +72,8 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	private JLabel lbltotal;
 	private int numOfSheet = 0;
 	private int numOfGames = 0;
-	private JButton btnPurchase;
-	private JButton btnFinish;
+	private RoundedButton btnPurchase;
+	private RoundedButton btnFinish;
 	private RoundedButton btnManual;
 	private boolean[] resetING = new boolean[5]; 
 	
@@ -93,10 +97,11 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	public Purchase() {
 		setModal(true); // 부모 창이랑 상호작용 못하게 막음
 		
-		setUIFont(new FontUIResource(new Font("휴먼편지체", 0, 15)));
+		setUIFont(new FontUIResource(new Font("빙그레체", 0, 14)));
 		
 		// 제일 큰 패널
-		MyImageBackgroundPanel pnlBuy = new MyImageBackgroundPanel(new Methods().backgroud("배경.png"));
+		JPanel pnlBuy = new JPanel();
+		pnlBuy.setBackground(Color.white);
 		
 		// 로또번호 선택가능한 패널
 		JPanel pnlWest = new JPanel();
@@ -117,6 +122,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		JPanel pnlNowGame = new JPanel();
 		pnlNowGame.setPreferredSize(new Dimension(200, 10));
 		JLabel lblNowGameT = new JLabel("현재 작성중인 조 : ");
+		pnlNowGame.setBackground(new Color(220,220,220));
 		lblNowGame = new JLabel("A");
 		lblFinish = new JLabel("선택완료");
 		pnlNowGame.add(lblNowGameT);
@@ -126,7 +132,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		
 		// 로또번호 패널
 		pnlNum = new JPanel();
-		pnlNum.setBackground(Color.WHITE);
+		pnlNum.setBackground(Color.white);
 		lblNumbers = new ArrayList<>(); // 1 ~ 45 번호
 		lottoNumsIcon = new boolean[45]; // 번호 선택여부 확인
 		pnlNum.setLayout(new GridLayout(7, 7, 0, 0));
@@ -156,10 +162,14 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		JPanel pnlNumSkill1 = new JPanel();
 		pnlNumSkill1.setPreferredSize(new Dimension(200, 15));
 		pnlNumSkill1.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		pnlNumSkill1.setBackground(Color.WHITE);
-		btnReset = new JButton("초기화");
+		pnlNumSkill1.setBackground(new Color(245, 245, 245));
+		btnReset = new RoundedButton("초기화");
+		btnReset.setBackground(new Color(220, 220, 220));
 		btnReset.addActionListener(this);
 		btnAuto = new JToggleButton("자동선택");
+		btnAuto.setBackground(new Color(220, 220, 220));
+		btnAuto.setBorderPainted(false);
+		btnAuto.setFocusable(false);
 		btnAuto.addItemListener(this);
 		pnlNumSkill1.add(btnReset);
 		pnlNumSkill1.add(Box.createHorizontalStrut(10));
@@ -168,19 +178,20 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		// 로또번호 수량선택 패널
 		JPanel pnlNumSkill2 = new JPanel();
 		pnlNumSkill2.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		pnlNumSkill2.setBackground(Color.WHITE);
+		pnlNumSkill2.setBackground(new Color(245, 245, 245));
 		JLabel lblQuantity = new JLabel("적용수량");
 		String[] QuantityList = {"1", "2", "3", "4", "5"};
 		cbQuantity = new JComboBox(QuantityList);
 		cbQuantity.setPreferredSize(new Dimension(80, 20));
-		btnOk = new JButton("확인");
+		btnOk = new RoundedButton("확인");
+		btnOk.setBackground(new Color(220, 220, 220));
 		btnOk.addActionListener(this);
 		ckAuto = new JCheckBox("선택수량 자동선택");
 		ckAuto.setBackground(Color.white);
 		ckAuto.addItemListener(this);
 		pnlNumSkill2.add(lblQuantity);
 		pnlNumSkill2.add(cbQuantity);
-		pnlNumSkill2.add(Box.createHorizontalStrut(5));
+
 		pnlNumSkill2.add(btnOk);
 		pnlNumSkill2.add(ckAuto);
 		
@@ -204,7 +215,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		// 전체 초기화기능 패널
 		JPanel pnlReset = new JPanel();
 		JLabel lblConfirm = new JLabel("선택번호 확인");
-		lblConfirm.setFont(new Font("휴먼편지체", 1, 20));
+		lblConfirm.setFont(new Font("빙그레체", 1, 20));
 		btnManual = new RoundedButton("사용법");
 		btnManual.addActionListener(this);
 		btnManual.setBackground(new Color(200, 128, 128));
@@ -245,9 +256,11 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 				lblChoNums2[i][j] = new JLabel(choiceImage);
 			}
 			// 수정, 삭제 버튼
-			btnChoResets.add(i, new JButton("수정"));
+			btnChoResets.add(i, new RoundedButton("수정"));
+			btnChoResets.get(i).setBackground(new Color(220, 220, 220));
 			btnChoResets.get(i).addActionListener(this);
-			btnChoDeletes.add(i, new JButton("삭제"));
+			btnChoDeletes.add(i, new RoundedButton("삭제"));
+			btnChoResets.get(i).setBackground(new Color(220, 220, 220));
 			btnChoDeletes.get(i).addActionListener(this);
 			// 각 줄에 컴포넌트 삽입
 			pnlChoSets.get(i).add(lblChoRound);
@@ -280,9 +293,11 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		lbltotal = new JLabel("0");
 		JLabel lblTotal = new JLabel("원");
 		
-		btnPurchase = new JButton("구매하기");
+		btnPurchase = new RoundedButton("구매하기");
+		btnPurchase.setBackground(new Color(220, 220, 220));
 		btnPurchase.addActionListener(this);
-		btnFinish = new JButton("구매종료");
+		btnFinish = new RoundedButton("구매종료");
+		btnFinish.setBackground(new Color(220, 220, 220));
 		btnFinish.addActionListener(this);
 		pnlPurchase.add(lblSheetT);		
 		pnlPurchase.add(lblSheet);
@@ -295,7 +310,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		pnlPurchase.add(lbltotalT);
 		pnlPurchase.add(lbltotal);
 		pnlPurchase.add(lblTotal);
-		pnlPurchase.add(Box.createHorizontalStrut(150));
+		pnlPurchase.add(Box.createHorizontalStrut(230));
 		pnlPurchase.add(btnPurchase);
 		pnlPurchase.add(btnFinish);
 		
