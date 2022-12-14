@@ -90,7 +90,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		this.sheetTypes = sheetTypes;
 	}
 
-	public Purchase() {
+	public Purchase(int gameRound) {
 		setModal(true); // 부모 창이랑 상호작용 못하게 막음
 		
 		setUIFont(new FontUIResource(new Font("빙그레체", 0, 14)));
@@ -210,7 +210,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		
 		// 전체 초기화기능 패널
 		JPanel pnlReset = new JPanel();
-		JLabel lblConfirm = new JLabel("선택번호 확인");
+		JLabel lblConfirm = new JLabel(gameRound + 1 + "회차 선택번호 확인");
 		lblConfirm.setFont(new Font("빙그레체", 1, 20));
 		btnManual = new RoundedButton("사용법");
 		btnManual.addActionListener(this);
@@ -220,7 +220,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		btnAllReset.setForeground(Color.white);
 		btnAllReset.addActionListener(this);
 		pnlReset.add(lblConfirm);
-		pnlReset.add(Box.createHorizontalStrut(135));
+		pnlReset.add(Box.createHorizontalStrut(50));
 		pnlReset.add(btnManual);
 		pnlReset.add(btnAllReset);
 		
@@ -795,6 +795,6 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 
 public class LottoPurchase {
 	public static void main(String[] args) {
-		new Purchase().showGUI();
+		new Purchase(1).showGUI();
 	}
 }

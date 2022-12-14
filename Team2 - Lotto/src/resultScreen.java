@@ -64,7 +64,17 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private int[] winMoney = new int[5];
 	private long resultMoney;
 	private Map<Integer, List<Integer>> winNums = new TreeMap<>();
+	private List<Integer> winPrice = new ArrayList<>();
+	private int gameRound;
 	
+	public List<Integer> getWinPrice() {
+		return winPrice;
+	}
+
+	public void setWinPrice(List<Integer> winPrice) {
+		this.winPrice = winPrice;
+	}
+
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
 		return sheets;
 	}
@@ -81,9 +91,10 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		this.winNums = winNums;
 	}
 
-	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets, Map<Integer, Map<Integer, String>> sheetTypes) {	
+	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets, Map<Integer, Map<Integer, String>> sheetTypes, int gameRound) {	
 		this.sheets = sheets;
 		this.sheetTypes = sheetTypes;
+		this.gameRound = gameRound;
 		
 		// 장수
 		sheetNum = sheets.size();
@@ -127,7 +138,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		List<Integer> tempWinNums = new ArrayList<>();
 		tempWinNums.addAll(winNumList);
 		tempWinNums.add(winNumBonus);
-		winNums.put(0, tempWinNums); //key에 회차넣기
+		winNums.put(gameRound, tempWinNums); //key에 회차넣기
 		
 		// 비교하기
 		for (int i = 0; i < sheetNum; i++) {
@@ -153,6 +164,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 				winMoney[3] =50000;
 				winMoney[4] =5000;
 		
+				winPrice.add(winMoney[0]);
 				
 		JPanel pnlFirst = new JPanel();
 		
@@ -208,7 +220,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnlBox.setPreferredSize(new Dimension(700, 460));
 		
 		// 제일위 당첨결과 title panel
-		JLabel turn = new JLabel("-");
+		JLabel turn = new JLabel(String.valueOf(gameRound));
 		JLabel title = new JLabel("회 당첨결과");
 		turn.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		title.setFont(new Font("휴먼편지체", Font.BOLD, 30));

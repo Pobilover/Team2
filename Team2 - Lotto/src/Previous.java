@@ -7,11 +7,11 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Random;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -22,12 +22,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 class Previous extends JDialog implements ActionListener {
-	private Map<Integer, List<Integer>> winNumber = new TreeMap<>();
-	private List<Integer> winPrice = new ArrayList<>();
+	private List<Integer> winPrice;
 	private Methods methods = new Methods();
 	private JLabel lblRound;
 	private JComboBox cbList;
@@ -37,20 +35,14 @@ class Previous extends JDialog implements ActionListener {
 	private JPanel pnlC1;
 	private JLabel lblWinPrice;
 	private JLabel lblWinner;
-	private List<Integer> winPerson;
+	private List<Integer> winPerson = new ArrayList<>();
 	private RoundedButton btnPre;
 	private RoundedButton btnNext;
 	private JPanel pnlN1;
 	private JPanel pnlNorth;	
+	private int gameRound;
+	private Map<Integer, List<Integer>> winNums;
 	
-	public Map<Integer, List<Integer>> getWinNumber() {
-		return winNumber;
-	}
-
-	public void setWinNumber(Map<Integer, List<Integer>> winNumber) {
-		this.winNumber = winNumber;
-	}
-
 	public List<Integer> getWinPrice() {
 		return winPrice;
 	}
@@ -59,25 +51,17 @@ class Previous extends JDialog implements ActionListener {
 		this.winPrice = winPrice;
 	}
 	
-	public Previous(Map<Integer, List<Integer>> winNumber, List<Integer> winPrice) {
-		this.winNumber = winNumber;
+	
+	public Previous(int gameRound, Map<Integer, List<Integer>> winNums, List<Integer> winPrice) {
+		this.gameRound = gameRound;
+		this.winNums = winNums;
 		this.winPrice = winPrice;
-	}
-
-	public Previous() {	
+		
 		// 임시적인 값 생성
-		List<Integer> num1 = Arrays.asList(1, 2, 3, 4, 5, 6, 10);
-		List<Integer> num2 = Arrays.asList(11, 12, 13, 14, 15, 16, 11);
-		List<Integer> num3 = Arrays.asList(21, 22, 23, 24, 25, 26, 12);
-		List<Integer> num4 = Arrays.asList(31, 32, 33, 34, 35, 36, 13);
-		List<Integer> num5 = Arrays.asList(41, 42, 43, 44, 45, 6, 14);
-		winNumber.put(1, num1);
-		winNumber.put(2, num2);
-		winNumber.put(3, num3);
-		winNumber.put(4, num4);
-		winNumber.put(5, num5);
-		winPrice = Arrays.asList(100, 200, 300, 400, 500);
-		winPerson = Arrays.asList(1, 2, 3, 4, 5);
+		Random r = new Random();
+		for (int i = 0; i < winPrice.size(); i++) {
+			winPerson.add(r.nextInt(10) + 1);
+		}
 		
 		// 주요패널 선언
 		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("미국돈.png", 700, 500).getImage());
@@ -99,7 +83,7 @@ class Previous extends JDialog implements ActionListener {
 		pnlCenter.setLayout(new BoxLayout(pnlCenter, BoxLayout.Y_AXIS));
 		pnlSouth.setLayout(new BoxLayout(pnlSouth, BoxLayout.Y_AXIS));
 		
-		lblRound = new JLabel("1");
+		lblRound = new JLabel(String.valueOf(gameRound));
 		lblRound.setFont(new Font("빙그레체", Font.PLAIN, 40));
 		lblRound.setForeground(Color.black);
 		lblRound.setOpaque(false);
@@ -110,12 +94,13 @@ class Previous extends JDialog implements ActionListener {
 		lblResultT.setFont(new Font("빙그레체", Font.PLAIN, 40));
 		JLabel lblSelectT = new JLabel("회차 바로가기");
 		lblSelectT.setFont(new Font("빙그레체", Font.PLAIN, 14));
-		String round[] = new String[winNumber.size()];
-		for (int i = 0; i < winNumber.size(); i++) {
+		String round[] = new String[winNums.size()];
+		for (int i = 0; i < winNums.size(); i++) {
 			round[i] = String.valueOf(i+1);
 		}
 		
 		cbList = new JComboBox(round);
+		cbList.setSelectedIndex(round.length - 1);
 		cbList.setPreferredSize(new Dimension(100, 25));
 		btnSearch = new RoundedButton("조회");
 		btnSearch.setFont(new Font("빙그레체", Font.PLAIN, 14));
@@ -196,7 +181,7 @@ class Previous extends JDialog implements ActionListener {
 		pnlCenter.setBorder(new LineBorder(Color.BLACK, 2, true));
 		
 		// pnlSouth에 들어갈 component
-		JLabel lblWinPriceT = new JLabel("1등 당첨금액 : ");
+		JLabel lblWinPriceT = new JLabel("1등 총상금 : ");
 		lblWinPriceT.setFont(new Font("빙그레체", Font.PLAIN, 30));
 		lblWinPrice = new JLabel("0");
 		lblWinPrice.setFont(new Font("빙그레체", Font.PLAIN, 30));
@@ -267,7 +252,7 @@ class Previous extends JDialog implements ActionListener {
 		}
 		if (command == btnNext) {
 			int index = cbList.getSelectedIndex();
-			if (index + 1 < winNumber.size()) { 
+			if (index + 1 < winNums.size()) { 
 				int round = Integer.parseInt(lblRound.getText());
 				round++;
 				lblRound.setText(String.valueOf(round));				
@@ -285,12 +270,14 @@ class Previous extends JDialog implements ActionListener {
 	public void searchRound() {
 		int round = cbList.getSelectedIndex() + 1;
 		for (int i = 0; i < 7; i++) {
-			int num = winNumber.get(round).get(i);
+			int num = winNums.get(round).get(i);
 			String name = "balls/ball" + num + ".png"; 
 			lblWinNums[i].setIcon(convertToIcon(name, 40, 40));
 			lblBonusNum.setIcon(convertToIcon(name, 40, 40));
 		}
-		lblWinPrice.setText(String.valueOf(winPrice.get(round - 1)));
+		DecimalFormat formatter = new DecimalFormat("###,###");
+		int price = winPrice.get(round - 1);
+		lblWinPrice.setText(formatter.format(price));
 		lblWinner.setText(String.valueOf(winPerson.get(round - 1)));		
 	}
 	
@@ -313,11 +300,6 @@ class Previous extends JDialog implements ActionListener {
 	 }
 	
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new Previous().showGUI();
-			}
-		});
+
 	}
 }

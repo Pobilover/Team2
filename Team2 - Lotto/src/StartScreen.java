@@ -12,20 +12,18 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.Action;
-import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.tools.DiagnosticCollector;
 
 public class StartScreen extends JFrame implements ActionListener {
 	
@@ -37,9 +35,12 @@ public class StartScreen extends JFrame implements ActionListener {
 	private boolean nextRound = false;
 	private boolean leadoff = false;
 	Purchase purchase;
-	Previous previous = new Previous();
+	Previous previous;
 	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
 	private Map<Integer, Map<Integer, String>> sheetTypes = new TreeMap<>();
+	private Map<Integer, List<Integer>> winNums = new TreeMap<>();
+	private List<Integer> winPrice = new ArrayList<>();
+	private resultScreenSet rs;
 
 	public StartScreen() {
 		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("로또기계.png", 700, 500).getImage());
@@ -164,28 +165,42 @@ public class StartScreen extends JFrame implements ActionListener {
 		
 		if (command == round1) {
 			if (!nextRound && !leadoff) {
-				purchase = new Purchase();
+				purchase = new Purchase(gameRound);
 				purchase.showGUI();
 				leadoff = true;
 			} else if (!nextRound) {
 				purchase.showGUI();
-			} else {
-				purchase = new Purchase();
+			} else if (nextRound){
+				purchase = new Purchase(gameRound);
 				purchase.showGUI();
+				nextRound = false;
 			}
 		}
 		if (command == round2) {
-			this.sheets = purchase.getSheets();
-			this.sheetTypes = purchase.getSheetTypes();
-			if (sheets.get(0) != null) {
-				gameRound++;
-				new resultScreenSet(sheets, sheetTypes).showGUI();
-			} else {
+			try {
+				if (purchase.getSheets().get(0) != null && !nextRound) {
+					this.sheets = purchase.getSheets();
+					this.sheetTypes = purchase.getSheetTypes();				
+					gameRound++;
+					nextRound = true;
+					rs = new resultScreenSet(sheets, sheetTypes, gameRound);
+					rs.showGUI();
+				} else {
+					JOptionPane.showMessageDialog(null, gameRound + 1 + "회차 1개 이상의 게임을 구매 후 확인 가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+				}
+			} catch (NullPointerException error) {
 				JOptionPane.showMessageDialog(null, "1개 이상의 게임을 구매 후 확인 가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 		if (command == round3) {
-			previous.showGUI();
+			if (gameRound > 0) {
+				winNums.putAll(rs.getWinNums());
+				winPrice.addAll(rs.getWinPrice());
+				Previous previous = new Previous(gameRound, winNums, winPrice);
+				previous.showGUI();
+			} else {
+				JOptionPane.showMessageDialog(null, "1번 이상의 당첨확인 후 열람 가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 		if (command == round4) {
 			new MiniGames().showGUI();
