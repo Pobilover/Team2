@@ -26,24 +26,43 @@ public class MiniGame2 extends JPanel implements ActionListener {
 	private JButton temp;
 	private Icon icon1;
 	private Icon icon2;
+	private List<ImageIcon> icon;
+	private List<Integer> numbers;
+	private int count = 0;
+	private RoundedButton restart;
+	private ImagePanel pnlEnd;
+	private ShowImage showImage = new ShowImage();
 	
 	public MiniGame2() {
+		
+		pnlEnd = new ImagePanel(new Methods().convertToIcon("잘했어요.jpg", 800, 600).getImage());
+		restart = new RoundedButton("다시하기");
+		restart.setBackground(Color.LIGHT_GRAY);
+		restart.setBounds(650, 550, 100, 40);
+		restart.addActionListener(this);
+		pnlEnd.add(restart);
 		
 		pnlGame = new JPanel();
 		pnlGame.setPreferredSize(new Dimension(800, 600));
 		pnlGame.setLayout(new GridLayout(6, 8));
+		icon = new ArrayList<>();
+		
 		btn = new ArrayList<>();
-		List<Integer> numbers = new ArrayList<>();
+		numbers = new ArrayList<>();
 		for (int i = 0; i < 48; i++) {
 			numbers.add(i + 1);
 		}
-		Collections.shuffle(numbers);
-		System.out.println(numbers);
 		
 		for (int i = 0; i < 48; i++) {
 			String image = "e\\e" + numbers.get(i) +".png";
+			icon.add(convertToIcon(image, 100, 100));
 			btn.add(new JButton());
-			btn.get(i).setIcon(convertToIcon(image, 100, 100));
+		}
+		
+		Collections.shuffle(numbers);
+		
+		for (int i = 0; i < 48; i++) {
+			btn.get(i).setIcon(icon.get(numbers.get(i) - 1));
 			btn.get(i).setBorder(new LineBorder(Color.DARK_GRAY, 1));
 			btn.get(i).setBackground(Color.LIGHT_GRAY);
 			btn.get(i).addActionListener(this);
@@ -51,6 +70,8 @@ public class MiniGame2 extends JPanel implements ActionListener {
 		}
 		
 		add(pnlGame);
+		add(pnlEnd);
+		pnlEnd.setVisible(false);
 		setName("퍼즐 - hint : 같은 이미지를 누번 누르면 정답 이미지를 볼 수 있습니다.");
 		setSize(800, 600);
 		setVisible(true);
@@ -85,11 +106,32 @@ public class MiniGame2 extends JPanel implements ActionListener {
 			btn.get(beforeBtnNum).setBorder(new LineBorder(Color.DARK_GRAY, 1));
 			afterBtnNum = btn.indexOf(command);
 			icon2 = btn.get(afterBtnNum).getIcon();
-			if (icon1 == icon2) {
-				new ShowImage();
-			} else {
+			if (icon1 == icon2 && !showImage.isVisible()) {
+				showImage.setVisible(true); 
+			} else if (icon1 != icon2) {
 				btn.get(beforeBtnNum).setIcon(icon2);
 				btn.get(afterBtnNum).setIcon(icon1);
+			}
+		}
+		if (command == restart) {
+			Collections.shuffle(numbers);
+			for (int i = 0; i < 48; i++) {
+				btn.get(i).setIcon(icon.get(numbers.get(i) - 1));
+			}
+			pnlGame.setVisible(true);
+			pnlEnd.setVisible(false);			
+		}
+		count = 0;
+		for (int i = 0; i < 48; i++) {
+			if (i == 1 || i == 2 || i == 4 || i == 5 || i == 6 || i == 7 ||
+					i == 33 || i == 41 || i == 42 || i == 43 || i == 44 || i == 45 || i == 46 || i ==47) {
+				
+			} else if (btn.get(i).getIcon() == icon.get(i)) {
+				count++;
+			}
+			if (count == 34) {
+				pnlGame.setVisible(false);
+				pnlEnd.setVisible(true);
 			}
 		}
 		
@@ -103,6 +145,8 @@ class ShowImage extends JDialog {
 		setTitle("정답 이미지");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocation(785, 0);
+	}
+	public void showGUI() {
 		setVisible(true);
 	}
 	
