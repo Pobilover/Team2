@@ -64,7 +64,7 @@ class Previous extends JDialog implements ActionListener {
 		}
 		
 		// 주요패널 선언
-		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("미국돈.png", 700, 500).getImage());
+		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("미국돈.png", 700, 460).getImage());
 		pnlNorth = new JPanel();
 		JPanel pnlWest = new JPanel();
 		JPanel pnlCenter = new JPanel();
@@ -178,17 +178,21 @@ class Previous extends JDialog implements ActionListener {
 		pnlCenter.add(pnlC2);
 		pnlC2.setPreferredSize(new Dimension(0, 20));
 		// pnlCenter에 border 추가
-		pnlCenter.setBorder(new LineBorder(Color.BLACK, 2, true));
+		pnlCenter.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
 		
 		// pnlSouth에 들어갈 component
 		JLabel lblWinPriceT = new JLabel("1등 총상금 : ");
 		lblWinPriceT.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		lblWinPrice = new JLabel("0");
 		lblWinPrice.setFont(new Font("휴먼편지체", Font.BOLD, 30));
+		JLabel lblWinPriceT2 = new JLabel("원");
+		lblWinPriceT2.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		JLabel lblWinnerT = new JLabel("당첨자수 : ");
 		lblWinnerT.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		lblWinner = new JLabel("0");
 		lblWinner.setFont(new Font("휴먼편지체", Font.BOLD, 30));
+		JLabel lblWinnerT2 = new JLabel("명");
+		lblWinnerT2.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		
 		// pnlSouth에 들어갈 패널
 		JPanel pnlS1 = new JPanel();
@@ -199,9 +203,11 @@ class Previous extends JDialog implements ActionListener {
 		// pnlS1에 component 추가
 		pnlS1.add(lblWinPriceT);
 		pnlS1.add(lblWinPrice);
+		pnlS1.add(lblWinPriceT2);
 		// pnlS2에 component 추가
 		pnlS2.add(lblWinnerT);
 		pnlS2.add(lblWinner);
+		pnlS2.add(lblWinnerT2);
 		// pnlSouth에 각 패널 추가
 		pnlSouth.add(Box.createVerticalStrut(50));
 		pnlSouth.add(pnlS1);
