@@ -202,7 +202,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnl1.add(turn);
 		pnl1.add(title);
 		pnl1.setBorder(new LineBorder(Color.LIGHT_GRAY, 3 , true));
-		pnl1.setBackground(new Color(35, 100, 165, 120));
+		pnl1.setBackground(new Color(35, 100, 165, 180));
 		
 		// 당첨결과 알려주는 공 표시해주는 panel
 		pnl2.setLayout(new BoxLayout(pnl2, BoxLayout.Y_AXIS));
