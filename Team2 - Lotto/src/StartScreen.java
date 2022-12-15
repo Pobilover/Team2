@@ -61,10 +61,10 @@ public class StartScreen extends JFrame implements ActionListener {
 		under.add(round3);
 		under.add(round4);
 		pnl.add(under, "South");
-		round1.setFont(new Font("빙그레체", Font.PLAIN, 20));
-		round2.setFont(new Font("빙그레체", Font.PLAIN, 20));
-		round3.setFont(new Font("빙그레체", Font.PLAIN, 20));
-		round4.setFont(new Font("빙그레체", Font.PLAIN, 20));
+		round1.setFont(new Font("휴먼편지체", Font.BOLD, 18));
+		round2.setFont(new Font("휴먼편지체", Font.BOLD, 18));
+		round3.setFont(new Font("휴먼편지체", Font.BOLD, 18));
+		round4.setFont(new Font("휴먼편지체", Font.BOLD, 18));
 		under.setPreferredSize(new Dimension(650, 100));
 		add(pnl);
 

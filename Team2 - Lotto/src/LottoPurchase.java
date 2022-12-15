@@ -93,7 +93,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	public Purchase(int gameRound) {
 		setModal(true); // 부모 창이랑 상호작용 못하게 막음
 		
-		setUIFont(new FontUIResource(new Font("빙그레체", 0, 14)));
+		setUIFont(new FontUIResource(new Font("휴먼편지체", Font.BOLD, 15)));
 		
 		// 제일 큰 패널
 		JPanel pnlBuy = new JPanel();
@@ -183,7 +183,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		btnOk.setBackground(new Color(220, 220, 220));
 		btnOk.addActionListener(this);
 		ckAuto = new JCheckBox("선택수량 자동선택");
-		ckAuto.setBackground(Color.white);
+		ckAuto.setBackground(new Color(245, 245, 245));
 		ckAuto.addItemListener(this);
 		pnlNumSkill2.add(lblQuantity);
 		pnlNumSkill2.add(cbQuantity);
@@ -211,7 +211,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		// 전체 초기화기능 패널
 		JPanel pnlReset = new JPanel();
 		JLabel lblConfirm = new JLabel(gameRound + 1 + "회차 선택번호 확인");
-		lblConfirm.setFont(new Font("빙그레체", 1, 20));
+		lblConfirm.setFont(new Font("휴먼편지체", 1, 20));
 		btnManual = new RoundedButton("사용법");
 		btnManual.addActionListener(this);
 		btnManual.setBackground(new Color(200, 128, 128));
@@ -220,8 +220,9 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		btnAllReset.setForeground(Color.white);
 		btnAllReset.addActionListener(this);
 		pnlReset.add(lblConfirm);
-		pnlReset.add(Box.createHorizontalStrut(50));
+		pnlReset.add(Box.createHorizontalStrut(80));
 		pnlReset.add(btnManual);
+		pnlReset.add(Box.createHorizontalStrut(5));
 		pnlReset.add(btnAllReset);
 		
 		// 선택한 번호 보이는 패널
