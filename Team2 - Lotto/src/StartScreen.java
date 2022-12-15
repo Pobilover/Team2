@@ -48,7 +48,7 @@ public class StartScreen extends JFrame implements ActionListener {
 		new Methods().setUIFont(new FontUIResource(new Font("휴먼편지체", 0, 20)));
 		
 		// 사용할 패널 선언 및 설정
-		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("backgrounds/로또기계.png", 700, 500).getImage());
+		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("로또기계.png", 700, 500).getImage());
 		pnl.setLayout(new BorderLayout());
 		JPanel pnlSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 45, 30));
 		pnlSouth.setPreferredSize(new Dimension(650, 100));
