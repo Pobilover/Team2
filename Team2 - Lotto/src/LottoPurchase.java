@@ -567,7 +567,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 					tempSet.addAll(inputRounds.get(numI));
 					Random random = new Random();
 					while (tempSet.size() < 6) {
-						int num = random.nextInt(45) + 1;
+						int num = random.nextInt(45);
 						tempSet.add(num);
 						inputRounds.get(numI).clear();
 						inputRounds.get(numI).addAll(tempSet);
@@ -600,6 +600,17 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			lblFinish.setVisible(false);			
 			lblNowGame.setText("A");
 			lblNumOfGames.setText(String.valueOf(numOfGames));
+//			for (int i = 0; i < sheets.size(); i++) {
+//				for (int j = 0; j < sheets.get(i).size(); j++) {
+//					if(!sheets.get(i).get(j).isEmpty()) {
+//						for (int k = 0; k < sheets.get(i).get(j).size(); k++) {
+//							int temp = sheets.get(i).get(j).get(k);
+//							sheets.get(i).get(j).add(k, temp +1);
+//						}
+//					}
+//				}
+//			}
+			
 			System.out.println(sheets);
 		} else if (command == btnPurchase && numOfGame == 0) {
 			JOptionPane.showMessageDialog(null, "1게임 이상 등록되어야 구매가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
