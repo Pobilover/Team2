@@ -382,13 +382,14 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		}
 		
 		if (resetING[resettingGame] && !lblNumbers.contains(command)) {
-			if (inputNumbers.size() != 6) {
+			if (inputNumbers.size() != 6 || inputNumbers.size() == 0) {
 				inputNumbers.clear();
 				for (int i = 0; i < 6; i++) {
 					inputNumbers.add(tempInputNumbers[i]);
 				}
 			}
 			String type = lblTypes.get(resettingGame).getText();
+			nowGameCounters[resettingGame] = 6;
 			changeBallIcon(resettingGame, inputNumbers, "등록", type);	
 			resetING[resettingGame] = false;
 			pnlGames.get(resettingGame).setBackground(Color.white);	
@@ -416,18 +417,21 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 				lblNumbers.get(index).setIcon(getIcon("numbers/" + name, 30, 30)); 
 				checkNumber[index] = false;
 				nowGameCounters[nowGame]--;
-				inputNumbers.remove(inputNumbers.indexOf(index));
+				System.out.println(index);
+				System.out.println(inputNumbers);
+				System.out.println(inputNumbers.indexOf(index + 1));
+				inputNumbers.remove(inputNumbers.indexOf(index + 1));
 			} else if (!checkNumber[index] && nowGameCounters[nowGame] < 6) { // 번호 선택하기
 				lblNumbers.get(index).setIcon(getIcon("afterNumbers/" + name, 30, 30));
 				checkNumber[index] = true;
 				nowGameCounters[nowGame]++;
-				inputNumbers.add(index);
+				inputNumbers.add(index + 1);
 			} else if (!checkNumber[index] && nowGameCounters[nowGame] >= 6 && inputNumbers.contains(100)) { // 자동번호가 포함되어있는 게임 수정할때
 				int deleteNum = inputNumbers.indexOf(100); 
 				inputNumbers.remove(deleteNum); // 랜덤번호 1개 삭제
 				lblNumbers.get(index).setIcon(getIcon("afterNumbers/" + name, 30, 30));
 				checkNumber[index] = true;
-				inputNumbers.add(index); // 새로 선택한 번호 추가
+				inputNumbers.add(index + 1); // 새로 선택한 번호 추가
 			} else if (!checkNumber[index] && nowGameCounters[nowGame] >= 6) {
 				JOptionPane.showMessageDialog(null, "최대 6개의 숫자를 선택할 수 있습니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -467,21 +471,26 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			}
 		}
 		
+		if (command == btnReset && !resetING[resettingGame]) {
+			clearSelectedNumber(nowGame);
+		}
+		
 		// 수정중인 게임과 현재 게임이 다르다면 or 확인버튼, 초기화버튼이 아니라면 수정중인게임 그대로 나두기
-		if (resetING[resettingGame] && command != btnOk && command != btnReset && !btnSNResets.contains(command)) {
-			if (inputNumbers.size() != 6) {
+		if (resetING[resettingGame] && command != btnOk && !btnSNResets.contains(command)) {
+			if (inputNumbers.size() != 6 || inputNumbers.size() == 0) {
 				inputNumbers.clear();
 				for (int i = 0; i < 6; i++) {
 					inputNumbers.add(tempInputNumbers[i]);
 				}
 			}
 			String type = lblTypes.get(resettingGame).getText();
+			nowGameCounters[resettingGame] = 6;
 			changeBallIcon(resettingGame, inputNumbers, "등록", type);	
 			resetING[resettingGame] = false;
 			pnlGames.get(resettingGame).setBackground(Color.white);	
 			cbQuantity.setSelectedIndex(0);
-			searchPossible(resettingGame);
 			clearSelectedNumber(resettingGame);	
+			searchPossible(resettingGame);
 			nowGameCounters[resettingGame] = 6;
 		}
 	
@@ -494,10 +503,6 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			inputNumbers(selectedQuantity, nowGame);
 		}  else if (command == btnOk && nowGameCounters[nowGame] < 6) { // 자동없이 선택된 번호가 6개 미만일때
 			JOptionPane.showMessageDialog(null, "6개의 번호를 선택해주세요.", "알림", JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-		if (command == btnReset) {
-			clearSelectedNumber(nowGame);
 		}
 		
 		if (command == btnAllReset) {
@@ -677,6 +682,8 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		}
 		inputNumbers.clear();
 		cbQuantity.setSelectedIndex(0);
+		clearSelectedNumber(nowGame);
+		nowGameCounters[nowGame] = 6;
 		searchPossible(nowGame);			
 	}
 	
@@ -729,7 +736,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			roundTypes.put(nowGame, type);
 			for (int i = 0; i < 6; i++) {
 				int number = inputRounds.get(nowGame).get(i);
-				String name = "ball" + (number + 1) + ".png";
+				String name = "ball" + number + ".png";
 				if (number == 100) {
 					name = "ball100.png";
 				}
@@ -766,17 +773,18 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	public void showSelectedNumber(int nowGame) {
 		inputNumbers = inputRounds.get(nowGame);
 		tempInputNumbers = new int[inputNumbers.size()];
-		for (int i = 0; i < 6; i++) {
-			int num = inputNumbers.get(i);
+		for (int i = 0; i < 6; i++) { 
+			int num = inputNumbers.get(i) - 1;
 			tempInputNumbers[i] = inputNumbers.get(i);
 			String name = "num" + (num + 1) + ".png";
-			if (num != 100) {
+			if (num != 99) {
 				lblNumbers.get(num).setIcon(getIcon("afterNumbers/" + name, 30, 30));
 				checkNumber[num] = true;
 			}
 			nowGameCounters[nowGame] = 6;
 			numOk[nowGame] = false;
 		}		
+		System.out.println(inputNumbers);
 	}
 	
 	public ImageIcon getIcon(String name, int width, int height) {

@@ -54,7 +54,7 @@ public class MiniGame2 extends JPanel implements ActionListener {
 		}
 		
 		for (int i = 0; i < 48; i++) {
-			String image = "e\\e" + numbers.get(i) +".png";
+			String image = "e/e" + numbers.get(i) +".png";
 			icon.add(convertToIcon(image, 100, 100));
 			btn.add(new JButton());
 		}
