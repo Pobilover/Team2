@@ -45,12 +45,14 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private JPanel pnlBox;
 	private JPanel pnlLoading;
 	private JPanel pnl4Box = new JPanel();
+	private JPanel pnl4Page = new JPanel();
 	private JPanel[] pnl4BoxSets = new JPanel[5];
 	private JLabel resultWord = new JLabel();
 	private JLabel[] lblRanks = new JLabel[5];
 	private JLabel[] lblTypes = new JLabel[5];;
 	private JLabel[] lblSequences = new JLabel[5];;
 	private JLabel[][] lblUserNumbers  = new JLabel[5][6];
+	private JLabel currentPage = new JLabel("1");
 	private JButton before;
 	private JButton after;
 	private JButton btnSkip;
@@ -65,6 +67,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private int gameRound;
 	private long resultMoney;
 	private boolean winCheck = false;
+	private int nowPage = 1;
 	
 
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
@@ -202,7 +205,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnl1.add(turn);
 		pnl1.add(title);
 		pnl1.setBorder(new LineBorder(Color.LIGHT_GRAY, 3 , true));
-		pnl1.setBackground(new Color(35, 100, 165, 180));
+		pnl1.setBackground(new Color(35, 100, 165, 150));
 		
 		// 당첨결과 알려주는 공 표시해주는 panel
 		pnl2.setLayout(new BoxLayout(pnl2, BoxLayout.Y_AXIS));
@@ -233,7 +236,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		}
 		pnl2_1.add(plus);
 		pnl2_1.add(bonus);
-		pnl2_1.setPreferredSize(new Dimension(0, 45));
+		pnl2_1.setPreferredSize(new Dimension(0, 50));
 		pnl2_2.setPreferredSize(new Dimension(0, 15));
 		pnl2.add(pnl2_1);
 		pnl2.add(pnl2_2);
@@ -260,6 +263,12 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnl4Box.setBackground(Color.WHITE);
 		showResult(0);
 		showResultWord();
+		JLabel pageName = new JLabel("page ");
+		JLabel pages = new JLabel("/ " + String.valueOf(sheets.size()));
+		pnl4Page.add(pageName);
+		pnl4Page.add(currentPage);
+		pnl4Page.add(pages);
+		pnl4Box.add(pnl4Page);
 		
 		// pnl4구성 - 버튼과 표
 		JPanel beforeBox = new JPanel();
@@ -268,7 +277,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		beforeBox.add(before);
 		afterBox.add(Box.createVerticalStrut(200));
 		afterBox.add(after);
-		pnl4.setPreferredSize(new Dimension(0, 230));
+		pnl4.setPreferredSize(new Dimension(0, 235));
 		pnl4.add(beforeBox);
 		pnl4.add(Box.createHorizontalStrut(30));
 		pnl4.add(pnl4Box);
@@ -420,7 +429,8 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 				pnl4BoxSets[i].add(lblUserNumbers[indexOfRound][j]);			
 			}
 			pnl4Box.add(pnl4BoxSets[i]);			
-		}	
+		}
+		pnl4Box.add(pnl4Page);
 		userNum.clear();
 		duplicateNum.clear();
 		duplicateSize.clear();		
@@ -513,6 +523,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		showResultWord();
 		pnl4Box.revalidate();
 		pnl4Box.repaint();
+		currentPage.setText(Integer.toString(pageCount + 1));
 	}
 	if (command == after && pageCount < sheets.size() -1) {
 		pnl4Box.removeAll();
@@ -521,6 +532,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		showResultWord();
 		pnl4Box.revalidate();
 		pnl4Box.repaint();
+		currentPage.setText(Integer.toString(pageCount + 1));
 	}
 		
 	}
