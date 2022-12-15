@@ -11,12 +11,11 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
-class ClickMe3 extends JFrame {
+class ClickMe3 extends JPanel {
 	private JButton start;
 	private JButton chunsik;
 	private JButton jayG;
@@ -44,7 +43,7 @@ class ClickMe3 extends JFrame {
 		losePage = new JLabel(losePageImage);
 		lbltime.setBounds(25, 20, 50, 50); // 시계 위치
 
-		MyImageBackgroundPanel pnl = new MyImageBackgroundPanel(new Methods().background("겨울배경.png"));
+		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("겨울배경.png", 800, 600).getImage());
 		add(pnl);
 
 		pnl.setLayout(null);
@@ -235,9 +234,7 @@ class ClickMe3 extends JFrame {
 
 		add(pnl);
 
-		pack();
 		setSize(800, 600);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 	}
 
