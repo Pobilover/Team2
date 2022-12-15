@@ -35,45 +35,37 @@ import javax.swing.border.LineBorder;
 class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private Map<Integer, Map<Integer, List<Integer>>> sheets = new TreeMap<>();
 	private Map<Integer, Map<Integer, String>> sheetTypes = new TreeMap<>();
-	private JButton before;
-	private JButton after;
-	private JLabel[][] lblUserNumbers  = new JLabel[5][6];
-	private int sheetNum;
-	private List<Integer> gameNum = new ArrayList<>();
 	private Map<Integer, List<Integer>> userNum = new TreeMap<>();
 	private Map<Integer, List<Integer>> duplicateNum = new TreeMap<>();
 	private Map<Integer, Map<Integer, List<Integer>>> duplicateList = new TreeMap<>();
-	private int index = 0;
-	private int pageCount = 0;
-	private int[][] searchRounds;
+	private List<Integer> duplicateSize = new ArrayList<>();
+	private Map<Integer, List<Integer>> winNums = new TreeMap<>();
+	private List<Integer> winPrice = new ArrayList<>();
+	private List<Integer> gameNum = new ArrayList<>();
+	private JPanel pnlBox;
+	private JPanel pnlLoading;
+	private JPanel pnl4Box = new JPanel();
 	private JPanel[] pnl4BoxSets = new JPanel[5];
+	private JLabel resultWord = new JLabel();
 	private JLabel[] lblRanks = new JLabel[5];
 	private JLabel[] lblTypes = new JLabel[5];;
 	private JLabel[] lblSequences = new JLabel[5];;
-	private JPanel pnl4Box = new JPanel();
-	private JPanel pnlLoading;
-	private JPanel pnlBox;
-	private int numTime;
+	private JLabel[][] lblUserNumbers  = new JLabel[5][6];
+	private JButton before;
+	private JButton after;
 	private JButton btnSkip;
 	private Timer timer;
-	private int indexOfRound;
-	private List<Integer> duplicateSize = new ArrayList<>();
-	private int winNumBonus = 0;
-	private boolean winCheck = false;
-	private JLabel resultWord = new JLabel();
+	private int[][] searchRounds;
 	private int[] winMoney = new int[5];
-	private long resultMoney;
-	private Map<Integer, List<Integer>> winNums = new TreeMap<>();
-	private List<Integer> winPrice = new ArrayList<>();
+	private int index = 0;
+	private int pageCount = 0;
+	private int numTime;
+	private int indexOfRound;
+	private int winNumBonus = 0;
 	private int gameRound;
+	private long resultMoney;
+	private boolean winCheck = false;
 	
-	public List<Integer> getWinPrice() {
-		return winPrice;
-	}
-
-	public void setWinPrice(List<Integer> winPrice) {
-		this.winPrice = winPrice;
-	}
 
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
 		return sheets;
@@ -91,17 +83,24 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		this.winNums = winNums;
 	}
 
+	public List<Integer> getWinPrice() {
+		return winPrice;
+	}
+	
+	public void setWinPrice(List<Integer> winPrice) {
+		this.winPrice = winPrice;
+	}
+
+	
 	public resultScreenSet(Map<Integer, Map<Integer, List<Integer>>> sheets, Map<Integer, Map<Integer, String>> sheetTypes, int gameRound) {	
 		this.sheets = sheets;
 		this.sheetTypes = sheetTypes;
 		this.gameRound = gameRound;
 		
-		// 장수
-		sheetNum = sheets.size();
-		for (int i = 0; i < sheetNum; i++) {
+		// 장당 게임수
+		for (int i = 0; i < sheets.size(); i++) {
 			gameNum.add(sheets.get(i).size());
 		}
-		
 		// 회차당 라운드 수 
 		searchRounds = new int[sheets.size()][];
 		int numOfGames = 0;	
@@ -117,7 +116,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	        }
 	     }
 		
-		// 당첨결과 여섯개 랜덤 숫자 만들기
+		// 당첨결과 일곱개 랜덤 숫자 만들기
 		Set<Integer> winNumSet = new HashSet<>();
 		Random random = new Random();
 		while (winNumSet.size() < 7) {
@@ -132,40 +131,18 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		int bonusRandom = random.nextInt(7);
 		winNumBonus = winNumList.get(bonusRandom);
 		winNumList.remove(bonusRandom);
-		System.out.println("당첨번호" + winNumList);
 		
-		// 완전한 당첨번호
+		// 출력용 당첨번호
 		List<Integer> tempWinNums = new ArrayList<>();
 		tempWinNums.addAll(winNumList);
 		tempWinNums.add(winNumBonus);
 		winNums.put(gameRound, tempWinNums); //key에 회차넣기
 		
-		// 비교하기
-		for (int i = 0; i < sheetNum; i++) {
-			Map<Integer, List<Integer>> tempMap = new TreeMap<>();
-			for (int j = 0; j < 5; j++) {
-				if(sheets.get(i).get(j) != null) {
-					Set<Integer> duplicate = new HashSet<>();
-					duplicate.addAll(sheets.get(i).get(j));			
-					duplicate.retainAll(winNumList);
-					List<Integer> duplicateToList = new ArrayList<>(duplicate);
-					Collections.sort(duplicateToList);
-					tempMap.put(j, duplicateToList);	
-				}
-			}
-			duplicateList.put(i, tempMap);
-		}		
-		System.out.println("겹치는거" + duplicateList);
 		
-		// 상금 넣기
-				winMoney[0] =random.nextInt(1147483647) + 1000000000;
-				winMoney[1] =random.nextInt(40000000) + 50000000;
-				winMoney[2] =random.nextInt(1000000) + 1000000;
-				winMoney[3] =50000;
-				winMoney[4] =5000;
+		getDuplicateNums(winNumList);
+		getWinMoney();
+
 		
-				winPrice.add(winMoney[0]);
-				
 		JPanel pnlFirst = new JPanel();
 		
 		// 로딩화면 구성
@@ -205,7 +182,6 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		};
 		timer.schedule(tTask, 1000, 1000);
 		
-		
 		// 전체 pnl
 		pnlBox = new JPanel();
 		JPanel pnl1 = new JPanel();
@@ -213,7 +189,6 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		JPanel pnl3 = new JPanel();
 		JPanel pnl4 = new JPanel();
 		JPanel pnl5 = new JPanel();
-		
 		
 		// 전체적인 panel
 		pnlBox.setLayout(new BoxLayout(pnlBox, BoxLayout.Y_AXIS));
@@ -226,6 +201,8 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		title.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		pnl1.add(turn);
 		pnl1.add(title);
+		pnl1.setBorder(new LineBorder(Color.LIGHT_GRAY, 3 , true));
+		pnl1.setBackground(new Color(35, 100, 165, 120));
 		
 		// 당첨결과 알려주는 공 표시해주는 panel
 		pnl2.setLayout(new BoxLayout(pnl2, BoxLayout.Y_AXIS));
@@ -260,13 +237,11 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnl2_2.setPreferredSize(new Dimension(0, 15));
 		pnl2.add(pnl2_1);
 		pnl2.add(pnl2_2);
-		//panel 크기 확인용
-//		pnl2_1.setBorder(new LineBorder(Color.BLACK, 2, true));
 		
 		// 회색 박스(당첨결과와 돈) 알려주는 panel
 		JPanel pnl3_1 = new JPanel();
 		pnl3_1.setPreferredSize(new Dimension(450, 45));
-		pnl3_1.setBackground(Color.LIGHT_GRAY);
+		pnl3_1.setBackground(Color.WHITE);
 		resultWord.setFont(new Font("휴먼편지체", Font.BOLD, 15));
 		pnl3_1.add(resultWord, "Center");
 		pnl3.add(pnl3_1, "Center");
@@ -286,7 +261,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		showResult(0);
 		showResultWord();
 		
-		// pnl4구성
+		// pnl4구성 - 버튼과 표
 		JPanel beforeBox = new JPanel();
 		JPanel afterBox = new JPanel();
 		beforeBox.add(Box.createVerticalStrut(200));
@@ -331,14 +306,43 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		setModal(true);
 		setSize(700,500);
 	}
-	
-	public void showGUI() {
-		setVisible(true);
+	// 상금 넣기
+	public void getWinMoney() {
+		Random random = new Random();
+		
+		winMoney[0] =random.nextInt(1147483647) + 1000000000;
+		winMoney[1] =random.nextInt(40000000) + 50000000;
+		winMoney[2] =random.nextInt(1000000) + 1000000;
+		winMoney[3] =50000;
+		winMoney[4] =5000;
+
+		winPrice.add(winMoney[0]);
 	}
 	
+	// 숫자 비교하기
+	public void getDuplicateNums(List winNumList) {
+		// 비교하기
+		for (int i = 0; i < sheets.size(); i++) {
+			Map<Integer, List<Integer>> tempMap = new TreeMap<>();
+			for (int j = 0; j < 5; j++) {
+				if(sheets.get(i).get(j) != null) {
+					Set<Integer> duplicate = new HashSet<>();
+					duplicate.addAll(sheets.get(i).get(j));			
+					duplicate.retainAll(winNumList);
+					List<Integer> duplicateToList = new ArrayList<>(duplicate);
+					Collections.sort(duplicateToList);
+					tempMap.put(j, duplicateToList);	
+				}
+			}
+			duplicateList.put(i, tempMap);
+		}
+	}
+	
+	// 표 안에 번호, 순위, 종류, 맞는 숫자 표로 알려주는 메소드
 	public void showResult(int pageCount) {
 		resultMoney = 0;
 		winCheck = false;
+		
 		for (int i = 0; i < lblSequences.length; i++) {
 			lblSequences[i] = new JLabel();
 		}
@@ -422,6 +426,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		duplicateSize.clear();		
 	}
 	
+	// 당첨결과와 당첨금 알려주는 메소드
 	public void showResultWord() {
 		DecimalFormat df = new DecimalFormat("###,###");
 		String resultMoneyWord = df.format(resultMoney);
@@ -432,6 +437,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		}
 	}
 	
+	// 아이콘 표시
 	public ImageIcon convertToIcon(String name, int width, int height) {
 		String imageName = name;
 		Toolkit kit = Toolkit.getDefaultToolkit();
@@ -443,6 +449,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		
 	}
 	
+	// gif표시
 	public ImageIcon convertToIconGIF(String name) {
 		String imageName = name;
 		Toolkit kit = Toolkit.getDefaultToolkit();
@@ -452,6 +459,12 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		return icon;
 		
 	}
+	
+	// gui보여주는 메소드
+	public void showGUI() {
+		setVisible(true);
+	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
