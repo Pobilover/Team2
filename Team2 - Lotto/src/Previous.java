@@ -84,16 +84,16 @@ class Previous extends JDialog implements ActionListener {
 		pnlSouth.setLayout(new BoxLayout(pnlSouth, BoxLayout.Y_AXIS));
 		
 		lblRound = new JLabel(String.valueOf(gameRound));
-		lblRound.setFont(new Font("휴먼편지체", Font.PLAIN, 40));
+		lblRound.setFont(new Font("휴먼편지체", Font.BOLD, 40));
 		lblRound.setForeground(Color.black);
 		lblRound.setOpaque(false);
 		JLabel lblRoundT = new JLabel("회");
-		lblRoundT.setFont(new Font("휴먼편지체", Font.PLAIN, 40));
+		lblRoundT.setFont(new Font("휴먼편지체", Font.BOLD, 40));
 		lblRoundT.setForeground(Color.black);
 		JLabel lblResultT = new JLabel("당첨결과");
-		lblResultT.setFont(new Font("휴먼편지체", Font.PLAIN, 40));
+		lblResultT.setFont(new Font("휴먼편지체", Font.BOLD, 40));
 		JLabel lblSelectT = new JLabel("회차 바로가기");
-		lblSelectT.setFont(new Font("휴먼편지체", Font.PLAIN, 14));
+		lblSelectT.setFont(new Font("휴먼편지체", Font.BOLD, 14));
 		String round[] = new String[winNums.size()];
 		for (int i = 0; i < winNums.size(); i++) {
 			round[i] = String.valueOf(i+1);
@@ -103,7 +103,7 @@ class Previous extends JDialog implements ActionListener {
 		cbList.setSelectedIndex(round.length - 1);
 		cbList.setPreferredSize(new Dimension(100, 25));
 		btnSearch = new RoundedButton("조회");
-		btnSearch.setFont(new Font("휴먼편지체", Font.PLAIN, 14));
+		btnSearch.setFont(new Font("휴먼편지체", Font.BOLD, 14));
 		btnSearch.addActionListener(this);
 		
 		pnlN1 = new JPanel();
@@ -127,14 +127,14 @@ class Previous extends JDialog implements ActionListener {
 		pnlNorth.add(Box.createVerticalStrut(40));
 		
 		btnPre = new RoundedButton("이전회");
-		btnPre.setFont(new Font("휴먼편지체", Font.PLAIN, 15));
+		btnPre.setFont(new Font("휴먼편지체", Font.BOLD, 15));
 		btnPre.addActionListener(this);
 		// pnlWest에 component 추가
 		pnlWest.add(Box.createVerticalStrut(80));
 		pnlWest.add(btnPre);		
 		
 		btnNext = new RoundedButton("다음회");	
-		btnNext.setFont(new Font("휴먼편지체", Font.PLAIN, 15));
+		btnNext.setFont(new Font("휴먼편지체", Font.BOLD, 15));
 		btnNext.addActionListener(this);
 		// pnlEast에 component 추가
 		pnlEast.add(Box.createVerticalStrut(80));
@@ -148,18 +148,18 @@ class Previous extends JDialog implements ActionListener {
 			lblWinNums[i].setOpaque(false);
 		}			
 		JLabel lblPlus = new JLabel("+");
-		lblPlus.setFont(new Font("휴먼편지체", Font.PLAIN, 25));
+		lblPlus.setFont(new Font("바탕", Font.BOLD, 25));
 		lblBonusNum = new JLabel();
 		lblBonusNum = new JLabel(methods.convertToIcon("balls/ballNull.png", 40, 40));			
 		JLabel lblWinNumT = new JLabel("당첨번호");
-		lblWinNumT.setFont(new Font("휴먼편지체", Font.PLAIN, 15));
+		lblWinNumT.setFont(new Font("휴먼편지체", Font.BOLD, 15));
 		JLabel lblBonusNumT = new JLabel("보너스");
-		lblBonusNumT.setFont(new Font("휴먼편지체", Font.PLAIN, 15));
+		lblBonusNumT.setFont(new Font("휴먼편지체", Font.BOLD, 15));
 		
 		pnlC1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
 		pnlC1.setOpaque(false);
 		pnlC1.setPreferredSize(new Dimension(0, 50));		
-		JPanel pnlC2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 175, 10));
+		JPanel pnlC2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 180, 10));
 		pnlC2.setOpaque(false);
 		
 		// pnlC1에 component 추가
@@ -182,13 +182,13 @@ class Previous extends JDialog implements ActionListener {
 		
 		// pnlSouth에 들어갈 component
 		JLabel lblWinPriceT = new JLabel("1등 총상금 : ");
-		lblWinPriceT.setFont(new Font("휴먼편지체", Font.PLAIN, 30));
+		lblWinPriceT.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		lblWinPrice = new JLabel("0");
-		lblWinPrice.setFont(new Font("휴먼편지체", Font.PLAIN, 30));
+		lblWinPrice.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		JLabel lblWinnerT = new JLabel("당첨자수 : ");
-		lblWinnerT.setFont(new Font("휴먼편지체", Font.PLAIN, 30));
+		lblWinnerT.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		lblWinner = new JLabel("0");
-		lblWinner.setFont(new Font("휴먼편지체", Font.PLAIN, 30));
+		lblWinner.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		
 		// pnlSouth에 들어갈 패널
 		JPanel pnlS1 = new JPanel();
