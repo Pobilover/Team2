@@ -476,7 +476,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		}
 		
 		// 수정중인 게임과 현재 게임이 다르다면 or 확인버튼, 초기화버튼이 아니라면 수정중인게임 그대로 나두기
-		if (resetING[resettingGame] && command != btnOk && !btnSNResets.contains(command)) {
+		if (resetING[resettingGame] && command != btnOk && btnSNResets.indexOf(command) != resettingGame) {
 			if (inputNumbers.size() != 6 || inputNumbers.size() == 0) {
 				inputNumbers.clear();
 				for (int i = 0; i < 6; i++) {
@@ -690,6 +690,9 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			nowGame = possible.get(i);
 			nowGameCounters[nowGame] = 6;
 			changeBallIcon(nowGame, inputNumbers, "등록", type);
+		}
+		if (resetING[nowGame]) {
+			resetING[nowGame] = false;
 		}
 		inputNumbers.clear();
 		cbQuantity.setSelectedIndex(0);
