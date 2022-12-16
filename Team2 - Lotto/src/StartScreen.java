@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.plaf.FontUIResource;
+
+import com.sun.xml.internal.ws.model.CheckedExceptionImpl;
 
 public class StartScreen extends JFrame implements ActionListener {
 	
@@ -42,6 +45,13 @@ public class StartScreen extends JFrame implements ActionListener {
 		// 전체 폰트 설정
 		new Methods().setUIFont(new FontUIResource(new Font("휴먼편지체", 0, 20)));
 		
+		try {
+			InputStream is = StartScreen.class.getResourceAsStream("Binggrae-Bold");
+			Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+		} catch (Exception e) {
+			System.out.println("몰라");
+		}
+			
 		// 사용할 패널 선언 및 설정
 		JPanel pnl = new JPanel();
 		JPanel pnlSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 45, 30));
@@ -87,8 +97,10 @@ public class StartScreen extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		System.out.println("프로그램 실행");
 		new StartScreen().showGUI();
-
+		
 	}
+	
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -116,6 +128,8 @@ public class StartScreen extends JFrame implements ActionListener {
 					nextRound = true;
 					rsScreen = new resultScreenSet(sheets, sheetTypes, gameRound);
 					rsScreen.showGUI();
+					winNums.putAll(rsScreen.getWinNums());
+					winPrice.addAll(rsScreen.getWinPrice());
 				} else if (purchase.getSheets().get(0) != null && nextRound) {
 					rsScreen.showGUI();
 				} else if (purchase.getSheets().get(0) == null){
@@ -126,13 +140,18 @@ public class StartScreen extends JFrame implements ActionListener {
 			}
 		}
 		if (command == round3) {
-			if (gameRound > 0) {
-				winNums.putAll(rsScreen.getWinNums());
-				winPrice.addAll(rsScreen.getWinPrice());
-				Previous previous = new Previous(gameRound, winNums, winPrice);
-				previous.showGUI();
-			} else {
-				JOptionPane.showMessageDialog(null, "1번 이상의 당첨확인 후 열람 가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+			try {
+				if (gameRound > 0) {
+//					winNums.putAll(rsScreen.getWinNums());
+//					winPrice.addAll(rsScreen.getWinPrice());
+					Previous previous = new Previous(gameRound, winNums, winPrice);
+					previous.showGUI();
+				} else {
+					JOptionPane.showMessageDialog(null, "1번 이상의 당첨확인 후 열람 가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
+				}
+			} catch (NullPointerException error) {
+				System.out.println("gameRound " + gameRound);
+				System.out.println("winNums " + winNums.isEmpty());
 			}
 		}
 		if (command == round4) {
