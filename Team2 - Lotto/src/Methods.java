@@ -37,6 +37,20 @@ public class Methods {
 		return null;
 	 }
 	
+	public ImageIcon convertToIconGIF(String name) {
+		String imageName = name;
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		ClassLoader classLoader = getClass().getClassLoader();
+		try {
+			Image image = kit.getImage(classLoader.getResource(imageName));
+			ImageIcon icon = new ImageIcon(image);
+			return icon;
+		} catch (NullPointerException e) {
+			System.out.println(name + " 해당 이미지 파일을 찾을 수 없습니다.");
+		}
+		return null;
+	 }
+	
 	
 	// 창 전체 폰트 설정하는 메소드
 	// 이 메소드를 복사하여 적용시킬 클래스에 붙여넣기

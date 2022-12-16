@@ -1,23 +1,18 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
 public class StartScreen extends JFrame implements ActionListener {
@@ -48,33 +43,37 @@ public class StartScreen extends JFrame implements ActionListener {
 		new Methods().setUIFont(new FontUIResource(new Font("휴먼편지체", 0, 20)));
 		
 		// 사용할 패널 선언 및 설정
-		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("로또기계.png", 700, 500).getImage());
-		pnl.setLayout(new BorderLayout());
+		JPanel pnl = new JPanel();
 		JPanel pnlSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 45, 30));
 		pnlSouth.setPreferredSize(new Dimension(650, 100));
 		pnlSouth.setBackground(new Color(100, 100, 100, 50));
-
-		// pnlSouth에 들어갈 Buttons
-		round1 = new RoundedButton("구매하기");
-		round2 = new RoundedButton("당첨확인");
-		round3 = new RoundedButton("이전회차");
-		round4 = new RoundedButton("미니게임");
-		round1.addActionListener(this);
-		round2.addActionListener(this);
-		round3.addActionListener(this);
-		round4.addActionListener(this);
 		
-		// pnlSouth에 buttons 추가
-		pnlSouth.add(round1);
-		pnlSouth.add(round2);
-		pnlSouth.add(round3);
-		pnlSouth.add(round4);
-		
-		// pnl에 pnlSouth 추가
-		pnl.add(pnlSouth, "South");
+				// pnlSouth에 들어갈 Buttons
+				round1 = new RoundedButton("구매하기");
+				round2 = new RoundedButton("당첨확인");
+				round3 = new RoundedButton("이전회차");
+				round4 = new RoundedButton("미니게임");
+				round1.addActionListener(this);
+				round2.addActionListener(this);
+				round3.addActionListener(this);
+				round4.addActionListener(this);
+				
+				// pnlSouth에 buttons 추가
+				pnlSouth.add(round1);
+				pnlSouth.add(round2);
+				pnlSouth.add(round3);
+				pnlSouth.add(round4);
+				
+				// pnl에 pnlSouth 추가
+				pnlSouth.setBounds(0, 370, 690, 100);
+				pnl.add(pnlSouth, "South");
+		JLabel lblBackgound = new JLabel(new Methods().convertToIconGIF("로또기계.gif"));
+		lblBackgound.setBounds(0, -15, 690, 490);
+		pnl.add(lblBackgound);
+		pnl.setLayout(null);
 		
 		// 프레임에 pnl 추가
-		add(pnl);
+		getContentPane().add(pnl);
 
 		setSize(700, 500);
 		setTitle("나눔 Lotto");
