@@ -44,15 +44,15 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private List<Integer> gameNum = new ArrayList<>();
 	private JPanel pnlBox;
 	private JPanel pnlLoading;
-	private JPanel pnl4Box = new JPanel();
-	private JPanel pnl4Page = new JPanel();
-	private JPanel[] pnl4BoxSets = new JPanel[5];
+	private JPanel[] pnl4Box = new JPanel[sheets.size()];
+	private JPanel[] pnl4Page = new JPanel[sheets.size()];
+	private JPanel[][] pnl4BoxSets = new JPanel[sheets.size()][5];
 	private JLabel resultWord = new JLabel();
-	private JLabel[] lblRanks = new JLabel[5];
-	private JLabel[] lblTypes = new JLabel[5];;
-	private JLabel[] lblSequences = new JLabel[5];;
+	private JLabel[][] lblRanks = new JLabel[sheets.size()][5];
+	private JLabel[][] lblTypes = new JLabel[sheets.size()][5];
+	private JLabel[][] lblSequences = new JLabel[sheets.size()][5];
 	private JLabel[][] lblUserNumbers  = new JLabel[5][6];
-	private JLabel currentPage = new JLabel("1");
+	private JLabel[] currentPage = new JLabel[sheets.size()];
 	private JButton before;
 	private JButton after;
 	private JButton btnSkip;
@@ -68,6 +68,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private long resultMoney;
 	private boolean winCheck = false;
 	private int nowPage = 1;
+	private boolean[] pageSet;
 	
 
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
@@ -258,18 +259,43 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		after.setPreferredSize(new Dimension(70,40));
 		after.setBackground(Color.LIGHT_GRAY);
 		after.addActionListener(this);
-
-		pnl4Box.setLayout(new BoxLayout(pnl4Box, BoxLayout.Y_AXIS));
-		pnl4Box.setBackground(Color.WHITE);
+		
+		pnl4Page = new JPanel[sheets.size()];
+		JLabel[] pageName = new JLabel[sheets.size()];
+		JLabel[] pages = new JLabel[sheets.size()]; 
+		currentPage = new JLabel[sheets.size()];
+		for (int i = 0; i < sheets.size(); i++) {
+			pnl4Page[i] = new JPanel();
+			pageName[i] = new JLabel("page");
+			pages[i] = new JLabel("/ " + String.valueOf(sheets.size()));
+			currentPage[i] = new JLabel(String.valueOf(i + 1));
+			pnl4Page[i].add(pageName[i]);
+			pnl4Page[i].add(currentPage[i]);
+			pnl4Page[i].add(pages[i]);
+		}
+		pnl4Box = new JPanel[sheets.size()];
+		for (int i = 0; i < sheets.size(); i++) {
+			pnl4Box[i] = new JPanel();
+			pnl4Box[i].setLayout(new BoxLayout(pnl4Box[i], BoxLayout.Y_AXIS));
+			pnl4Box[i].setBackground(Color.WHITE);
+			pnl4Box[i].add(pnl4Page[i]);
+		}
+		
+		pnl4BoxSets = new JPanel[sheets.size()][5];
+		lblSequences = new JLabel[sheets.size()][5];
+		lblRanks = new JLabel[sheets.size()][5];
+		lblTypes = new JLabel[sheets.size()][5];
+		pageSet = new boolean[sheets.size()];
+		for (int i = 0; i < sheets.size(); i++) {
+			pnl4BoxSets[i] = new JPanel[5];
+			lblSequences[i] = new JLabel[5];
+			lblRanks[i] = new JLabel[5];
+			lblTypes[i] = new JLabel[5];
+			pageSet[i] = false;
+		}
 		showResult(0);
 		showResultWord();
-		JLabel pageName = new JLabel("page ");
-		JLabel pages = new JLabel("/ " + String.valueOf(sheets.size()));
-		pnl4Page.add(pageName);
-		pnl4Page.add(currentPage);
-		pnl4Page.add(pages);
-		pnl4Box.add(pnl4Page);
-		
+
 		// pnl4구성 - 버튼과 표
 		JPanel beforeBox = new JPanel();
 		JPanel afterBox = new JPanel();
@@ -280,7 +306,11 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnl4.setPreferredSize(new Dimension(0, 235));
 		pnl4.add(beforeBox);
 		pnl4.add(Box.createHorizontalStrut(30));
-		pnl4.add(pnl4Box);
+		for (int i = 0; i < sheets.size(); i++) {
+			pnl4.add(pnl4Box[i]);
+			pnl4Box[i].setVisible(false);
+		}
+		pnl4Box[0].setVisible(true);
 		pnl4.add(Box.createHorizontalStrut(30));
 		pnl4.add(afterBox);
 		
@@ -349,19 +379,20 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	
 	// 표 안에 번호, 순위, 종류, 맞는 숫자 표로 알려주는 메소드
 	public void showResult(int pageCount) {
+		pageSet[pageCount] = true;
 		resultMoney = 0;
 		winCheck = false;
 		
-		for (int i = 0; i < lblSequences.length; i++) {
-			lblSequences[i] = new JLabel();
+		for (int i = 0; i < lblSequences[pageCount].length; i++) {
+			lblSequences[pageCount][i] = new JLabel();
 		}
 
-		for (int i = 0; i < lblTypes.length; i++) {
-			lblTypes[i] = new JLabel();
+		for (int i = 0; i < lblTypes[pageCount].length; i++) {
+			lblTypes[pageCount][i] = new JLabel();
 		}
 		
-		for (int i = 0; i < lblRanks.length; i++) {
-			lblRanks[i] = new JLabel("1등");
+		for (int i = 0; i < lblRanks[pageCount].length; i++) {
+			lblRanks[pageCount][i] = new JLabel("1등");
 		}
 		
 		userNum.putAll(sheets.get(pageCount));
@@ -389,48 +420,48 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		
 		for (int i = 0; i < gameNum.get(pageCount); i++) {
 			indexOfRound = searchRounds[pageCount][i];
-			pnl4BoxSets[i] = new JPanel();
-			pnl4BoxSets[i].setBackground(Color.WHITE);
-			pnl4BoxSets[i].setBorder(new LineBorder(Color.black, 1 , true));
-			pnl4BoxSets[i].setLayout(new FlowLayout(FlowLayout.CENTER));
-			pnl4BoxSets[i].add(lblSequences[i]);
-			lblSequences[i].setText(String.valueOf((char) (indexOfRound + 65)));
-			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
-			pnl4BoxSets[i].add(lblTypes[i]);
+			pnl4BoxSets[pageCount][i] = new JPanel();
+			pnl4BoxSets[pageCount][i].setBackground(Color.WHITE);
+			pnl4BoxSets[pageCount][i].setBorder(new LineBorder(Color.black, 1 , true));
+			pnl4BoxSets[pageCount][i].setLayout(new FlowLayout(FlowLayout.CENTER));
+			pnl4BoxSets[pageCount][i].add(lblSequences[pageCount][i]);
+			lblSequences[pageCount][i].setText(String.valueOf((char) (indexOfRound + 65)));
+			pnl4BoxSets[pageCount][i].add(Box.createHorizontalStrut(5));
+			pnl4BoxSets[pageCount][i].add(lblTypes[pageCount][i]);
 			String type = sheetTypes.get(pageCount).get(indexOfRound);
-			lblTypes[i].setText(type);
-			lblTypes[i].setPreferredSize(new Dimension(40, 15));
-			pnl4BoxSets[i].add(lblRanks[i]);
+			lblTypes[pageCount][i].setText(type);
+			lblTypes[pageCount][i].setPreferredSize(new Dimension(40, 15));
+			pnl4BoxSets[pageCount][i].add(lblRanks[pageCount][i]);
 			if(duplicateSize.get(i) == 6) {
-				lblRanks[i].setText(" 1등");
+				lblRanks[pageCount][i].setText(" 1등");
 				winCheck = true;
 				resultMoney += winMoney[0];
 			} else if (duplicateSize.get(i) == 5  && userNum.get(indexOfRound).contains(winNumBonus)) {
-				lblRanks[i].setText(" 2등");
+				lblRanks[pageCount][i].setText(" 2등");
 				winCheck = true;
 				resultMoney += winMoney[1];
 			} else if (duplicateSize.get(i) == 5) {
-				lblRanks[i].setText(" 3등");
+				lblRanks[pageCount][i].setText(" 3등");
 				winCheck = true;
 				resultMoney += winMoney[2];
 			} else if (duplicateSize.get(i) == 4) {
-				lblRanks[i].setText(" 4등");
+				lblRanks[pageCount][i].setText(" 4등");
 				winCheck = true;
 				resultMoney += winMoney[3];
 			} else if (duplicateSize.get(i) == 3) {
-				lblRanks[i].setText(" 5등");
+				lblRanks[pageCount][i].setText(" 5등");
 				winCheck = true;
 				resultMoney += winMoney[4];
 			} else {
-				lblRanks[i].setText("낙첨");
+				lblRanks[pageCount][i].setText("낙첨");
 			} 
-			pnl4BoxSets[i].add(Box.createHorizontalStrut(5));
+			pnl4BoxSets[pageCount][i].add(Box.createHorizontalStrut(5));
 			for (int j = 0; j < 6; j++) {
-				pnl4BoxSets[i].add(lblUserNumbers[indexOfRound][j]);			
+				pnl4BoxSets[pageCount][i].add(lblUserNumbers[indexOfRound][j]);			
 			}
-			pnl4Box.add(pnl4BoxSets[i]);			
+			pnl4Box[pageCount].add(pnl4BoxSets[pageCount][i]);			
 		}
-		pnl4Box.add(pnl4Page);
+		pnl4Box[pageCount].add(pnl4Page[pageCount]);
 		userNum.clear();
 		duplicateNum.clear();
 		duplicateSize.clear();		
@@ -517,22 +548,19 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	}
 	
 	if (command == before && pageCount > 0) {
-		pnl4Box.removeAll();
+		pnl4Box[pageCount].setVisible(false);
 		pageCount--;
-		showResult(pageCount);
+		pnl4Box[pageCount].setVisible(true);
 		showResultWord();
-		pnl4Box.revalidate();
-		pnl4Box.repaint();
-		currentPage.setText(Integer.toString(pageCount + 1));
 	}
 	if (command == after && pageCount < sheets.size() -1) {
-		pnl4Box.removeAll();
+		pnl4Box[pageCount].setVisible(false);
 		pageCount++;
-		showResult(pageCount);
+		if (!pageSet[pageCount]) {
+			showResult(pageCount);
+		}
+		pnl4Box[pageCount].setVisible(true);
 		showResultWord();
-		pnl4Box.revalidate();
-		pnl4Box.repaint();
-		currentPage.setText(Integer.toString(pageCount + 1));
 	}
 		
 	}
