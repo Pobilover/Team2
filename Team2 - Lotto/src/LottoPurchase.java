@@ -382,11 +382,9 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		}
 		
 		if (resetING[resettingGame] && !lblNumbers.contains(command)) {
-			if (inputNumbers.size() != 6 || inputNumbers.size() == 0) {
-				inputNumbers.clear();
-				for (int i = 0; i < 6; i++) {
-					inputNumbers.add(tempInputNumbers[i]);
-				}
+			inputNumbers.clear();
+			for (int i = 0; i < 6; i++) {
+				inputNumbers.add(tempInputNumbers[i]);
 			}
 			String type = lblTypes.get(resettingGame).getText();
 			nowGameCounters[resettingGame] = 6;
@@ -477,11 +475,9 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		
 		// 수정중인 게임과 현재 게임이 다르다면 or 확인버튼, 초기화버튼이 아니라면 수정중인게임 그대로 나두기
 		if (resetING[resettingGame] && command != btnOk && btnSNResets.indexOf(command) != resettingGame) {
-			if (inputNumbers.size() != 6 || inputNumbers.size() == 0) {
-				inputNumbers.clear();
-				for (int i = 0; i < 6; i++) {
-					inputNumbers.add(tempInputNumbers[i]);
-				}
+			inputNumbers.clear();
+			for (int i = 0; i < 6; i++) {
+				inputNumbers.add(tempInputNumbers[i]);
 			}
 			String type = lblTypes.get(resettingGame).getText();
 			nowGameCounters[resettingGame] = 6;
@@ -798,7 +794,6 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 			nowGameCounters[nowGame] = 6;
 			numOk[nowGame] = false;
 		}		
-		System.out.println(inputNumbers);
 	}
 	
 	public ImageIcon getIcon(String name, int width, int height) {
