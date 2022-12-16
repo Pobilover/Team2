@@ -160,7 +160,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 							 "당신의 행복회로가 과부화 됩니다.",
 							 "인생은 한방입니다. 포기하지 마세요",
 							 "단돈 1,000원에 기회를 잡을 수 있습니다."};
-		btnSkip = new JButton("Skip");
+		btnSkip = new RoundedButton("Skip");
 		btnSkip.addActionListener(this);
 		pnlMessage.add(Box.createHorizontalStrut(140));
 		pnlMessage.add(lblMessage);
