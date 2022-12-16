@@ -117,6 +117,8 @@ public class StartScreen extends JFrame implements ActionListener {
 					nextRound = true;
 					rsScreen = new resultScreenSet(sheets, sheetTypes, gameRound);
 					rsScreen.showGUI();
+				} else if (purchase.getSheets().get(0) != null && nextRound) {
+					rsScreen.showGUI();
 				} else if (purchase.getSheets().get(0) == null){
 					JOptionPane.showMessageDialog(null, gameRound + 1 + "회차 1개 이상의 게임을 구매 후 확인 가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 				}
