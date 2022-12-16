@@ -58,10 +58,6 @@ class Previous extends JDialog implements ActionListener {
 		this.winPrice = winPrice;
 		
 		// 임시적인 값 생성
-		Random r = new Random();
-		for (int i = 0; i < winPrice.size(); i++) {
-			winPerson.add(r.nextInt(10) + 1);
-		}
 		
 		// 주요패널 선언
 		ImagePanel pnl = new ImagePanel(new Methods().convertToIcon("미국돈.png", 700, 460).getImage());
@@ -187,12 +183,7 @@ class Previous extends JDialog implements ActionListener {
 		lblWinPrice.setFont(new Font("휴먼편지체", Font.BOLD, 30));
 		JLabel lblWinPriceT2 = new JLabel("원");
 		lblWinPriceT2.setFont(new Font("휴먼편지체", Font.BOLD, 30));
-		JLabel lblWinnerT = new JLabel("당첨자수 : ");
-		lblWinnerT.setFont(new Font("휴먼편지체", Font.BOLD, 30));
-		lblWinner = new JLabel("0");
-		lblWinner.setFont(new Font("휴먼편지체", Font.BOLD, 30));
-		JLabel lblWinnerT2 = new JLabel("명");
-		lblWinnerT2.setFont(new Font("휴먼편지체", Font.BOLD, 30));
+
 		
 		// pnlSouth에 들어갈 패널
 		JPanel pnlS1 = new JPanel();
@@ -205,9 +196,7 @@ class Previous extends JDialog implements ActionListener {
 		pnlS1.add(lblWinPrice);
 		pnlS1.add(lblWinPriceT2);
 		// pnlS2에 component 추가
-		pnlS2.add(lblWinnerT);
-		pnlS2.add(lblWinner);
-		pnlS2.add(lblWinnerT2);
+
 		// pnlSouth에 각 패널 추가
 		pnlSouth.add(Box.createVerticalStrut(50));
 		pnlSouth.add(pnlS1);
@@ -283,8 +272,7 @@ class Previous extends JDialog implements ActionListener {
 		}
 		DecimalFormat formatter = new DecimalFormat("###,###");
 		int price = winPrice.get(round - 1);
-		lblWinPrice.setText(formatter.format(price));
-		lblWinner.setText(String.valueOf(winPerson.get(round - 1)));		
+		lblWinPrice.setText(formatter.format(price));	
 	}
 	
 	public ImageIcon convertToIcon(String name, int width, int height) {

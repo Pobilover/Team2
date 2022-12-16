@@ -619,7 +619,7 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		lblNumOfGames.setText(String.valueOf(numOfGames));
 		lblPrice.setText(String.valueOf(numOfGames * 1000));		
 		if (command == btnFinish) {
-			
+			dispose();
 		}
 		if (command == btnManual) {
 			new Manual().showGUI();
