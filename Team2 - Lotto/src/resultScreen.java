@@ -47,7 +47,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private JPanel[] pnl4Box = new JPanel[sheets.size()];
 	private JPanel[] pnl4Page = new JPanel[sheets.size()];
 	private JPanel[][] pnl4BoxSets = new JPanel[sheets.size()][5];
-	private JLabel resultWord = new JLabel();
+	private JLabel[] resultWord = new JLabel[sheets.size()];
 	private JLabel[][] lblRanks = new JLabel[sheets.size()][5];
 	private JLabel[][] lblTypes = new JLabel[sheets.size()][5];
 	private JLabel[][] lblSequences = new JLabel[sheets.size()][5];
@@ -246,8 +246,14 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		JPanel pnl3_1 = new JPanel();
 		pnl3_1.setPreferredSize(new Dimension(450, 45));
 		pnl3_1.setBackground(Color.WHITE);
-		resultWord.setFont(new Font("휴먼편지체", Font.BOLD, 15));
-		pnl3_1.add(resultWord, "Center");
+		resultWord = new JLabel[sheets.size()];
+		for (int i = 0; i < sheets.size(); i++) {
+			resultWord[i] = new JLabel();
+			resultWord[i].setFont(new Font("휴먼편지체", Font.BOLD, 15));
+			pnl3_1.add(resultWord[i], "Center");
+			resultWord[i].setVisible(false);
+		}
+		resultWord[0].setVisible(true);
 		pnl3.add(pnl3_1, "Center");
 		
 		// pnl4에 들어갈 구성 버튼과 표
@@ -294,7 +300,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 			pageSet[i] = false;
 		}
 		showResult(0);
-		showResultWord();
+		showResultWord(0);
 
 		// pnl4구성 - 버튼과 표
 		JPanel beforeBox = new JPanel();
@@ -468,13 +474,13 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	}
 	
 	// 당첨결과와 당첨금 알려주는 메소드
-	public void showResultWord() {
+	public void showResultWord(int pageCount) {
 		DecimalFormat df = new DecimalFormat("###,###");
 		String resultMoneyWord = df.format(resultMoney);
 		if (!winCheck) {
-			resultWord.setText("<html><body><center>아쉽게도,<br>낙첨되었습니다.</center></body></html>");
+			resultWord[pageCount].setText("<html><body><center>아쉽게도,<br>낙첨되었습니다.</center></body></html>");
 		} else {
-			resultWord.setText("<html><body><center>축하합니다!<br>총 "+ resultMoneyWord + "원 당첨되었습니다.</center></body></html>");
+			resultWord[pageCount].setText("<html><body><center>축하합니다!<br>총 "+ resultMoneyWord + "원 당첨되었습니다.</center></body></html>");
 		}
 	}
 	
@@ -549,18 +555,21 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	
 	if (command == before && pageCount > 0) {
 		pnl4Box[pageCount].setVisible(false);
+		resultWord[pageCount].setVisible(false);
 		pageCount--;
 		pnl4Box[pageCount].setVisible(true);
-		showResultWord();
+		resultWord[pageCount].setVisible(true);
 	}
 	if (command == after && pageCount < sheets.size() -1) {
 		pnl4Box[pageCount].setVisible(false);
+		resultWord[pageCount].setVisible(false);
 		pageCount++;
 		if (!pageSet[pageCount]) {
 			showResult(pageCount);
+			showResultWord(pageCount);
 		}
 		pnl4Box[pageCount].setVisible(true);
-		showResultWord();
+		resultWord[pageCount].setVisible(true);
 	}
 		
 	}
