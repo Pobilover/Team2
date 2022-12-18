@@ -74,8 +74,18 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	private RoundedButton btnManual;
 	private boolean[] resetING = new boolean[5];
 	private String[] quantityLists;
-	private int[] tempInputNumbers; 
+	private int[] tempInputNumbers;
 	
+	
+	
+	public int getNumOfGames() {
+		return numOfGames;
+	}
+
+	public void setNumOfGames(int numOfGames) {
+		this.numOfGames = numOfGames;
+	}
+
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
 		return sheets;
 	}
@@ -94,6 +104,12 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 	}
 
 	public Purchase(int gameRound) {
+		// 프레임 설정
+		setModal(true);
+		setSize(720, 500);
+		setTitle("로또구매 - 인생역전");
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
 		// 전체 폰트 설정
 		new Methods().setUIFont(new FontUIResource(new Font("휴먼편지체", 0, 14)));
 		
@@ -318,11 +334,6 @@ class Purchase extends JDialog implements MouseListener, ActionListener, ItemLis
 		pnl.add(pnlEast);
 		
 		add(pnl);
-		
-		setModal(true); // 부모 창이랑 상호작용 못하게 막음
-		setSize(720, 500);
-		setTitle("로또구매 - 인생역전");
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
 	@Override

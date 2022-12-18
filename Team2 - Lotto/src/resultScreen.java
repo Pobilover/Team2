@@ -42,6 +42,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private Map<Integer, List<Integer>> winNums = new TreeMap<>();
 	private List<Integer> winPrice = new ArrayList<>();
 	private List<Integer> gameNum = new ArrayList<>();
+	private Map<Integer, Integer> rank = new TreeMap<>();
 	private JPanel pnlBox;
 	private JPanel pnlLoading;
 	private JPanel[] pnl4Box = new JPanel[sheets.size()];
@@ -69,7 +70,31 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	private boolean winCheck = false;
 	private int nowPage = 1;
 	private boolean[] pageSet;
+	private int count0 = 0;
+	private int count1 = 0;
+	private int count2 = 0;
+	private int count3 = 0;
+	private int count4 = 0;
+	private int count5 = 0;
+	private int getPrice = 0;
 	
+	
+
+	public int getGetPrice() {
+		return getPrice;
+	}
+
+	public void setGetPrice(int getPrice) {
+		this.getPrice = getPrice;
+	}
+
+	public Map<Integer, Integer> getRank() {
+		return rank;
+	}
+
+	public void setRank(Map<Integer, Integer> rank) {
+		this.rank = rank;
+	}
 
 	public Map<Integer, Map<Integer, List<Integer>>> getSheets() {
 		return sheets;
@@ -119,6 +144,13 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 	            numOfGames++;
 	        }
 	     }
+	    
+	    rank.put(0, 0);
+	    rank.put(1, 0);
+	    rank.put(2, 0);
+	    rank.put(3, 0);
+	    rank.put(4, 0);
+	    rank.put(5, 0);
 		
 		// 당첨결과 일곱개 랜덤 숫자 만들기
 		Set<Integer> winNumSet = new HashSet<>();
@@ -299,8 +331,6 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 			lblTypes[i] = new JLabel[5];
 			pageSet[i] = false;
 		}
-		showResult(0);
-		showResultWord(0);
 
 		// pnl4구성 - 버튼과 표
 		JPanel beforeBox = new JPanel();
@@ -347,6 +377,52 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		pnlFirst.add(pnlBox);
 		pnlBox.setVisible(false);
 		
+		for (int j = 0; j < sheets.size(); j++) {
+			userNum.putAll(sheets.get(j));
+			duplicateNum.putAll(duplicateList.get(j));
+			for (int i = 0; i < gameNum.get(j); i++) {
+				int indexOfRound = searchRounds[j][i];
+				duplicateSize.add(duplicateNum.get(indexOfRound).size());
+			}
+			for (int i = 0; i < gameNum.get(j); i++) {
+				if(duplicateSize.get(i) == 6) {
+					winCheck = true;
+					count1++;
+					rank.put(1, count1);
+					getPrice += winMoney[0];
+				} else if (duplicateSize.get(i) == 5  && userNum.get(indexOfRound).contains(winNumBonus)) {
+					winCheck = true;
+					count2++;
+					rank.put(2, count2);
+					getPrice += winMoney[1];
+				} else if (duplicateSize.get(i) == 5) {
+					winCheck = true;
+					count3++;
+					rank.put(3, count3);
+					getPrice += winMoney[2];
+				} else if (duplicateSize.get(i) == 4) {
+					winCheck = true;
+					count4++;
+					rank.put(4, count4);
+					getPrice += winMoney[3];
+				} else if (duplicateSize.get(i) == 3) {
+					winCheck = true;
+					count5++;
+					rank.put(5, count5);
+					getPrice += winMoney[4];
+				} else {
+					count0++;
+					rank.put(0, count0);
+				}
+			}
+			userNum.clear();
+			duplicateNum.clear();
+			duplicateSize.clear();	
+		}
+		
+		showResult(0);
+		showResultWord(0);
+			
 		add(pnlFirst);
 		setModal(true);
 		setSize(700,500);
@@ -403,7 +479,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		
 		userNum.putAll(sheets.get(pageCount));
 		duplicateNum.putAll(duplicateList.get(pageCount));
-		
+	
 		for (int i = 0; i < gameNum.get(pageCount); i++) {
 			int indexOfRound = searchRounds[pageCount][i];
 				for (int j = 0; j < 6; j++) {
