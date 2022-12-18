@@ -55,6 +55,7 @@ public class StartScreen extends JFrame implements ActionListener {
 		// 프레임 설정
 		setSize(700, 500);
 		setTitle("나눔 Lotto");
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		// 전체 폰트 설정
@@ -121,12 +122,15 @@ public class StartScreen extends JFrame implements ActionListener {
 		if (command == round1) {
 			if (!nextRound && !leadOff) {
 				purchase = new Purchase(gameRound);
+				purchase.setLocation(this.getLocation());
 				purchase.showGUI();
 				leadOff = true;
 			} else if (!nextRound) {
 				purchase.showGUI();
+				purchase.setLocation(this.getLocation());
 			} else if (nextRound){
 				purchase = new Purchase(gameRound);
+				purchase.setLocation(this.getLocation());
 				purchase.showGUI();
 				nextRound = false;
 			}
@@ -139,7 +143,7 @@ public class StartScreen extends JFrame implements ActionListener {
 					gameRound++;
 					nextRound = true;
 					rsScreen = new resultScreenSet(sheets, sheetTypes, gameRound);
-//					rsScreen.setRank(rank);
+					rsScreen.setLocation(this.getLocation());
 					rsScreen.showGUI();
 					winNums.putAll(rsScreen.getWinNums());
 					winPrice.addAll(rsScreen.getWinPrice());
@@ -150,6 +154,9 @@ public class StartScreen extends JFrame implements ActionListener {
 					this.getPrice += rsScreen.getGetPrice();
 				} else if (purchase.getSheets().get(0) != null && nextRound) {
 					rsScreen.showGUI();
+					rsScreen.setLocation(this.getLocation());
+				} else {
+					JOptionPane.showMessageDialog(null, gameRound + 1 +  "회차 1개 이상의 게임을 구매 후 확인 가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
 				}
 			} catch (NullPointerException error) {
 				error.printStackTrace();
@@ -171,6 +178,7 @@ public class StartScreen extends JFrame implements ActionListener {
 						}
 					}
 					Previous previous = new Previous(gameRound, winNums, winPrice, userPrice, rank, getPrice, sNumber);
+					previous.setLocation(this.getLocation());
 					previous.showGUI();
 				} else {
 					JOptionPane.showMessageDialog(null, "1번 이상의 당첨확인 후 열람 가능합니다.", "알림", JOptionPane.INFORMATION_MESSAGE);
@@ -180,7 +188,9 @@ public class StartScreen extends JFrame implements ActionListener {
 			}
 		}
 		if (command == round4) {
-			new MiniGames().showGUI();
+			MiniGames mini = new MiniGames();
+			mini.setLocation(this.getLocation());
+			mini.showGUI();
 		}
 	}
 
