@@ -323,7 +323,7 @@ class Previous extends JDialog implements ActionListener {
 		
 		JPanel pnlS2_2Numbers = new JPanel();
 		pnlS2_2Numbers.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 1, true), "\uAD6C\uB9E4\uD55C \uBC88\uD638 \uC911 \uAC00\uC7A5 \uC55E\uC5D0\uC788\uB294 \uBC88\uD638\uAE30\uC900", TitledBorder.CENTER, TitledBorder.BOTTOM, null, new Color(0, 0, 0)));
-		pnlS2_2Numbers.setBackground(new Color(0, 0, 0, 150));
+		pnlS2_2Numbers.setBackground(new Color(0, 0, 0, 0));
 		pnlS2_2Numbers.setBounds(12, 15, 360, 65);
 		pnlS2_2.add(pnlS2_2Numbers);
 		JLabel num[] = new JLabel[6];
