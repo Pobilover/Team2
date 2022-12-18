@@ -423,6 +423,7 @@ class resultScreenSet extends JDialog implements MouseListener, ActionListener{
 		showResult(0);
 		showResultWord(0);
 			
+		setTitle("결과확인");
 		add(pnlFirst);
 		setModal(true);
 		setSize(700,500);
