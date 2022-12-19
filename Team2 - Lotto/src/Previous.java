@@ -552,7 +552,10 @@ class Previous extends JDialog implements ActionListener {
 			lblBonusNum.setIcon(convertToIcon(name, 40, 40));
 		}
 		int price = winPrice.get(round - 1);
-		lblWinPrice.setText(formatter.format(price));		
+		lblWinPrice.setText(formatter.format(price));
+		lblRound.setText(String.valueOf(cbList.getSelectedItem()));
+		pnlNorth.revalidate();
+		pnlNorth.repaint();
 	}
 	
 	public ImageIcon convertToIcon(String name, int width, int height) {
